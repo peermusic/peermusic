@@ -1,0 +1,27 @@
+{
+  "name": "peermusic-desktop",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peermusic/desktop.git"
+  },
+  "keywords": [
+    "music",
+    "player"
+  ],
+  "author": "https://github.com/peermusic/",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/peermusic/desktop/issues"
+  },
+  "homepage": "https://github.com/peermusic/desktop#readme",
+  "dependencies": {
+    "file-system": "git+https://github.com/peermusic/file-system.git",
+    "player-engine": "git+https://github.com/peermusic/player-engine.git"
+  }
+}
