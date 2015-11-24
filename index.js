@@ -1,6 +1,5 @@
 var engine = require('player-engine')
-var fs = require('file-system')(64 * 1024 * 1024,
-  ['audio/mp3', 'audio/wav', 'audio/ogg'])
+var fs = require('file-system')(64 * 1024 * 1024, ['audio/mp3', 'audio/wav', 'audio/ogg'])
 
 var seeking = false
 var current_song_index = -1
@@ -73,8 +72,8 @@ function renderTracks () {
     var li = document.createElement('li')
     var playing = current_song_index === i ? '<strong>PLAYING</strong> ' : ''
     li.innerHTML = playing + '<a href="#" onclick="playTrack(\'' + track.index + '\')">' + track.name + '</a>' +
-        ' &mdash; <a href="#" onclick="queueTrack(\'' + track.index + '\')">queue</a>' +
-        ' &mdash; <a href="#" onclick="removeTrack(\'' + track.index + '\')">delete</a>'
+      ' &mdash; <a href="#" onclick="queueTrack(\'' + track.index + '\')">queue</a>' +
+      ' &mdash; <a href="#" onclick="removeTrack(\'' + track.name + '\')">delete</a>'
     fragment.appendChild(li)
   }
 
@@ -165,9 +164,9 @@ window.playTrack = function (index) {
 }
 
 // Delete a track
-window.removeTrack = function (index) {
-  engine.removeTrack(index)
-  renderView()
+window.removeTrack = function (filename) {
+  engine.removeTrack(filename)
+  fs.delete(filename, renderView)
 }
 
 // Queue a track
@@ -190,7 +189,7 @@ function windowDrop (event) {
 
   // Check if the item is a folder
   if (files[0].type === '') {
-    console.error('Folder are not supported for drag \'n\' drop yet')
+    console.error("Folder are not supported for drag 'n' drop yet")
     return
   }
 
