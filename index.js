@@ -1,5 +1,6 @@
 var engine = require('player-engine')
-var fs = require('file-system')(64 * 1024 * 1024)
+var fs = require('file-system')(64 * 1024 * 1024,
+  ['audio/mp3', 'audio/wav', 'audio/ogg'])
 
 var seeking = false
 var current_song_index = -1
