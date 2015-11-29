@@ -1,7 +1,7 @@
 var engine = require('player-engine')
 var fs = require('file-system')(64 * 1024 * 1024, ['audio/mp3', 'audio/wav', 'audio/ogg'])
 var async = require('async')
-var hashing = require('xxhashjs')
+var rusha = new (require('rusha'))()
 
 var seeking = false
 var current_song_index = -1
@@ -47,7 +47,7 @@ engine.on('progress', function (progress) {
 })
 
 function hash (string) {
-  return hashing(string, 0xCAFEBABE).toString(16)
+  return rusha.digestFromString(string)
 }
 
 // Add files to the file system
