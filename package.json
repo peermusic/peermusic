@@ -22,6 +22,8 @@
   "homepage": "https://github.com/peermusic/desktop#readme",
   "dependencies": {
     "file-system": "git+https://github.com/peermusic/file-system.git",
-    "player-engine": "git+https://github.com/peermusic/player-engine.git"
+    "player-engine": "git+https://github.com/peermusic/player-engine.git",
+    "xxhashjs": "0.1.*",
+    "async": "1.5.*"
   }
 }

@@ -1,5 +1,7 @@
 var engine = require('player-engine')
 var fs = require('file-system')(64 * 1024 * 1024, ['audio/mp3', 'audio/wav', 'audio/ogg'])
+var async = require('async')
+var hashing = require('xxhashjs')
 
 var seeking = false
 var current_song_index = -1
@@ -44,9 +46,27 @@ engine.on('progress', function (progress) {
   }
 })
 
+function hash (string) {
+  return hashing(string, 0xCAFEBABE).toString(16)
+}
+
 // Add files to the file system
 function addFiles (files) {
-  fs.add(files, attachFiles)
+  // Asynchronously map the files with the hash function over their contents
+  async.map(files, function (file, callback) {
+    var reader = new window.FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = function () {
+      file.hashName = hash(this.result) + file.name.replace(/^.*(\.[A-Za-z0-9]{3})$/, '$1')
+      // TODO add metadata parsing & saving here (original filename: file.name)
+      console.log('Done hashing file', file)
+      callback(null, file)
+    }
+  }, function (error, results) {
+    // Add the files into the file system, which uses "hashName" as a priority
+    if (error) throw error
+    fs.add(results, attachFiles)
+  })
 }
 
 // Update the engine's files with the one's from the file system
