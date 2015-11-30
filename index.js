@@ -100,39 +100,58 @@ function renderView () {
 
 function renderTracks () {
   var tracks = engine.getTracks()
-  var fragment = document.createDocumentFragment()
-
-  for (var i = 0; i !== tracks.length; i++) {
-    var track = tracks[i]
-    var meta = meta_storage.get(track.name)
-    var li = document.createElement('li')
-    var playing = current_song_index === i ? '<strong>PLAYING</strong> ' : ''
-    li.innerHTML = playing + '<a href="#" onclick="playTrack(\'' + track.index + '\')">' + meta.album + ' - ' + meta.artist + ' - ' + meta.title + '</a>' +
-      ' &mdash; <a href="#" onclick="queueTrack(\'' + track.index + '\')">queue</a>' +
-      ' &mdash; <a href="#" onclick="removeTrack(\'' + track.name + '\')">delete</a>'
-    fragment.appendChild(li)
-  }
-
-  var list = document.querySelector('#list')
-  list.innerHTML = ''
-  list.appendChild(fragment)
+  document.querySelector('#list').innerHTML = trackTableHtml(tracks)
 }
 
 function renderQueuedTracks () {
   var tracks = engine.getQueuedTracks()
-  var fragment = document.createDocumentFragment()
+  document.querySelector('#queued').innerHTML = trackTableHtml(tracks, true)
+}
+
+function trackTableHtml (tracks, queue) {
+  if (tracks.length === 0) {
+    return ''
+  }
+
+  var rows = []
+
+  var headers = []
+  headers.push('')
+
+  if (!queue) {
+    headers.push('')
+  }
+
+  headers.push('Title')
+  headers.push('Artist')
+  headers.push('Album')
+  headers.push('')
+  rows.push(headers.map(function (x) { return '<th>' + x + '</th>' }).join(''))
 
   for (var i = 0; i !== tracks.length; i++) {
     var track = tracks[i]
     var meta = meta_storage.get(track.name)
-    var li = document.createElement('li')
-    li.innerHTML = '<a href="#" onclick="playTrack(\'' + track.index + '\')">' + meta.album + ' - ' + meta.artist + ' - ' + meta.title + '</a>'
-    fragment.appendChild(li)
+    var columns = []
+
+    columns.push('<a href="#" onclick="playTrack(\'' + track.index + '\')"><i class="fa fa-play"></i></a>')
+
+    if (!queue) {
+      columns.push('<a href="#" onclick="queueTrack(\'' + track.index + '\')"><i class="fa fa-plus"></i></a>')
+    }
+
+    columns.push(meta.title || '')
+    columns.push(meta.artist || '')
+    columns.push(meta.album || '')
+    columns.push('<a href="#" onclick="removeTrack(\'' + track.name + '\')"><i class="fa fa-trash"></i></a>')
+
+    if (!queue && current_song_index === i) {
+      columns = columns.map(function (x) { return '<strong>' + x + '</strong>' })
+    }
+
+    rows.push(columns.map(function (x) { return '<td>' + x + '</td>' }).join(''))
   }
 
-  var list = document.querySelector('#queued')
-  list.innerHTML = ''
-  list.appendChild(fragment)
+  return rows.map(function (x) { return '<tr>' + x + '</tr>' }).join('')
 }
 
 // Format a second value as minutes:seconds

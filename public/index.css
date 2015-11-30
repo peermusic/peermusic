@@ -54,3 +54,34 @@
 .clearfix {
     clear: both;
 }
+
+#queued, #list {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#queued tr th, #list tr th {
+    border-collapse: collapse;
+    border-bottom: 1px solid black;
+    padding: 5px;
+    background: black;
+    color: white;
+    text-align: left;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+#queued tr td, #list tr td {
+    border-collapse: collapse;
+    border-bottom: 1px solid black;
+    padding: 5px;
+}
+
+#queued tr:last-child td, #list tr:last-child td {
+    border-bottom: none;
+}
+
+#queued a, #list a{
+    text-decoration: none;
+    color: black;
+}
