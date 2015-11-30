@@ -21,9 +21,10 @@
   },
   "homepage": "https://github.com/peermusic/desktop#readme",
   "dependencies": {
+    "async": "1.5.*",
     "file-system": "git+https://github.com/peermusic/file-system.git",
     "player-engine": "git+https://github.com/peermusic/player-engine.git",
     "rusha": "0.8.*",
-    "async": "1.5.*"
+    "music-metadata": "git+https://github.com/peermusic/music-metadata.git"
   }
 }

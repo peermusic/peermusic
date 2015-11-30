@@ -2,9 +2,22 @@ var engine = require('player-engine')
 var fs = require('file-system')(64 * 1024 * 1024, ['audio/mp3', 'audio/wav', 'audio/ogg'])
 var async = require('async')
 var rusha = new (require('rusha'))()
+var musicMetadata = require('music-metadata')
 
 var seeking = false
 var current_song_index = -1
+
+// In-memory storage with persistence through localStorage
+var meta_storage = {
+  cache: JSON.parse(window.localStorage.getItem('metadata')) || {},
+  get: function (key) {
+    return this.cache[key]
+  },
+  set: function (key, meta) {
+    this.cache[key] = meta
+    window.localStorage.setItem('metadata', JSON.stringify(this.cache))
+  }
+}
 
 // Initialize the player engine & event listeners
 engine = engine()
@@ -28,7 +41,8 @@ engine.on('backState', function (back_possible) {
 
 // Update songs
 engine.on('songState', function (song) {
-  document.querySelector('#fileContainer').innerHTML = '<strong>Currently playing:</strong> ' + song.name
+  var meta = meta_storage.get(song.name)
+  document.querySelector('#fileContainer').innerHTML = '<strong>Currently playing:</strong> ' + meta.album + ' - ' + meta.artist + ' - ' + meta.title
   document.querySelector('#currentTime').innerHTML = duration(0)
   document.querySelector('#progressBar').min = 0
   document.querySelector('#progressBar').value = 0
@@ -58,9 +72,10 @@ function addFiles (files) {
     reader.readAsDataURL(file)
     reader.onloadend = function () {
       file.hashName = hash(this.result) + file.name.replace(/^.*(\.[A-Za-z0-9]{3})$/, '$1')
-      // TODO add metadata parsing & saving here (original filename: file.name)
-      console.log('Done hashing file', file)
-      callback(null, file)
+      musicMetadata(file, function (meta) {
+        meta_storage.set(file.hashName, meta)
+        callback(null, file)
+      })
     }
   }, function (error, results) {
     // Add the files into the file system, which uses "hashName" as a priority
@@ -89,9 +104,10 @@ function renderTracks () {
 
   for (var i = 0; i !== tracks.length; i++) {
     var track = tracks[i]
+    var meta = meta_storage.get(track.name)
     var li = document.createElement('li')
     var playing = current_song_index === i ? '<strong>PLAYING</strong> ' : ''
-    li.innerHTML = playing + '<a href="#" onclick="playTrack(\'' + track.index + '\')">' + track.name + '</a>' +
+    li.innerHTML = playing + '<a href="#" onclick="playTrack(\'' + track.index + '\')">' + meta.album + ' - ' + meta.artist + ' - ' + meta.title + '</a>' +
       ' &mdash; <a href="#" onclick="queueTrack(\'' + track.index + '\')">queue</a>' +
       ' &mdash; <a href="#" onclick="removeTrack(\'' + track.name + '\')">delete</a>'
     fragment.appendChild(li)
@@ -108,8 +124,9 @@ function renderQueuedTracks () {
 
   for (var i = 0; i !== tracks.length; i++) {
     var track = tracks[i]
+    var meta = meta_storage.get(track.name)
     var li = document.createElement('li')
-    li.innerHTML = '<a href="#" onclick="playTrack(\'' + track.index + '\')">' + track.name + '</a>'
+    li.innerHTML = '<a href="#" onclick="playTrack(\'' + track.index + '\')">' + meta.album + ' - ' + meta.artist + ' - ' + meta.title + '</a>'
     fragment.appendChild(li)
   }
 
