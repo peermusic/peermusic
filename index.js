@@ -66,6 +66,7 @@ function hash (string) {
 
 // Add files to the file system
 function addFiles (files) {
+  console.log('Adding ' + files.length + ' files...')
   // Asynchronously map the files with the hash function over their contents
   async.map(files, function (file, callback) {
     var reader = new window.FileReader()
@@ -75,6 +76,7 @@ function addFiles (files) {
       musicMetadata(file, function (meta) {
         meta.originalName = file.name
         meta_storage.set(file.hashName, meta)
+        console.log('File finished processing: ' + file.name)
         callback(null, file)
       })
     }
@@ -234,23 +236,48 @@ window.queueTrack = function (index) {
 
 // Handle drag & drop by adding the dropped files
 function windowDrop (event) {
-  // get window.event if e argument missing (in IE)
+  // Get the event from the window, if it is missing
+  // and stop the default event handling (= showing the file)
   event = event || window.event
-
-  // stops the browser from redirecting off to the image.
   if (event.preventDefault) {
     event.preventDefault()
   }
 
-  var files = event.dataTransfer.files
-
-  // Check if the item is a folder
-  if (files[0].type === '') {
-    console.error("Folder are not supported for drag 'n' drop yet")
-    return
+  // Get all entries from the event
+  var items = event.dataTransfer.items
+  var entries = []
+  for (var i = 0; i < items.length; i++) {
+    var entry = items[i].webkitGetAsEntry()
+    if (entry) { entries.push(entry) }
   }
 
-  addFiles(files)
+  // Get all files from the entries, even if they are deep in directories
+  getFilesFromEntries(entries, addFiles)
+}
+
+// Get the files of the webkit entries
+function getFilesFromEntries (entries, callback) {
+  async.map(entries, function (entry, callback) {
+    traverseEntryTree(entry, function (files) { callback(null, files) })
+  }, function (error, results) {
+    if (error) throw error
+    var files = results.concat().reduce(function (x, y) { return x.concat(y) })
+    callback(files)
+  })
+}
+
+// Go through tree of entries and return a list of files
+function traverseEntryTree (entry, callback) {
+  // this entry is a file, so we are done here
+  if (entry.isFile) {
+    entry.file(function (file) { callback([file]) })
+  }
+
+  // this entry is a directory, we have to go deeper
+  if (entry.isDirectory) {
+    var dirReader = entry.createReader()
+    dirReader.readEntries(function (entries) { getFilesFromEntries(entries, callback) })
+  }
 }
 
 // Cancel this event
