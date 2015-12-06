@@ -171,7 +171,10 @@ window.addEventListener('load', function () {
   attachFiles()
 
   // Add files
-  document.querySelector('#myfile').onchange = function () {
+  document.querySelector('#fileUpload').onchange = function () {
+    addFiles(this.files)
+  }
+  document.querySelector('#directoryUpload').onchange = function () {
     addFiles(this.files)
   }
 

@@ -41,8 +41,11 @@
 </div>
 
 <div id="fileList">
-    <input type="file" id="myfile" multiple  webkitdirectory directory/> &mdash;
-    <input type="button" id="deleteFSContent" value="Clear files"/>
+
+    <h2>Files</h2>
+    Import files: <input type="file" id="fileUpload" multiple/><br>
+    Import directory: <input type="file" id="directoryUpload" webkitdirectory directory/><br>
+    Clear files: <input type="button" id="deleteFSContent" value="Clear"/>
 
     <h2>Queued</h2>
     <table id="queued"></table>
