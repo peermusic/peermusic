@@ -73,6 +73,7 @@ function addFiles (files) {
     reader.onloadend = function () {
       file.hashName = hash(this.result) + file.name.replace(/^.*(\.[A-Za-z0-9]{3})$/, '$1')
       musicMetadata(file, function (meta) {
+        meta.originalName = file.name
         meta_storage.set(file.hashName, meta)
         callback(null, file)
       })
