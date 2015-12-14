@@ -9,7 +9,7 @@ function ScrapingServers (storage) {
   this.storage = storage
 }
 
-// Bind the click handlers and render the initial list
+// Bind the event handlers and render the initial list
 ScrapingServers.prototype.initialize = function () {
   var self = this
   document.querySelector('#addNewScraping').onclick = function () { self.add() }
