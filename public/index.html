@@ -47,6 +47,12 @@
     Import directory: <input type="file" id="directoryUpload" webkitdirectory directory/><br>
     Clear files: <input type="button" id="deleteFSContent" value="Clear"/>
 
+    <h2>Scraping servers</h2>
+    <input type="url" placeholder="http://url-to-server.com" id="serverURL" required>
+    <input type="text" placeholder="description" id="serverDescription">
+    <input type="button" id="addNewScraping" value="Add">
+    <ul id="scraping-servers"></ul>
+
     <h2>Queued</h2>
     <table id="queued"></table>
 

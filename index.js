@@ -4,6 +4,7 @@ var async = require('async')
 var rusha = new (require('rusha'))()
 var storage = new (require('./modules/storage'))()
 var metadata = new (require('./modules/metadata'))(storage)
+var scrapingServers = new (require('./modules/scraping-servers'))(storage)
 
 var seeking = false
 var current_song_index = -1
@@ -158,6 +159,7 @@ function duration (seconds) {
 // Bind the window events
 window.addEventListener('load', function () {
   attachFiles()
+  scrapingServers.initialize()
 
   // Add files
   document.querySelector('#fileUpload').onchange = function () {
