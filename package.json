@@ -25,6 +25,7 @@
     "file-system": "git+https://github.com/peermusic/file-system.git",
     "player-engine": "git+https://github.com/peermusic/player-engine.git",
     "rusha": "0.8.*",
-    "music-metadata": "git+https://github.com/peermusic/music-metadata.git"
+    "music-metadata": "git+https://github.com/peermusic/music-metadata.git",
+    "in-memory-storage": "git+https://github.com/peermusic/in-memory-storage.git"
   }
 }

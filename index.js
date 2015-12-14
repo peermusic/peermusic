@@ -1,4 +1,4 @@
-var storage = new (require('./modules/storage'))()
+var storage = new (require('in-memory-storage'))()
 var metadata = new (require('./modules/metadata'))(storage)
 var scrapingServers = new (require('./modules/scraping-servers'))(storage)
 var musicPlayer = new (require('./modules/music-player'))(metadata)
