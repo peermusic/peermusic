@@ -2,22 +2,11 @@ var engine = require('player-engine')
 var fs = require('file-system')(64 * 1024 * 1024, ['audio/mp3', 'audio/wav', 'audio/ogg'])
 var async = require('async')
 var rusha = new (require('rusha'))()
-var musicMetadata = require('music-metadata')
+var storage = new (require('./modules/storage'))()
+var metadata = new (require('./modules/metadata'))(storage)
 
 var seeking = false
 var current_song_index = -1
-
-// In-memory storage with persistence through localStorage
-var meta_storage = {
-  cache: JSON.parse(window.localStorage.getItem('metadata')) || {},
-  get: function (key) {
-    return this.cache[key]
-  },
-  set: function (key, meta) {
-    this.cache[key] = meta
-    window.localStorage.setItem('metadata', JSON.stringify(this.cache))
-  }
-}
 
 // Initialize the player engine & event listeners
 engine = engine()
@@ -41,7 +30,7 @@ engine.on('backState', function (back_possible) {
 
 // Update songs
 engine.on('songState', function (song) {
-  var meta = meta_storage.get(song.name)
+  var meta = metadata.get(song.name)
   document.querySelector('#fileContainer').innerHTML = '<strong>Currently playing:</strong> ' + meta.album + ' - ' + meta.artist + ' - ' + meta.title
   document.querySelector('#currentTime').innerHTML = duration(0)
   document.querySelector('#progressBar').min = 0
@@ -73,9 +62,9 @@ function addFiles (files) {
     reader.readAsDataURL(file)
     reader.onloadend = function () {
       file.hashName = hash(this.result) + file.name.replace(/^.*(\.[A-Za-z0-9]{3})$/, '$1')
-      musicMetadata(file, function (meta) {
+      metadata.fetch(file, function (meta) {
         meta.originalName = file.name
-        meta_storage.set(file.hashName, meta)
+        metadata.set(file.hashName, meta)
         console.log('File finished processing: ' + file.name)
         callback(null, file)
       })
@@ -133,7 +122,7 @@ function trackTableHtml (tracks, queue) {
 
   for (var i = 0; i !== tracks.length; i++) {
     var track = tracks[i]
-    var meta = meta_storage.get(track.name)
+    var meta = metadata.get(track.name)
     var columns = []
 
     columns.push('<a href="#" onclick="playTrack(\'' + track.index + '\')"><i class="fa fa-play"></i></a>')
