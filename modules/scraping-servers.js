@@ -13,6 +13,7 @@ function ScrapingServers (storage) {
 ScrapingServers.prototype.initialize = function () {
   var self = this
   document.querySelector('#addNewScraping').onclick = function () { self.add() }
+  window.removeServer = function (index) { self.remove(index) }
 
   this.render()
 }
@@ -24,10 +25,10 @@ ScrapingServers.prototype.get = function () {
 
 // Render a list of scraping servers
 ScrapingServers.prototype.render = function () {
-  document.querySelector('#scraping-servers').innerHTML = this.get().map(function (x) {
+  document.querySelector('#scraping-servers').innerHTML = this.get().map(function (x, i) {
     var string = '<li>' + x.url
     string += x.description === '' ? '' : ' (' + x.description + ')'
-    return string + '</li>'
+    return string + ' <a href="#" onclick="removeServer(' + i + ')">delete</a></li>'
   }).join('')
 }
 
@@ -51,5 +52,16 @@ ScrapingServers.prototype.add = function () {
   // Update the view
   document.querySelector('#serverURL').value = ''
   document.querySelector('#serverDescription').value = ''
+  this.render()
+}
+
+// Remove a scraping server
+ScrapingServers.prototype.remove = function (index) {
+  // Remove the server from storage
+  var servers = this.get()
+  servers.splice(index, 1)
+  this.storage.set('scrapingServers', servers)
+
+  // Update the view
   this.render()
 }
