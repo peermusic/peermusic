@@ -173,9 +173,15 @@ MusicPlayer.prototype.renderCurrentCoverArt = function (metadata) {
 // Render similar tracks to the current song
 MusicPlayer.prototype.renderSimilarTracks = function (metadata) {
   document.querySelector('#similarTracks').innerHTML = ''
-  similarity(this.scrapingServers.get(), metadata, function (tracks) {
-    document.querySelector('#similarTracks').innerHTML = tracks.map(function (track) {
-      return '"' + track.title + '" (' + track.artist + ')'
+  var servers = this.scrapingServers.get().map(function (x) { return x.url })
+
+  if (servers.length == 0) {
+    return
+  }
+
+  similarity(servers, metadata, function (tracks) {
+    document.querySelector('#similarTracks').innerHTML = tracks.length === 0 ? 'None found' : tracks.map(function (track) {
+      return track.title
     }).join(', ')
   })
 }
