@@ -1,3 +1,6 @@
+/* eslint-disable spaced-comment */
+var xhr = require('xhr')
+
 module.exports = ScrapingServers
 
 // Manage scrapping servers
@@ -17,6 +20,10 @@ ScrapingServers.prototype.initialize = function () {
 
   this.render()
 }
+
+/*******************************************************************
+ * Managing scrapping servers
+ *******************************************************************/
 
 // Get all registered scraping servers
 ScrapingServers.prototype.get = function () {
@@ -64,4 +71,46 @@ ScrapingServers.prototype.remove = function (index) {
 
   // Update the view
   this.render()
+}
+
+/*******************************************************************
+ * Using scrapping servers
+ *******************************************************************/
+
+// Get a cover for a metadata object
+ScrapingServers.prototype.getCover = function (metadata, callback) {
+  var self = this
+
+  // Check if we have it in storage already
+  var hash = metadata.artist + '_' + metadata.album
+  var cache = this.storage.get('coverCache', {})
+  if (cache[hash]) {
+    callback(cache[hash])
+    return
+  }
+
+  // Check if we have scraping servers, and if not we are done here
+  var servers = this.get()
+  if (servers.length === 0) {
+    callback('')
+    return
+  }
+
+  // Get the cover image from the scraping server
+  xhr({
+    url: servers[0].url + '/Cover',
+    method: 'POST',
+    body: JSON.stringify({payload: metadata}),
+    headers: {'Content-Type': 'application/json'}
+  }, function (error, response, body) {
+    if (error || response.statusCode !== 200) {
+      console.error('Failed getting cover art from first scraping server')
+      return
+    }
+
+    body = JSON.parse(body)
+    cache[hash] = body.response
+    self.storage.set('coverCache', cache)
+    callback(body.response)
+  })
 }

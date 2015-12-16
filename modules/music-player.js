@@ -8,12 +8,13 @@ var dragDrop = require('./drag-and-drop')
 module.exports = MusicPlayer
 
 // Manage the music player interface
-function MusicPlayer (metadata) {
+function MusicPlayer (metadata, scrapingServers) {
   if (!(this instanceof MusicPlayer)) {
-    return new MusicPlayer(metadata)
+    return new MusicPlayer(metadata, scrapingServers)
   }
 
   this.metadata = metadata
+  this.scrapingServers = scrapingServers
   this.engine = engine()
   this.seeking = false
   this.current_song_index = -1
@@ -155,7 +156,16 @@ MusicPlayer.prototype.renderCurrentSong = function (song) {
   document.querySelector('#progressBar').max = song.duration
   document.querySelector('#songLength').innerHTML = this.formatDuration(song.duration)
   this.current_song_index = song.index
+  this.renderCurrentCoverArt(metadata)
   this.render()
+}
+
+// Render the cover of the current song
+MusicPlayer.prototype.renderCurrentCoverArt = function (metadata) {
+  document.querySelector('#coverArt').src = ''
+  this.scrapingServers.getCover(metadata, function (data) {
+    document.querySelector('#coverArt').src = data
+  })
 }
 
 // Format a second value as a duration value
