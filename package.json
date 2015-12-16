@@ -27,6 +27,7 @@
     "music-metadata": "git+https://github.com/peermusic/music-metadata.git",
     "player-engine": "git+https://github.com/peermusic/player-engine.git",
     "rusha": "0.8.*",
-    "xhr": "^2.2.0"
+    "xhr": "^2.2.0",
+    "music-similarity": "git+https://github.com/peermusic/music-similarity.git"
   }
 }

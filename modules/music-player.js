@@ -4,6 +4,7 @@ var fs = require('file-system')(64 * 1024 * 1024, ['audio/mp3', 'audio/wav', 'au
 var async = require('async')
 var rusha = new (require('rusha'))()
 var dragDrop = require('./drag-and-drop')
+var similarity = require('music-similarity')
 
 module.exports = MusicPlayer
 
@@ -157,6 +158,7 @@ MusicPlayer.prototype.renderCurrentSong = function (song) {
   document.querySelector('#songLength').innerHTML = this.formatDuration(song.duration)
   this.current_song_index = song.index
   this.renderCurrentCoverArt(metadata)
+  this.renderSimilarTracks(metadata)
   this.render()
 }
 
@@ -165,6 +167,16 @@ MusicPlayer.prototype.renderCurrentCoverArt = function (metadata) {
   document.querySelector('#coverArt').src = ''
   this.scrapingServers.getCover(metadata, function (data) {
     document.querySelector('#coverArt').src = data
+  })
+}
+
+// Render similar tracks to the current song
+MusicPlayer.prototype.renderSimilarTracks = function (metadata) {
+  document.querySelector('#similarTracks').innerHTML = ''
+  similarity(this.scrapingServers.get(), metadata, function (tracks) {
+    document.querySelector('#similarTracks').innerHTML = tracks.map(function (track) {
+      return '"' + track.title + '" (' + track.artist + ')'
+    }).join(', ')
   })
 }
 

@@ -8,37 +8,43 @@
 </head>
 <body>
 
-<h1>peermusic</h1>
+<h1 id="logo">peermusic</h1>
 
 <div id="outerContainer">
 
-    <img src="" height="62" width="62" id="coverArt">
+    <img src="" height="90" width="90" id="coverArt">
 
-    <div id="fileContainer">
-    </div>
+    <div class="text">
 
-    <div id="controlsContainer">
-        <button id="previous" disabled><i class="fa fa-fast-backward"></i></button>
-
-        <button id="play"><i class="fa fa-play"></i></button>
-
-        <button id="next"><i class="fa fa-fast-forward"></i></button>
-    </div>
-
-    <div id="progressOuterCountainer">
-        <div id="currentTime">
+        <div id="fileContainer">
         </div>
-        <input type="range" id="progressBar"/>
-        <div id="songLength">
+
+        <div id="controlsContainer">
+            <button id="previous" disabled><i class="fa fa-fast-backward"></i></button>
+
+            <button id="play"><i class="fa fa-play"></i></button>
+
+            <button id="next"><i class="fa fa-fast-forward"></i></button>
         </div>
-    </div>
 
-    <div id="volumeOuterContainer">
-        <i class="fa fa-volume-up"></i>
-        <input type="range" id="volumeBar"/>
-    </div>
+        <div id="progressOuterCountainer">
+            <div id="currentTime">
+            </div>
+            <input type="range" id="progressBar"/>
+            <div id="songLength">
+            </div>
+        </div>
 
-    <div class="clearfix"></div>
+        <div id="volumeOuterContainer">
+            <i class="fa fa-volume-up"></i>
+            <input type="range" id="volumeBar"/>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <small>Similar tracks: <span id="similarTracks"></span></small>
+
+    </div>
 
 </div>
 

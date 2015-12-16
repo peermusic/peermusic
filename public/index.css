@@ -1,19 +1,39 @@
+* {
+    font-family: Arial;
+}
+
+#logo {
+    font-size: 50px;
+    text-align: center;
+}
+
 #outerContainer, #fileList {
     border: 1px solid black;
-    margin: 25px;
     padding: 25px;
-    width: 877px;
+    width: 900px;
+    margin: 25px auto;
+}
+
+#outerContainer {
+    display: flex;
+    align-items: center;
+}
+
+#outerContainer small {
+    color: gray;
+    display: block;
+    margin-top: 7px;
+    font-size: 12px;
 }
 
 #outerContainer #coverArt {
-    float: left;
     margin-right: 15px;
     background: lightgray;
     border: 1px solid lightgray;
 }
 
 #fileContainer {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     margin-top: 5px;
 }
 
