@@ -13,12 +13,12 @@ function Metadata (storage) {
 
 // Get the metadata for a song
 Metadata.prototype.get = function (song) {
-  return this.storage.get('metadata')[song]
+  return this.storage.get('metadata', {})[song]
 }
 
 // Set the metadata for a song
 Metadata.prototype.set = function (song, metadata) {
-  var tmp = this.storage.get('metadata')
+  var tmp = this.storage.get('metadata', {})
   tmp[song] = metadata
   this.storage.set('metadata', tmp)
 }
