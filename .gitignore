@@ -1,3 +1,6 @@
+# Build data
+public/build/
+
 # Editors
 .idea/
 

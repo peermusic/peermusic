@@ -25,9 +25,21 @@
     "file-system": "git+https://github.com/peermusic/file-system.git",
     "in-memory-storage": "git+https://github.com/peermusic/in-memory-storage.git",
     "music-metadata": "git+https://github.com/peermusic/music-metadata.git",
+    "music-similarity": "git+https://github.com/peermusic/music-similarity.git",
     "player-engine": "git+https://github.com/peermusic/player-engine.git",
     "rusha": "0.8.*",
-    "xhr": "^2.2.0",
-    "music-similarity": "git+https://github.com/peermusic/music-similarity.git"
+    "xhr": "^2.2.0"
+  },
+  "devDependencies": {
+    "browserify": "^12.0.1",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-sass": "^2.1.1",
+    "http": "0.0.0",
+    "reactify": "^1.1.1",
+    "st": "^1.1.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.6.1"
   }
 }
