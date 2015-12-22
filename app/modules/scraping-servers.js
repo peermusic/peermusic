@@ -3,6 +3,9 @@ var xhr = require('xhr')
 
 module.exports = ScrapingServers
 
+var ADD_SCRAPPING_SERVER = '#scraping-server-add'
+var SCRAPING_SERVER_LIST = '#scraping-servers'
+
 // Manage scrapping servers
 function ScrapingServers (storage) {
   if (!(this instanceof ScrapingServers)) {
@@ -15,7 +18,7 @@ function ScrapingServers (storage) {
 // Bind the event handlers and render the initial list
 ScrapingServers.prototype.initialize = function () {
   var self = this
-  document.querySelector('#addNewScraping').onclick = function () { self.add() }
+  document.querySelector(ADD_SCRAPPING_SERVER).onclick = function () { self.add() }
   window.removeServer = function (index) { self.remove(index) }
 
   this.render()
@@ -32,11 +35,28 @@ ScrapingServers.prototype.get = function () {
 
 // Render a list of scraping servers
 ScrapingServers.prototype.render = function () {
-  document.querySelector('#scraping-servers').innerHTML = this.get().map(function (x, i) {
-    var string = '<li>' + x.url
-    string += x.description === '' ? '' : ' (' + x.description + ')'
-    return string + ' <a href="#" onclick="removeServer(' + i + ')">delete</a></li>'
-  }).join('')
+  var servers = this.get()
+
+  if (!servers.length) {
+    document.querySelector(SCRAPING_SERVER_LIST).innerHTML = ''
+    return
+  }
+
+  var html = [
+    '<tr><th class="number">#</th><th>Server URL</th><th>Description</th><th></th></tr>'
+  ]
+
+  for (var i = 0; i !== servers.length; i++) {
+    var description = servers[i].description === '' ? '&mdash;' : servers[i].description
+    html.push('<tr>' +
+      '<td class="number">' + (i + 1) + '</td>' +
+      '<td>' + servers[i].url + '</td>' +
+      '<td>' + description + '</td>' +
+      '<td><a href="#" onclick="removeServer(' + i + ')">delete</a></td>' +
+      '</tr>')
+  }
+
+  document.querySelector(SCRAPING_SERVER_LIST).innerHTML = html.join('')
 }
 
 // Add a new scraping server

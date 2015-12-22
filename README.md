@@ -1,5 +1,7 @@
 # peermusic-desktop
 
+![peermusic interface](http://i.imgur.com/6K1W5mQ.png)
+
 ## Install
 
 ```sh

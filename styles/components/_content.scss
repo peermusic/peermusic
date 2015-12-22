@@ -1,0 +1,36 @@
+@import '../colors';
+@import '../mixins/custom-scrollbar';
+
+.content {
+    @include custom-scrollbar($background-light-gray);
+    flex-grow: 1;
+    padding: 25px;
+    color: $color-light-gray;
+    overflow-y: auto;
+
+    a {
+        color: $color-brand;
+    }
+
+    h2 {
+        margin: 0;
+        margin-bottom: 25px;
+        font-size: 40px;
+        font-weight: 300;
+        letter-spacing: 1px;
+    }
+
+    @import 'song-table';
+    @import 'input';
+
+    .queue {
+        flex-grow: 0;
+        flex-shrink: 0;
+        width: 600px;
+        margin-left: 20px;
+
+        @media (max-width: 1600px) {
+            display: none;
+        }
+    }
+}

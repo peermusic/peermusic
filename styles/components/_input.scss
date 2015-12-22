@@ -1,0 +1,99 @@
+@import '../colors';
+@import '../mixins/custom-scrollbar';
+
+input[type='text'], input[type='url'], textarea {
+    display: inline-block;
+    padding: 7px 10px;
+    border: 1px solid $background-light-gray;
+    border-radius: 5px;
+    background: $background-dark-gray;
+    color: $color-light-gray;
+
+    &::-webkit-input-placeholder {
+        color: $color-dark-gray;
+    }
+
+    &:focus {
+        border: 1px solid $color-brand;
+        outline: none;
+    }
+}
+
+textarea {
+    @include custom-scrollbar($background-light-gray);
+    resize: none;
+}
+
+input[type='submit'], input[type='button'], button, .fake-file-input {
+    display: inline-block;
+    padding: 6px 15px;
+    border: 1px solid $color-brand;
+    border-radius: 5px;
+    outline: none;
+    background: $color-brand;
+    color: $background-dark-gray;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &.margin-right {
+        margin-right: 10px;
+    }
+
+    &:hover {
+        border: 1px solid darken($color-brand, 5);
+        background: darken($color-brand, 5);
+    }
+
+}
+
+.fake-file-input input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    border: solid transparent;
+    border-width: 0 0 100px 200px;
+    cursor: pointer;
+    opacity: 0;
+    direction: ltr;
+    filter: alpha(opacity = 0);
+}
+
+.pretty-form {
+    width: 100%;
+    max-width: 960px;
+    margin-bottom: 15px;
+    font-size: 15px;
+
+    > div {
+        display: flex;
+        margin-bottom: 15px;
+        padding: 0 15px 20px;
+        border-bottom: 1px solid $background-gray;
+
+        &.no-border {
+            margin-bottom: 0;
+            border-bottom: 0;
+        }
+
+        label {
+            align-self: center;
+            width: 150px;
+            color: $color-light-gray;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        input, textarea {
+            flex: 1;
+        }
+
+        textarea {
+            min-height: 100px;
+        }
+
+    }
+
+}
