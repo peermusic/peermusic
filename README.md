@@ -21,9 +21,9 @@ If you have http://livereload.com/extensions/ installed, they even get instantly
 ## Styleguides
 
 ```sh
-// Javascript
+# Javascript
 standard app/**/*
 
-// SCSS
+# SCSS
 scss-lint styles/* -e styles\_normalize.scss
 ```
