@@ -23,7 +23,7 @@
     @import 'song-table';
     @import 'input';
 
-    .queue {
+    &.queue {
         flex-grow: 0;
         flex-shrink: 0;
         width: 600px;
