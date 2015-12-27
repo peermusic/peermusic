@@ -40,13 +40,14 @@ var actions = {
                 // the song data in local storage
                 var song = {
                   id: hash,
-                  filename: hashName,
+                  filename: url,
                   ...meta,
                   added_at: (new Date()).toString(),
                   length: duration,
                   favorited: false,
                   cover_id: getCoverId(meta),
                   availability: 0,
+                  hashName: hashName,
                   originalFilename: file.name
                 }
 

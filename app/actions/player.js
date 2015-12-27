@@ -1,5 +1,4 @@
 var engine = require('player-engine')()
-var fs = require('file-system')(64 * 1024 * 1024, ['audio/mp3', 'audio/wav', 'audio/ogg'])
 
 var actions = {
 
@@ -23,12 +22,8 @@ var actions = {
         // Old file is not here anymore :(
         dispatch(actions.PLAYER_CURRENT_DURATION(0))
       } else {
-        // Old file is still here, let's load it! :)
-        fs.get(filename, (err, url) => {
-          if (err) throw 'Error getting file: ' + err
-          engine.load(url)
-          engine.seek(state.player.currentDuration)
-        })
+        engine.load(filename)
+        engine.seek(state.player.currentDuration)
       }
     }
   },
@@ -37,15 +32,11 @@ var actions = {
   PLAYER_SET_SONG: (id) => {
     return (dispatch, getState) => {
       const filename = getSongFile(id, getState())
-      fs.get(filename, (err, url) => {
-        if (err) throw 'Error getting file: ' + err
-
-        engine.load(url)
-        engine.play()
-        dispatch({
-          type: 'PLAYER_SET_SONG',
-          id
-        })
+      engine.load(filename)
+      engine.play()
+      dispatch({
+        type: 'PLAYER_SET_SONG',
+        id
       })
     }
   },
