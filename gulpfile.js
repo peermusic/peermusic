@@ -2,7 +2,6 @@ var gulp = require('gulp')
 var source = require('vinyl-source-stream')
 var browserify = require('browserify')
 var watchify = require('watchify')
-var reactify = require('reactify')
 var babelify = require('babelify')
 var concat = require('gulp-concat')
 var sass = require('gulp-sass')
@@ -25,7 +24,7 @@ gulp.task('browserify', function () {
   // We also wanna convert JSX to javascript, transpile es6, and turn on source mapping
   var bundler = browserify({
     entries: ['./app/index.js'],
-    transform: [reactify, [babelify, {'presets': ['es2015', 'react']}]],
+    transform: [[babelify, {'presets': ['es2015', 'stage-0', 'react']}]],
     debug: true,
     cache: {},
     packageCache: {},
