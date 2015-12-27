@@ -23,7 +23,7 @@ gulp.task('browserify', function () {
   // Give browserify the initial file, it automatically grabs the dependencies
   // We also wanna convert JSX to javascript, transpile es6, and turn on source mapping
   var bundler = browserify({
-    entries: ['./app/index.js'],
+    entries: ['./app/index.jsx'],
     transform: [[babelify, {'presets': ['es2015', 'stage-0', 'react']}]],
     debug: true,
     cache: {},

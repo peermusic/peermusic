@@ -14,22 +14,27 @@
 
     .search {
         display: block;
-        width: 80%;
-        margin: auto;
-        margin-top: 25px;
-        padding: 7px 10px;
-        border: 1px solid $background-light-gray;
-        border-radius: 5px;
-        background: $background-dark-gray;
-        color: $color-light-gray;
+        width: 100%;
 
-        &::-webkit-input-placeholder {
-            color: $color-dark-gray;
-        }
+        input {
+            display: block;
+            width: 80%;
+            margin: auto;
+            margin-top: 25px;
+            padding: 7px 10px;
+            border: 1px solid $background-light-gray;
+            border-radius: 5px;
+            background: $background-dark-gray;
+            color: $color-light-gray;
 
-        &:focus {
-            border: 1px solid $color-brand;
-            outline: none;
+            &::-webkit-input-placeholder {
+                color: $color-dark-gray;
+            }
+
+            &:focus {
+                border: 1px solid $color-brand;
+                outline: none;
+            }
         }
 
     }

@@ -1,6 +1,6 @@
 @import '../colors';
 
-.library-table {
+.song-table {
     width: 100%;
     max-width: 960px;
     font-size: 14px;
@@ -36,11 +36,24 @@
             text-align: center;
         }
 
+        .inactive {
+            color: $color-dark-gray;
+        }
+
+        .number {
+            width: 25px;
+        }
+
+        .song-time {
+            width: 50px;
+        }
+
         .creation-date {
             width: 75px;
         }
 
         .play-button, .add-button, .favorite-button {
+            width: 25px;
             padding: 10px 15px;
             text-align: center;
 
@@ -60,6 +73,12 @@
             }
         }
 
+        .remove-button {
+            width: 25px;
+            padding: 10px 15px;
+            text-align: center;
+        }
+
         .play-button {
             padding-right: 10px;
         }
@@ -76,7 +95,7 @@
         }
 
         &.active {
-            .title, .artist, .album, .play-button a, .play-button a:hover {
+            .title, .artist, .album, .play-button {
                 color: $color-brand;
                 visibility: visible;
             }

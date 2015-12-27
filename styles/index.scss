@@ -16,7 +16,12 @@ html, body {
     height: 100%;
     background: $background-dark-gray;
     cursor: default;
+    overflow: hidden;
     -webkit-user-select: none;
+
+    a {
+        cursor: pointer;
+    }
 
     .top-content {
         display: flex;

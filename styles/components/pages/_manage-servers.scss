@@ -1,0 +1,11 @@
+.import-form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 960px;
+    margin-bottom: 40px;
+
+    .right {
+        margin-left: auto;
+    }
+}

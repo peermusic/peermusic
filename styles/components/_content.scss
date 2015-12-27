@@ -20,6 +20,15 @@
         letter-spacing: 1px;
     }
 
+    h3 {
+        margin: 0;
+        margin-bottom: 15px;
+        color: $color-gray;
+        font-size: 25px;
+        font-weight: 300;
+        letter-spacing: 1px;
+    }
+
     @import 'song-table';
     @import 'input';
 
@@ -33,4 +42,25 @@
             display: none;
         }
     }
+
+    p {
+        max-width: 400px;
+        margin-bottom: 25px;
+        color: $color-gray;
+        font-size: 14px;
+    }
+
+    @import 'pages/manage-servers';
+    @import 'pages/search';
+
+    // TODO remove
+    .work-in-progress {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        margin-top: 250px;
+        color: $color-gray;
+    }
+
 }

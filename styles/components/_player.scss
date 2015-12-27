@@ -37,6 +37,7 @@
             height: 6px;
             background-color: $color-gray;
             content: '';
+            pointer-events: none;
         }
     }
 
