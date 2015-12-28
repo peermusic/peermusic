@@ -7,7 +7,8 @@ var actions = {
   ...require('./songs.js'),
   ...require('./player.js'),
   ...require('./interfaceStatus.js'),
-  ...require('./scrapingServers.js')
+  ...require('./scrapingServers.js'),
+  ...require('./covers.js')
 }
 
 module.exports = actions

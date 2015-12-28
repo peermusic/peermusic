@@ -5,7 +5,8 @@ var reducers = {
   songs: require('./songs.js'),
   player: require('./player.js'),
   interfaceStatus: require('./interfaceStatus.js'),
-  scrapingServers: require('./scrapingServers.js')
+  scrapingServers: require('./scrapingServers.js'),
+  covers: require('./covers.js')
 }
 
 module.exports = reducers

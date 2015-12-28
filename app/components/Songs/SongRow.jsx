@@ -20,7 +20,7 @@ function SongRow ({ song, playing, PLAYER_SET_SONG }) {
         <td className={artistClass}>{song.artist || '—'}</td>
         <td className={albumClass}>{song.album || '—'}</td>
         <td className='creation-date'>
-          <DateFormat then={song.added_at}/>
+          <DateFormat then={song.addedAt}/>
         </td>
         <td className='song-time'>
           <Duration seconds={song.length}/>

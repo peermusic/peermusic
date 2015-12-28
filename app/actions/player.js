@@ -1,4 +1,5 @@
 var engine = require('player-engine')()
+var coversActions = require('./covers.js')
 
 var actions = {
 
@@ -17,13 +18,16 @@ var actions = {
       dispatch(actions.PLAYER_SET_PLAYING(false))
 
       // Get the filename of the last played song
-      const filename = getSongFile(state.player.songId, state)
+      const song = getSong(state.player.songId, state)
+      const filename = song ? song.filename : false
       if (!filename) {
         // Old file is not here anymore :(
         dispatch(actions.PLAYER_CURRENT_DURATION(0))
       } else {
+        // Old file is still here, let's load it! :)
         engine.load(filename)
         engine.seek(state.player.currentDuration)
+        coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
       }
     }
   },
@@ -31,9 +35,11 @@ var actions = {
   // Set the player engine to play a song
   PLAYER_SET_SONG: (id) => {
     return (dispatch, getState) => {
-      const filename = getSongFile(id, getState())
+      const song = getSong(id, getState())
+      const filename = song ? song.filename : false
       engine.load(filename)
       engine.play()
+      coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
       dispatch({
         type: 'PLAYER_SET_SONG',
         id
@@ -87,10 +93,9 @@ var actions = {
 
 }
 
-// Get the filename off the state based on a song id
-function getSongFile (songId, state) {
-  const song = state.songs.filter(x => x.id === songId)[0]
-  return (song) ? song.filename : false
+// Get the song off the state based on a song id
+function getSong (songId, state) {
+  return state.songs.filter(x => x.id === songId)[0]
 }
 
 module.exports = actions

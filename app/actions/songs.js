@@ -1,6 +1,7 @@
 var rusha = new (require('rusha'))()
 var metadataReader = require('music-metadata')
 var fs = require('file-system')(64 * 1024 * 1024, ['audio/mp3', 'audio/wav', 'audio/ogg'])
+var coversActions = require('./covers.js')
 
 var actions = {
 
@@ -8,7 +9,7 @@ var actions = {
   // gets the metadata and the duration and dispatches the result metadata.
   // To add multiple files just dispatch this action multiple times.
   ADD_SONG: (file) => {
-    return dispatch => {
+    return (dispatch, getState) => {
       // Extract the file ending
       var file_ending = file.name.replace(/^.*(\.[A-Za-z0-9]{3})$/, '$1')
 
@@ -42,14 +43,17 @@ var actions = {
                   id: hash,
                   filename: url,
                   ...meta,
-                  added_at: (new Date()).toString(),
+                  addedAt: (new Date()).toString(),
                   length: duration,
                   favorited: false,
-                  cover_id: getCoverId(meta),
+                  coverId: getCoverId(meta),
                   availability: 0,
                   hashName: hashName,
                   originalFilename: file.name
                 }
+
+                // Dispatch an action to get the cover from the scraping server
+                coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
 
                 dispatch({
                   type: 'ADD_SONG',

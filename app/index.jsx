@@ -19,7 +19,7 @@ const reducer = reduxStorage.reducer(combineReducers(require('./reducers')))
 const storage = reduxStorage.createMiddleware(storageEngine, ['@@router/INIT_PATH'])
 
 // Everything is prepared, combine the middleware and the reducer into a store
-const store = applyMiddleware(storage, thunk, logger)(createStore)(reducer)
+const store = applyMiddleware(storage, thunk)(createStore)(reducer)
 
 // Load the state we saved before when the application loads
 // and sync that state into the player engine
