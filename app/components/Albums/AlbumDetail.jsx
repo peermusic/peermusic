@@ -3,13 +3,17 @@ const { connect } = require('react-redux')
 const SongTable = require('../Songs/SongTable.jsx')
 
 function AlbumDetail ({ album, artist, songs, currentCover }) {
+  if (songs.length > 0) {
+    var albumDuration = Math.round(songs.map(x => x.length).reduce((a, b) => a + b) / 60)
+  }
+
   return (
       <div>
         <div className='album-header'>
           <img src={currentCover}/>
           <div>
             <h2>{album}</h2>
-            <h3>{artist}</h3>
+            <h3>{artist} <span className='padder'>&mdash;</span> {songs.length} songs <span className='padder'>&mdash;</span> {albumDuration} minutes</h3>
           </div>
         </div>
         <SongTable songs={songs} showRows={{track: true, title: true}}/>

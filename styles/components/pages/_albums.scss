@@ -1,10 +1,26 @@
 .album-header {
     display: flex;
+    margin-bottom: 40px;
 
-    > div {
-        margin-left: 25px;
-        margin-top: 15px;
+    img {
+        width: 175px;
+        height: 175px;
     }
 
-    margin-bottom: 40px;
+    h2 {
+        margin-bottom: 15px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    > div {
+        margin-top: 10px;
+        margin-left: 25px;
+    }
+
+    .padder {
+        margin: 0 5px;
+    }
 }
