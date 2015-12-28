@@ -86,7 +86,7 @@ var actions = {
   CLEAR_DATA: () => {
     return (dispatch) => {
       fs.clear((err) => {
-        if (err) throw 'Error removing song: ' + err
+        if (err) throw 'Error clearing filesystem: ' + err
         dispatch({
           type: 'CLEAR_DATA'
         })
