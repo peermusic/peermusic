@@ -9,52 +9,56 @@
     font-style: normal;
 }
 
-[class^='flaticon-']::before, [class*=' flaticon-']::before,
-[class^='flaticon-']::after, [class*=' flaticon-']::after {
+[class^='flaticon-']:before, [class*=' flaticon-']:before,
+[class^='flaticon-']:after, [class*=' flaticon-']:after {
     font-family: Flaticon;
     font-style: normal;
 }
 
-.flaticon-download::before {
+.flaticon-download:before {
     content: '\e000';
 }
 
-.flaticon-servers::before {
+.flaticon-servers:before {
     content: '\e001';
 }
 
-.flaticon-favorite::before {
+.flaticon-favorite:before {
     content: '\e002';
 }
 
-.flaticon-friends::before {
+.flaticon-friends:before {
     content: '\e003';
 }
 
-.flaticon-search::before {
+.flaticon-history:before {
     content: '\e004';
 }
 
-.flaticon-songs::before {
+.flaticon-search:before {
     content: '\e005';
 }
 
-.flaticon-albums::before {
+.flaticon-songs:before {
     content: '\e006';
 }
 
-.flaticon-overview::before {
+.flaticon-albums:before {
     content: '\e007';
 }
 
-.flaticon-queue::before {
+.flaticon-overview:before {
     content: '\e008';
 }
 
-.flaticon-speaker::before {
+.flaticon-queue:before {
     content: '\e009';
 }
 
-.flaticon-artist::before {
+.flaticon-speaker:before {
     content: '\e00a';
+}
+
+.flaticon-artist:before {
+    content: '\e00b';
 }
