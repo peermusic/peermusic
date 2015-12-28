@@ -2,7 +2,7 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
-const { TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYER_NEXT_SONG, TOGGLE_SONG_FAVORITE } = require('../actions')
+const { TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE } = require('../actions')
 const Duration = require('./Duration.jsx')
 
 class Player extends React.Component {
@@ -45,7 +45,11 @@ class Player extends React.Component {
   }
 
   render () {
-    const { player, currentSong, playingNextPanel, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_NEXT_SONG, TOGGLE_SONG_FAVORITE } = this.props
+    const { player, currentSong, backEnabled, playingNextPanel, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE } = this.props
+
+    const backButton = (backEnabled)
+        ? <button onClick={() => PLAYBACK_BACK()}><i className='fa fa-step-backward'/></button>
+        : <button disabled><i className='fa fa-step-backward'/></button>
 
     var volume = player.volume
     var playingToggle = !player.playing
@@ -63,9 +67,9 @@ class Player extends React.Component {
     return (
         <div className='player'>
           <div className='buttons'>
-            <button disabled><i className='fa fa-step-backward'/></button>
+            {backButton}
             <button className='play' onClick={() => PLAYER_SET_PLAYING(playingToggle)}>{playButton}</button>
-            <button onClick={() => PLAYER_NEXT_SONG()}><i className='fa fa-step-forward'/></button>
+            <button onClick={() => PLAYBACK_NEXT()}><i className='fa fa-step-forward'/></button>
           </div>
 
           <div className='seeker'>
@@ -116,7 +120,8 @@ module.exports = connect(
     (state) => ({
       currentSong: state.songs.filter(s => s.id === state.player.songId)[0],
       player: state.player,
+      backEnabled: state.player.history.currentIndex !== 0,
       playingNextPanel: state.interfaceStatus.playingNextPanel
     }),
-    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYER_NEXT_SONG, TOGGLE_SONG_FAVORITE}
+    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE}
 )(Player)

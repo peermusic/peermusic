@@ -6,15 +6,19 @@ const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
 
-function SongRow ({ song, playing, PLAYER_SET_SONG, REMOVE_SONG, TOGGLE_SONG_FAVORITE, columns }) {
-  var track, play, title, artist, album, added, length, queue, favorite, remove
+function SongRow ({ i, song, playing, PLAYER_SET_SONG, REMOVE_SONG, TOGGLE_SONG_FAVORITE, columns }) {
+  var index, track, play, title, artist, album, added, length, queue, favorite, remove, rowClass
+
+  if (columns.index) {
+    index = <th className='number'>{i}</th>
+  }
 
   if (columns.track) {
     track = <th className='number'>{song.track}</th>
   }
 
   if (columns.play) {
-    const playButton = playing ? <i className='fa fa-volume-up'/>
+    const playButton = playing && columns.activeRow ? <i className='fa fa-volume-up'/>
         : <a onClick={() => PLAYER_SET_SONG(song.id) }><i className='fa fa-play'/></a>
     play = <td className='play-button'>{playButton}</td>
   }
@@ -56,10 +60,13 @@ function SongRow ({ song, playing, PLAYER_SET_SONG, REMOVE_SONG, TOGGLE_SONG_FAV
     remove = <td className='remove-button'><a onClick={() => REMOVE_SONG(song.id)}><i className='fa fa-trash'/></a></td>
   }
 
-  var rowClass = classNames({active: playing})
+  if (columns.activeRow) {
+    rowClass = classNames({active: playing})
+  }
 
   return (
       <tr className={rowClass} onDoubleClick={() => PLAYER_SET_SONG(song.id) }>
+        {index}
         {track}
         {play}
         {title}
