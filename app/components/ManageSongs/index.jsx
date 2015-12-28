@@ -33,7 +33,7 @@ class ManageSongs extends React.Component {
     return (
         <div>
           <h2>Manage songs</h2>
-          <p>You can import files by just drag & dropping them onto the application or using the buttons below.</p>
+          
           <div className='import-form'>
             <label className='fake-file-input margin-right'>
               Import files
