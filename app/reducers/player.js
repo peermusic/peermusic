@@ -3,7 +3,21 @@ const initialState = {
   currentDuration: 0,
   volume: 0.2,
   playing: false,
-  history: {currentIndex: 0, songs: []}
+  history: {currentIndex: 0, songs: []},
+  userQueue: []
+}
+
+const userQueue = (state = [], action) => {
+  switch (action.type) {
+    case 'PLAYBACK_USER_QUEUE_PUSH':
+      return [...state, action.id]
+    case 'PLAYBACK_USER_QUEUE_POP':
+      return [...state.slice(1, state.length)]
+    case 'REMOVE_SONG':
+      // TODO Cleanup on remove song!
+    default:
+      return state
+  }
 }
 
 const history = (state = {currentIndex: 0, songs: []}, action) => {
@@ -29,7 +43,7 @@ const history = (state = {currentIndex: 0, songs: []}, action) => {
 
       return {...state, songs: [...songs, action.id], currentIndex: index}
     case 'REMOVE_SONG':
-      // TODO Cleanup history.songs on remove song!
+      // TODO Cleanup .songs on remove song!
     default:
       return state
   }
@@ -54,6 +68,9 @@ const player = (state = initialState, action) => {
     case 'HISTORY_BACK':
     case 'HISTORY_NEXT':
       return {...state, history: history(state.history, action)}
+    case 'PLAYBACK_USER_QUEUE_PUSH':
+    case 'PLAYBACK_USER_QUEUE_POP':
+      return {...state, userQueue: userQueue(state.userQueue, action)}
     default:
       return state
   }

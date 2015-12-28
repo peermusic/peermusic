@@ -109,12 +109,31 @@ var actions = {
     }
   },
 
+  // Queue a song for playback
+  PLAYBACK_USER_QUEUE: (id) => {
+    return {
+      type: 'PLAYBACK_USER_QUEUE_PUSH',
+      id
+    }
+  },
+
   // Set the next song for the player
   PLAYBACK_NEXT: () => {
     return (dispatch, getState) => {
-      const history = getState().player.history
+      const state = getState()
+
+      // If we have a queue entry, it *always* takes priority
+      const userQueue = state.player.userQueue
+      if (userQueue.length > 0) {
+        dispatch(actions.PLAYER_SET_SONG(userQueue[0]))
+        dispatch({
+          type: 'PLAYBACK_USER_QUEUE_POP'
+        })
+        return
+      }
 
       // We have a history entry set, let's use that one.
+      const history = state.player.history
       if (history.songs.length - 1 > history.currentIndex) {
         const id = history.songs[history.currentIndex + 1]
         dispatch(actions.PLAYER_SET_SONG(id, true))
@@ -126,7 +145,7 @@ var actions = {
 
       // Nothing set, let's randomly play something :(
       console.log('No songs set, random song playing')
-      const songs = getState().songs
+      const songs = state.songs
       const id = songs[Math.floor(Math.random() * songs.length)].id
       dispatch(actions.PLAYER_SET_SONG(id))
     }

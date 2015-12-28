@@ -1,12 +1,12 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
-const { PLAYER_SET_SONG, REMOVE_SONG, TOGGLE_SONG_FAVORITE } = require('../../actions')
+const { PLAYER_SET_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE } = require('../../actions')
 const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
 
-function SongRow ({ i, song, playing, PLAYER_SET_SONG, REMOVE_SONG, TOGGLE_SONG_FAVORITE, options }) {
+function SongRow ({ i, song, playing, PLAYER_SET_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, options }) {
   var index, track, play, title, artist, album, added, length, queue, favorite, remove, rowClass
 
   if (options.index) {
@@ -48,7 +48,7 @@ function SongRow ({ i, song, playing, PLAYER_SET_SONG, REMOVE_SONG, TOGGLE_SONG_
   }
 
   if (options.queue) {
-    queue = <td className='add-button'><a href='#'><i className='fa fa-plus'/></a></td>
+    queue = <td className='add-button'><a onClick={() => PLAYBACK_USER_QUEUE(song.id)}><i className='fa fa-plus'/></a></td>
   }
 
   if (options.favorite) {
@@ -81,4 +81,4 @@ function SongRow ({ i, song, playing, PLAYER_SET_SONG, REMOVE_SONG, TOGGLE_SONG_
   )
 }
 
-module.exports = connect(null, {PLAYER_SET_SONG, REMOVE_SONG, TOGGLE_SONG_FAVORITE})(SongRow)
+module.exports = connect(null, {PLAYER_SET_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE})(SongRow)

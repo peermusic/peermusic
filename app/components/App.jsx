@@ -2,13 +2,13 @@ const React = require('react')
 const { connect } = require('react-redux')
 const Navigation = require('./Navigation.jsx')
 const Player = require('./Player.jsx')
-const Placeholder = require('./Placeholder.jsx')
 const DropPageWrapper = require('./DropPageWrapper.jsx')
+const PlayingNext = require('./PlayingNext/index.jsx')
 
 function App ({ children, currentUrl, playingNextPanel }) {
   var playingNext
   if (currentUrl !== '/playing-next' && playingNextPanel) {
-    playingNext = <div className='content queue'><Placeholder/></div>
+    playingNext = <div className='content queue'><PlayingNext options={{index: false, play: false, added: false, length: false, favorite: false}}/></div>
   }
 
   return (
