@@ -71,7 +71,7 @@ var actions = {
 // Creates and returns a blob from a base64 data URL
 // Source: https://github.com/ebidel/filer.js/blob/master/src/filer.js#L137
 function dataURLToBlob (dataURL) {
-  var parts = dataURL.split('base64,')
+  var parts = dataURL.split(';base64,')
   var contentType = parts[0].split(':')[1]
   var raw = window.atob(parts[1])
   var rawLength = raw.length
