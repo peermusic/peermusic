@@ -22,6 +22,9 @@ function mapStateToProps (state) {
     coverUrl: _getCover(song.coverId, state)
   })))
 
+  // Remove albums that have either album or artist not set
+  albums = albums.filter(a => a.album && a.artist)
+
   // Order the albums by the album title
   albums.sort((a, b) => (a.album > b.album) ? 1 : ((b.album > a.album) ? -1 : 0))
 

@@ -13,7 +13,13 @@ function AlbumDetail ({ album, artist, songs, currentCover }) {
           <img src={currentCover}/>
           <div>
             <h2>{album}</h2>
-            <h3>{artist} <span className='padder'>&mdash;</span> {songs.length} songs <span className='padder'>&mdash;</span> {albumDuration} minutes</h3>
+            <h3>
+              {artist}
+              <span className='padder'>&mdash;</span>
+              {songs.length} {songs.length > 1 ? 'songs' : 'song'}
+              <span className='padder'>&mdash;</span>
+              {albumDuration} minutes
+            </h3>
           </div>
         </div>
         <SongTable songs={songs} showRows={{track: true, title: true}}/>
