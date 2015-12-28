@@ -112,6 +112,10 @@
             .title, .artist, .album, .play-button {
                 color: $color-brand;
                 visibility: visible;
+
+                a {
+                    color: $color-brand
+                }
             }
         }
 

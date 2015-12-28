@@ -22,7 +22,7 @@ function AlbumDetail ({ album, artist, songs, currentCover }) {
             </h3>
           </div>
         </div>
-        <SongTable songs={songs} showRows={{track: true, title: true}}/>
+        <SongTable songs={songs} columns={{track: true, artist: false, album: false}}/>
       </div>
   )
 }

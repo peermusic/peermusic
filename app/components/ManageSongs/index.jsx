@@ -1,7 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const { ADD_SONG, CLEAR_DATA } = require('../../actions')
-const ManageSongsTable = require('./ManageSongsTable.jsx')
+const SongTable = require('../Songs/SongTable.jsx')
 
 class ManageSongs extends React.Component {
 
@@ -27,6 +27,8 @@ class ManageSongs extends React.Component {
 
   render () {
     const { songs } = this.props
+    const columns = {play: false, queue: false, favorite: false, remove: true}
+    const songDisplay = songs.length > 0 ? <SongTable songs={songs} columns={columns}/> : <h3>You didn't add any songs yet!<br/>Start by dragging and dropping some songs into this window.</h3>
 
     return (
         <div>
@@ -47,7 +49,7 @@ class ManageSongs extends React.Component {
                    onClick={() => this.clearData()}/>
           </div>
 
-          <ManageSongsTable songs={songs}/>
+          {songDisplay}
         </div>
     )
   }

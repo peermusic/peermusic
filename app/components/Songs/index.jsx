@@ -3,7 +3,7 @@ const { connect } = require('react-redux')
 const SongTable = require('./SongTable.jsx')
 
 function Songs ({ songs }) {
-  var songDisplay = songs.length > 0 ? <SongTable songs={songs}/> : <h3>You didn't add any songs yet!<br/>Start by dragging and dropping some songs into this window.</h3>
+  const songDisplay = songs.length > 0 ? <SongTable songs={songs}/> : <h3>You didn't add any songs yet!<br/>Start by dragging and dropping some songs into this window.</h3>
 
   return (
       <div>
