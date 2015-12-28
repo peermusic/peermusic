@@ -30,6 +30,20 @@
             }
         }
 
+        .title, .artist, .album {
+            flex: 1;
+        }
+
+        .artist a, .album a {
+            color: $color-light-gray;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+
+        }
+
         .creation-date, .song-time, .number {
             color: $color-gray;
             font-size: 80%;

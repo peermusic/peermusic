@@ -1,10 +1,14 @@
 const React = require('react')
 const { connect } = require('react-redux')
+const { Link } = require('react-router')
 
 function CurrentSong ({ currentSong, currentCover }) {
   if (currentSong === undefined) {
     return <div className='current-song'></div>
   }
+
+  var linkTargetAlbum = '/albums?album=' + currentSong.album + '&artist=' + currentSong.artist
+  var album = <Link to={linkTargetAlbum}>{currentSong.album}</Link>
 
   return (
       <div className='current-song'>
@@ -12,7 +16,7 @@ function CurrentSong ({ currentSong, currentCover }) {
         <div className='text'>
           <div className='song-title'>{currentSong.title}</div>
           <div className='song-artist'>
-            {currentSong.artist} &mdash; {currentSong.album}
+            {currentSong.artist} &mdash; {album}
           </div>
         </div>
       </div>

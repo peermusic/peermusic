@@ -30,6 +30,7 @@
     }
 
     @import 'song-table';
+    @import 'album-table';
     @import 'input';
 
     &.queue {
@@ -50,6 +51,7 @@
         font-size: 14px;
     }
 
+    @import 'pages/albums';
     @import 'pages/manage-servers';
     @import 'pages/search';
 

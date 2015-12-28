@@ -29,7 +29,7 @@ function mapStateToProps (state) {
 
 function matches (needle, haystack) {
   if (!haystack) {
-    return false;
+    return false
   }
   return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1
 }

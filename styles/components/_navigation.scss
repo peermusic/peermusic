@@ -106,6 +106,15 @@
             padding: 10px;
             border-top: 1px solid $background-dark-gray;
 
+            a {
+                color: $color-gray;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
             .song-title {
                 color: $color-light-gray;
             }

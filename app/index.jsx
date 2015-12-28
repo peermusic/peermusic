@@ -35,6 +35,7 @@ syncReduxAndRouter(history, store)
 // Require our application components
 const App = require('./components/App.jsx')
 const Songs = require('./components/Songs/index.jsx')
+const Albums = require('./components/Albums/index.jsx')
 const ManageServers = require('./components/ManageServers/index.jsx')
 const ManageSongs = require('./components/ManageSongs/index.jsx')
 const Placeholder = require('./components/Placeholder.jsx')
@@ -47,6 +48,7 @@ ReactDOM.render(
         <Route path='/' component={App}>
           <IndexRoute component={Placeholder}/>
           <Route path='songs' component={Songs}/>
+          <Route path='albums' component={Albums}/>
           <Route path='manage-songs' component={ManageSongs}/>
           <Route path='manage-servers' component={ManageServers}/>
           <Route path='search' component={Search}/>

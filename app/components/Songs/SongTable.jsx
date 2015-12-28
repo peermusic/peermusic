@@ -2,15 +2,16 @@ const React = require('react')
 const { connect } = require('react-redux')
 const SongRow = require('./SongRow.jsx')
 
-function SongTable ({ songs, currentSong }) {
+function SongTable ({ songs, currentSong, showRows = {title: true, artist: true, album: true} }) {
   return (
       <table className='song-table'>
         <tbody>
         <tr>
+          {showRows.track && <th className='number'>#</th>}
           <th/>
-          <th>Title</th>
-          <th>Artist</th>
-          <th>Album</th>
+          {showRows.title && <th>Title</th>}
+          {showRows.artist && <th>Artist</th>}
+          {showRows.album && <th>Album</th>}
           <th className='creation-date'>Added</th>
           <th className='song-time'>Length</th>
           <th/>
@@ -18,7 +19,7 @@ function SongTable ({ songs, currentSong }) {
         </tr>
         {songs.map((song) => {
           var playing = song.id === currentSong
-          return <SongRow key={song.id} song={song} playing={playing}/>
+          return <SongRow key={song.id} song={song} playing={playing} showRows={showRows}/>
         })}
         </tbody>
       </table>
