@@ -5,6 +5,7 @@ const SongTable = require('../Songs/SongTable.jsx')
 function AlbumDetail ({ album, artist, songs, currentCover }) {
   if (songs.length > 0) {
     var albumDuration = Math.round(songs.map(x => x.length).reduce((a, b) => a + b) / 60)
+    var year = songs.map(s => s.year).filter(s => s)[0]
   }
 
   return (
@@ -15,6 +16,12 @@ function AlbumDetail ({ album, artist, songs, currentCover }) {
             <h2>{album}</h2>
             <h3>
               {artist}
+              {year &&
+                <span>
+                  <span className='padder'>&mdash;</span>
+                  {year}
+                </span>
+              }
               <span className='padder'>&mdash;</span>
               {songs.length} {songs.length > 1 ? 'songs' : 'song'}
               <span className='padder'>&mdash;</span>
