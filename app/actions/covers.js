@@ -1,5 +1,5 @@
 var xhr = require('xhr')
-var fs = require('file-system')(64 * 1024 * 1024, ['image/jpeg'])
+var fs = require('file-system')(['image/jpeg', 'image/jpg'])
 
 var inflightCoverRequests = []
 

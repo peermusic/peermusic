@@ -1,6 +1,6 @@
 var rusha = new (require('rusha'))()
 var metadataReader = require('music-metadata')
-var fs = require('file-system')(64 * 1024 * 1024, ['audio/mp3', 'audio/wav', 'audio/ogg'])
+var fs = require('file-system')(['audio/mp3', 'audio/wav', 'audio/ogg'])
 var coversActions = require('./covers.js')
 
 var actions = {
