@@ -2,6 +2,15 @@ const song = (state = {}, action) => {
   switch (action.type) {
     case 'ADD_SONG':
       return action.song
+    case 'TOGGLE_SONG_FAVORITE':
+      if (state.id !== action.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        favorite: !state.favorite
+      }
     default:
       return state
   }
@@ -14,6 +23,8 @@ const songs = (state = [], action) => {
         return state
       }
       return [...state, song(undefined, action)]
+    case 'TOGGLE_SONG_FAVORITE':
+      return state.map(s => song(s, action))
     case 'REMOVE_SONG':
       return state.filter(x => x.id !== action.id)
     case 'CLEAR_DATA':

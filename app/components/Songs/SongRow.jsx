@@ -1,13 +1,12 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
-const { PLAYER_SET_SONG, REMOVE_SONG } = require('../../actions')
+const { PLAYER_SET_SONG, REMOVE_SONG, TOGGLE_SONG_FAVORITE } = require('../../actions')
 const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
 
-function SongRow({ song, playing, PLAYER_SET_SONG, REMOVE_SONG, columns }) {
-
+function SongRow ({ song, playing, PLAYER_SET_SONG, REMOVE_SONG, TOGGLE_SONG_FAVORITE, columns }) {
   var track, play, title, artist, album, added, length, queue, favorite, remove
 
   if (columns.track) {
@@ -50,11 +49,11 @@ function SongRow({ song, playing, PLAYER_SET_SONG, REMOVE_SONG, columns }) {
 
   if (columns.favorite) {
     const favoriteClass = classNames('favorite-button', {active: song.favorite})
-    favorite = <td className={favoriteClass}><a href='#'><i className='flaticon-favorite'/></a></td>
+    favorite = <td className={favoriteClass}><a onClick={() => TOGGLE_SONG_FAVORITE(song.id)}><i className='flaticon-favorite'/></a></td>
   }
 
   if (columns.remove) {
-    remove = <td className='remove-button'><a onClick={() => {console.log(song.id); REMOVE_SONG(song.id)}}><i className='fa fa-trash'/></a></td>
+    remove = <td className='remove-button'><a onClick={() => REMOVE_SONG(song.id)}><i className='fa fa-trash'/></a></td>
   }
 
   var rowClass = classNames({active: playing})
@@ -75,4 +74,4 @@ function SongRow({ song, playing, PLAYER_SET_SONG, REMOVE_SONG, columns }) {
   )
 }
 
-module.exports = connect(null, {PLAYER_SET_SONG, REMOVE_SONG})(SongRow)
+module.exports = connect(null, {PLAYER_SET_SONG, REMOVE_SONG, TOGGLE_SONG_FAVORITE})(SongRow)

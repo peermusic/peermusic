@@ -2,7 +2,7 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
-const { TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYER_NEXT_SONG } = require('../actions')
+const { TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYER_NEXT_SONG, TOGGLE_SONG_FAVORITE } = require('../actions')
 const Duration = require('./Duration.jsx')
 
 class Player extends React.Component {
@@ -45,7 +45,7 @@ class Player extends React.Component {
   }
 
   render () {
-    const { player, currentSong, playingNextPanel, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_NEXT_SONG } = this.props
+    const { player, currentSong, playingNextPanel, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_NEXT_SONG, TOGGLE_SONG_FAVORITE } = this.props
 
     var volume = player.volume
     var playingToggle = !player.playing
@@ -89,11 +89,11 @@ class Player extends React.Component {
           </div>
 
           <div className={favoriteClass}>
-            <a><i className='flaticon-favorite'/></a>
+            <a onClick={() => TOGGLE_SONG_FAVORITE(currentSong.id)}><i className='flaticon-favorite'/></a>
           </div>
 
-          <div className={playlistClass} onClick={() => TOGGLE_PLAYING_NEXT_PANEL() }>
-            <a><i className='flaticon-queue'/></a>
+          <div className={playlistClass}>
+            <a onClick={() => TOGGLE_PLAYING_NEXT_PANEL() }><i className='flaticon-queue'/></a>
           </div>
 
           <div className='shuffle active'>
@@ -118,5 +118,5 @@ module.exports = connect(
       player: state.player,
       playingNextPanel: state.interfaceStatus.playingNextPanel
     }),
-    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYER_NEXT_SONG}
+    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYER_NEXT_SONG, TOGGLE_SONG_FAVORITE}
 )(Player)

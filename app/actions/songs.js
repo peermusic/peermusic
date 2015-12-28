@@ -82,6 +82,14 @@ var actions = {
     }
   },
 
+  // Toggle the favorite status of a song
+  TOGGLE_SONG_FAVORITE: (id) => {
+    return {
+      type: 'TOGGLE_SONG_FAVORITE',
+      id
+    }
+  },
+
   // Remove all songs
   CLEAR_DATA: () => {
     return (dispatch) => {

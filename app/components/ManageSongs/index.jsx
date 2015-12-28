@@ -33,7 +33,7 @@ class ManageSongs extends React.Component {
     return (
         <div>
           <h2>Manage songs</h2>
-          
+
           <div className='import-form'>
             <label className='fake-file-input margin-right'>
               Import files
