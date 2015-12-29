@@ -1,16 +1,20 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
-const { PLAYER_SET_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE } = require('../../actions')
+const { PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE } = require('../../actions')
 const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
 
-function SongRow ({ i, song, playing, PLAYER_SET_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, options }) {
-  var index, track, play, title, artist, album, added, length, queue, favorite, remove, rowClass
+function SongRow ({ songs, index, playing, PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, options }) {
+  const song = songs[index]
+  var number, track, play, title, artist, album, added, length, queue, favorite, remove, rowClass
+
+  // Generate a playback function based on the options
+  const playback = (options.playbackSingle) ? () => PLAYBACK_SONG([song], 0) : () => PLAYBACK_SONG(songs, index)
 
   if (options.index) {
-    index = <th className='number'>{i}</th>
+    number = <th className='number'>{index + 1}</th>
   }
 
   if (options.track) {
@@ -18,8 +22,9 @@ function SongRow ({ i, song, playing, PLAYER_SET_SONG, PLAYBACK_USER_QUEUE, REMO
   }
 
   if (options.play) {
-    const playButton = playing && options.activeRow ? <i className='fa fa-volume-up'/>
-        : <a onClick={() => PLAYER_SET_SONG(song.id) }><i className='fa fa-play'/></a>
+    const playButton = playing && options.activeRow
+        ? <i className='fa fa-volume-up'/>
+        : <a onClick={() => playback() }><i className='fa fa-play'/></a>
     play = <td className='play-button'>{playButton}</td>
   }
 
@@ -60,13 +65,13 @@ function SongRow ({ i, song, playing, PLAYER_SET_SONG, PLAYBACK_USER_QUEUE, REMO
     remove = <td className='remove-button'><a onClick={() => REMOVE_SONG(song.id)}><i className='fa fa-trash'/></a></td>
   }
 
-  if (options.activeRow) {
-    rowClass = classNames({active: playing})
-  }
+  var classes = (options.activeRow) ? {active: playing} : {}
+  classes = Object.assign({}, classes, {desaturated: song.desaturated})
+  rowClass = classNames(classes)
 
   return (
-      <tr className={rowClass} onDoubleClick={() => PLAYER_SET_SONG(song.id) }>
-        {index}
+      <tr className={rowClass} onDoubleClick={() => playback() }>
+        {number}
         {track}
         {play}
         {title}
@@ -81,4 +86,4 @@ function SongRow ({ i, song, playing, PLAYER_SET_SONG, PLAYBACK_USER_QUEUE, REMO
   )
 }
 
-module.exports = connect(null, {PLAYER_SET_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE})(SongRow)
+module.exports = connect(null, {PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE})(SongRow)

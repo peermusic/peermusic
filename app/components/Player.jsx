@@ -100,7 +100,7 @@ class Player extends React.Component {
             <a onClick={() => TOGGLE_PLAYING_NEXT_PANEL() }><i className='flaticon-queue'/></a>
           </div>
 
-          <div className='shuffle active'>
+          <div className='shuffle'>
             <a><i className='fa fa-random'/></a>
           </div>
 

@@ -7,6 +7,7 @@ var defaultColumns = {
   track: false,
   play: true,
   activeRow: true,
+  playbackSingle: false,
   title: true,
   artist: true,
   album: true,
@@ -38,7 +39,7 @@ function SongTable ({ songs, currentSong, options }) {
         </tr>
         {songs.map((song, i) => {
           var playing = song.id === currentSong
-          return <SongRow key={i} i={i + 1} song={song} playing={playing} options={options}/>
+          return <SongRow key={i} songs={songs} index={i} playing={playing} options={options}/>
         })}
         </tbody>
       </table>

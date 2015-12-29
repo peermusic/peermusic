@@ -4,7 +4,21 @@ const initialState = {
   volume: 0.2,
   playing: false,
   history: {currentIndex: 0, songs: []},
-  userQueue: []
+  userQueue: [],
+  automaticQueue: []
+}
+
+const automaticQueue = (state = [], action) => {
+  switch (action.type) {
+    case 'PLAYBACK_AUTOMATIC_QUEUE':
+      return [...action.songs]
+    case 'PLAYBACK_AUTOMATIC_QUEUE_POP':
+      return [...state.slice(1, state.length)]
+    case 'REMOVE_SONG':
+    // TODO Cleanup on remove song!
+    default:
+      return state
+  }
 }
 
 const userQueue = (state = [], action) => {
@@ -14,7 +28,7 @@ const userQueue = (state = [], action) => {
     case 'PLAYBACK_USER_QUEUE_POP':
       return [...state.slice(1, state.length)]
     case 'REMOVE_SONG':
-      // TODO Cleanup on remove song!
+    // TODO Cleanup on remove song!
     default:
       return state
   }
@@ -43,7 +57,7 @@ const history = (state = {currentIndex: 0, songs: []}, action) => {
 
       return {...state, songs: [...songs, action.id], currentIndex: index}
     case 'REMOVE_SONG':
-      // TODO Cleanup .songs on remove song!
+    // TODO Cleanup .songs on remove song!
     default:
       return state
   }
@@ -71,6 +85,9 @@ const player = (state = initialState, action) => {
     case 'PLAYBACK_USER_QUEUE_PUSH':
     case 'PLAYBACK_USER_QUEUE_POP':
       return {...state, userQueue: userQueue(state.userQueue, action)}
+    case 'PLAYBACK_AUTOMATIC_QUEUE':
+    case 'PLAYBACK_AUTOMATIC_QUEUE_POP':
+      return {...state, automaticQueue: automaticQueue(state.automaticQueue, action)}
     default:
       return state
   }

@@ -97,6 +97,26 @@ var actions = {
     }
   },
 
+  // Play a song and queue the next songs to be played
+  PLAYBACK_SONG: (songs, index) => {
+    return (dispatch) => {
+      // Take the songs that we can queue
+      songs = [...songs.slice(index)].map(x => x.id)
+
+      // Play the first song and set up the rest for queueing to play later
+      dispatch(actions.PLAYER_SET_SONG(songs[0]))
+      songs = [...songs.slice(1)]
+
+      // Queue the rest, but *not* for single songs
+      if (songs.length > 0) {
+        dispatch({
+          type: 'PLAYBACK_AUTOMATIC_QUEUE',
+          songs
+        })
+      }
+    }
+  },
+
   // Set the previous song for the player out of the history
   PLAYBACK_BACK: () => {
     return (dispatch, getState) => {
@@ -143,11 +163,21 @@ var actions = {
         return
       }
 
-      // Nothing set, let's randomly play something :(
-      console.log('No songs set, random song playing')
-      const songs = state.songs
-      const id = songs[Math.floor(Math.random() * songs.length)].id
-      dispatch(actions.PLAYER_SET_SONG(id))
+      // As the last step, take the automatically queued songs
+      // (e.g. songs of a album or the radio songs)
+      const automaticQueue = state.player.automaticQueue
+      if (automaticQueue.length > 0) {
+        dispatch(actions.PLAYER_SET_SONG(automaticQueue[0]))
+        dispatch({
+          type: 'PLAYBACK_AUTOMATIC_QUEUE_POP'
+        })
+        return
+      }
+
+      // Nothing set, let's pause on the last track
+      console.log('Queue empty')
+      dispatch(actions.PLAYER_SET_PLAYING(false))
+      dispatch(actions.PLAYER_SEEK(0))
     }
   }
 
