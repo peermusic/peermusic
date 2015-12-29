@@ -6,8 +6,7 @@ const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
 
-function SongRow ({ songs, index, playing, PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, options }) {
-  const song = songs[index]
+function SongRow ({ song, songs, index, playing, PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, options }) {
   var number, track, play, title, artist, album, added, length, queue, favorite, remove, rowClass
 
   // Generate a playback function based on the options

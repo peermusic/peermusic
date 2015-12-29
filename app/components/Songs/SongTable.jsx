@@ -18,7 +18,7 @@ var defaultColumns = {
   remove: false
 }
 
-function SongTable ({ songs, currentSong, options }) {
+function SongTable ({ songs, totalSongs, currentSong, options }) {
   options = Object.assign({}, defaultColumns, options)
 
   return (
@@ -38,8 +38,9 @@ function SongTable ({ songs, currentSong, options }) {
           {options.remove && <th/>}
         </tr>
         {songs.map((song, i) => {
-          var playing = song.id === currentSong
-          return <SongRow key={i} songs={songs} index={i} playing={playing} options={options}/>
+          const playing = song.id === currentSong
+          const index = totalSongs ? totalSongs.indexOf(song) : i;
+          return <SongRow key={i} song={song} songs={totalSongs || songs} index={index} playing={playing} options={options}/>
         })}
         </tbody>
       </table>
