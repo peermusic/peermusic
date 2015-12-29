@@ -39,7 +39,7 @@ function SongTable ({ songs, totalSongs, currentSong, options }) {
         </tr>
         {songs.map((song, i) => {
           const playing = song.id === currentSong
-          const index = totalSongs ? totalSongs.indexOf(song) : i;
+          const index = totalSongs ? totalSongs.indexOf(song) : i
           return <SongRow key={i} song={song} songs={totalSongs || songs} index={index} playing={playing} options={options}/>
         })}
         </tbody>
