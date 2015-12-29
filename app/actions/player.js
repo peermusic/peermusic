@@ -214,8 +214,11 @@ var actions = {
       const state = getState()
 
       if (!state.player.randomPlayback) {
+        // We were *not* on shuffle before, shuffle all songs in the queue
         dispatch({type: 'SHUFFLE_AUTOMATIC_QUEUE'})
       } else {
+        // Unshuffle the songs by taking the index in the original queue and then adding
+        // back the songs *after* that index
         const index = state.player.possibleQueue.indexOf(state.player.songId)
         dispatch({
           type: 'PLAYBACK_AUTOMATIC_QUEUE',
@@ -229,7 +232,21 @@ var actions = {
 
   // Toggle repeat playback
   TOGGLE_REPEAT_PLAYBACK: () => {
-    return {type: 'TOGGLE_REPEAT_PLAYBACK'}
+    return (dispatch, getState) => {
+      const state = getState()
+
+      // Unqueue all songs that were on repeat
+      if (state.player.repeatPlayback) {
+        const index = state.player.possibleQueue.indexOf(state.player.songId)
+        const songs = [...state.player.possibleQueue.slice(index + 1)]
+        dispatch({
+          type: 'PLAYBACK_AUTOMATIC_QUEUE',
+          songs: state.player.randomPlayback ? shuffle(songs, {copy: true}) : songs
+        })
+      }
+
+      dispatch({type: 'TOGGLE_REPEAT_PLAYBACK'})
+    }
   }
 
 }
