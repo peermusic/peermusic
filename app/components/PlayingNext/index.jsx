@@ -29,8 +29,8 @@ function mapStateToProps (state) {
   const userQueue = state.player.userQueue.map(h => state.songs.filter(s => s.id === h)[0]).filter(x => x)
   const automaticQueue = state.player.automaticQueue.map(h => state.songs.filter(s => s.id === h)[0]).filter(x => x).map(x => ({...x, desaturated: true}))
 
-  // Limit the length to 50 automatically queued entries
-  const length = userQueue.length + 50
+  // Limit the length to 15 automatically queued entries
+  const length = userQueue.length + 15
   const songs = [].concat(userQueue, automaticQueue).slice(0, length)
 
   return {songs}

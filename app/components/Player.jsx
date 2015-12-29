@@ -10,7 +10,8 @@ const {
     PLAYBACK_NEXT,
     PLAYBACK_BACK,
     TOGGLE_SONG_FAVORITE,
-    TOGGLE_RANDOM_PLAYBACK
+    TOGGLE_RANDOM_PLAYBACK,
+    TOGGLE_REPEAT_PLAYBACK
 } = require('../actions')
 const Duration = require('./Duration.jsx')
 
@@ -54,7 +55,7 @@ class Player extends React.Component {
   }
 
   render () {
-    const { player, currentSong, backEnabled, playingNextPanel, randomPlayback, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK } = this.props
+    const { player, currentSong, backEnabled, playingNextPanel, randomPlayback, repeatPlayback, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK, TOGGLE_REPEAT_PLAYBACK } = this.props
 
     const backButton = (backEnabled)
         ? <button onClick={() => PLAYBACK_BACK()}><i className='fa fa-step-backward'/></button>
@@ -63,6 +64,7 @@ class Player extends React.Component {
     var volume = player.volume
     var playingToggle = !player.playing
     var playButton = player.playing ? <i className='fa fa-pause'/> : <i className='fa fa-play'/>
+    var repeatClass = classNames('repeat', {active: repeatPlayback})
     var favoriteClass = classNames('favorite', {active: currentSong && currentSong.favorite})
     var playlistClass = classNames('playlist', {active: playingNextPanel})
     var shuffleClass = classNames('shuffle', {active: randomPlayback})
@@ -106,8 +108,8 @@ class Player extends React.Component {
             <a onClick={() => TOGGLE_SONG_FAVORITE(currentSong.id)}><i className='flaticon-favorite'/></a>
           </div>
 
-          <div className={playlistClass}>
-            <a onClick={() => TOGGLE_PLAYING_NEXT_PANEL() }><i className='flaticon-queue'/></a>
+          <div className={repeatClass}>
+            <a onClick={() => TOGGLE_REPEAT_PLAYBACK()}><i className='fa fa-repeat'/></a>
           </div>
 
           <div className={shuffleClass}>
@@ -116,6 +118,10 @@ class Player extends React.Component {
 
           <div className='radio'>
             <a>Radio</a>
+          </div>
+
+          <div className={playlistClass}>
+            <a onClick={() => TOGGLE_PLAYING_NEXT_PANEL() }><i className='flaticon-queue'/></a>
           </div>
 
           <div className='share'>
@@ -132,7 +138,8 @@ module.exports = connect(
       player: state.player,
       backEnabled: state.player.history.currentIndex !== 0,
       playingNextPanel: state.interfaceStatus.playingNextPanel,
-      randomPlayback: state.player.randomPlayback
+      randomPlayback: state.player.randomPlayback,
+      repeatPlayback: state.player.repeatPlayback
     }),
-    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK}
+    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK, TOGGLE_REPEAT_PLAYBACK}
 )(Player)

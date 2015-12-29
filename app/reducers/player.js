@@ -8,7 +8,9 @@ const initialState = {
   history: {currentIndex: 0, songs: []},
   userQueue: [],
   automaticQueue: [],
-  randomPlayback: false
+  possibleQueue: [],
+  randomPlayback: false,
+  repeatPlayback: true
 }
 
 const automaticQueue = (state = [], action) => {
@@ -17,6 +19,8 @@ const automaticQueue = (state = [], action) => {
       return shuffle(state, {copy: true})
     case 'PLAYBACK_AUTOMATIC_QUEUE':
       return [...action.songs]
+    case 'PLAYBACK_AUTOMATIC_QUEUE_PUSH':
+      return [...state, ...action.songs]
     case 'PLAYBACK_AUTOMATIC_QUEUE_POP':
       return [...state.slice(1, state.length)]
     case 'REMOVE_SONG':
@@ -92,10 +96,15 @@ const player = (state = initialState, action) => {
       return {...state, userQueue: userQueue(state.userQueue, action)}
     case 'SHUFFLE_AUTOMATIC_QUEUE':
     case 'PLAYBACK_AUTOMATIC_QUEUE':
+    case 'PLAYBACK_AUTOMATIC_QUEUE_PUSH':
     case 'PLAYBACK_AUTOMATIC_QUEUE_POP':
       return {...state, automaticQueue: automaticQueue(state.automaticQueue, action)}
+    case 'SAVE_POSSIBLE_SONG_QUEUE':
+      return {...state, possibleQueue: action.songs}
     case 'TOGGLE_RANDOM_PLAYBACK':
       return {...state, randomPlayback: !state.randomPlayback}
+    case 'TOGGLE_REPEAT_PLAYBACK':
+      return {...state, repeatPlayback: !state.repeatPlayback}
     default:
       return state
   }

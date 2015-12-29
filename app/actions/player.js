@@ -99,14 +99,19 @@ var actions = {
   },
 
   // Play a song and queue the next songs to be played
-  PLAYBACK_SONG: (songs, index) => {
+  PLAYBACK_SONG: (songs, index, push = false) => {
     return (dispatch, getState) => {
       const state = getState()
 
-      // Take the first song and play it, keep the rest for queueing later
-      songs = songs.map(x => x.id)
-      dispatch(actions.PLAYER_SET_SONG(songs[index]))
-      songs = [...songs.slice(0, index), ...songs.slice(index + 1)]
+      songs = songs.map(x => x.id || x)
+
+      if (!push) {
+        // Take the first song and play it
+        dispatch(actions.PLAYER_SET_SONG(songs[index]))
+        dispatch({type: 'SAVE_POSSIBLE_SONG_QUEUE', songs})
+        // Remove the played songs
+        songs = [...songs.slice(0, index), ...songs.slice(index + 1)]
+      }
 
       if (state.player.randomPlayback) {
         // Random playback, shuffle all possible songs
@@ -117,9 +122,16 @@ var actions = {
       }
 
       // Queue the rest, but *not* for single songs
-      if (songs.length > 0) {
+      if (songs.length > 0 && !push) {
         dispatch({
           type: 'PLAYBACK_AUTOMATIC_QUEUE',
+          songs
+        })
+      }
+
+      if (songs.length > 0 && push) {
+        dispatch({
+          type: 'PLAYBACK_AUTOMATIC_QUEUE_PUSH',
           songs
         })
       }
@@ -172,9 +184,15 @@ var actions = {
         return
       }
 
-      // As the last step, take the automatically queued songs
-      // (e.g. songs of a album or the radio songs)
+      // If we are on infinite playback, make sure that we have songs added to the automatic queue
       const automaticQueue = state.player.automaticQueue
+      if (state.player.repeatPlayback && automaticQueue.length <= 15) {
+        const index = !state.player.randomPlayback ? 0 : Math.floor(Math.random() * state.player.possibleQueue.length);
+        actions.PLAYBACK_SONG(state.player.possibleQueue, index, true)(dispatch, getState)
+      }
+
+      // Take the automatically queued songs
+      // (e.g. songs of a album or the radio songs)
       if (automaticQueue.length > 0) {
         dispatch(actions.PLAYER_SET_SONG(automaticQueue[0]))
         dispatch({
@@ -201,6 +219,11 @@ var actions = {
 
       dispatch({type: 'TOGGLE_RANDOM_PLAYBACK'})
     }
+  },
+
+  // Toggle repeat playback
+  TOGGLE_REPEAT_PLAYBACK: () => {
+    return {type: 'TOGGLE_REPEAT_PLAYBACK'}
   }
 
 }

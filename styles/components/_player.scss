@@ -119,7 +119,7 @@
         }
     }
 
-    .favorite, .playlist, .shuffle, .radio, .share {
+    .favorite, .playlist, .shuffle, .radio, .share, .repeat {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -150,6 +150,15 @@
     }
 
     .playlist {
+        margin-left: 35px;
+
+        i {
+            position: relative;
+            top: -2px;
+        }
+    }
+
+    .repeat {
         margin-left: 35px;
 
         i {
