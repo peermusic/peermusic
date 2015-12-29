@@ -17,6 +17,7 @@ function Navigation () {
             <li className='heading'>Your music</li>
             <li><Link to='/songs' className='flaticon-songs' {...linkStyle}>Songs</Link></li>
             <li><Link to='/albums' className='flaticon-albums' {...linkStyle}>Albums</Link></li>
+            <li><Link to='/artists' className='flaticon-artist' {...linkStyle}>Artists</Link></li>
             <li className='heading'>Playlists</li>
             <li><Link to='/favorites' className='flaticon-favorite' {...linkStyle}>Favorites</Link></li>
             <li><Link to='/playing-next' className='flaticon-queue' {...linkStyle}>Playing Next</Link></li>

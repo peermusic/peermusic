@@ -7,7 +7,9 @@ function CurrentSong ({ currentSong, currentCover }) {
     return <div className='current-song'></div>
   }
 
+  var linkTargetArtist = '/artists?artist=' + currentSong.artist
   var linkTargetAlbum = '/albums?album=' + currentSong.album + '&artist=' + currentSong.artist
+  var artist = <Link to={linkTargetArtist}>{currentSong.artist}</Link>
   var album = <Link to={linkTargetAlbum}>{currentSong.album}</Link>
 
   return (
@@ -16,7 +18,7 @@ function CurrentSong ({ currentSong, currentCover }) {
         <div className='text'>
           <div className='song-title'>{currentSong.title}</div>
           <div className='song-artist'>
-            {currentSong.artist} &mdash; {album}
+            {artist} &mdash; {album}
           </div>
         </div>
       </div>

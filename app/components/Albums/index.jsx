@@ -8,7 +8,7 @@ function Albums ({query}) {
 }
 
 function mapStateToProps (state) {
-  var query = state.routing.path.toString().replace(/^.*album=(.*)&artist=(.*)$/, '$1=++=++=$2').split('=++=++=')
+  var query = state.routing.path.toString().replace(/^.*\?album=(.*)&artist=(.*)$/, '$1=++=++=$2').split('=++=++=')
 
   if (query[0] === '/albums') {
     query = null

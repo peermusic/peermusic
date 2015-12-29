@@ -32,8 +32,10 @@ function SongRow ({ song, songs, index, playing, PLAYBACK_SONG, PLAYBACK_USER_QU
   }
 
   if (options.artist) {
+    const linkTargetArtist = '/artists?artist=' + song.artist
     const artistClass = classNames('artist', {inactive: !song.artist})
-    artist = <td className={artistClass}>{song.artist || '—'}</td>
+    const artistLink = !song.artist ? '—' : <Link to={linkTargetArtist}>{song.artist}</Link>
+    artist = <td className={artistClass}>{artistLink}</td>
   }
 
   if (options.album) {

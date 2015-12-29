@@ -17,7 +17,7 @@ function Search ({ query, songs }) {
 
 function mapStateToProps (state) {
   // Get the query off the routing path
-  const query = state.routing.path.toString().replace(/^.*query=(.*)$/, '$1')
+  const query = state.routing.path.toString().replace(/^.*\?query=(.*)$/, '$1')
 
   // Only bind songs to the view that match the query
   const songs = state.songs.filter((song) => {

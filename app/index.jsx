@@ -36,6 +36,7 @@ syncReduxAndRouter(history, store)
 const App = require('./components/App.jsx')
 const Songs = require('./components/Songs/index.jsx')
 const Albums = require('./components/Albums/index.jsx')
+const Artists = require('./components/Artists/index.jsx')
 const Favorites = require('./components/Favorites/index.jsx')
 const PlayingNext = require('./components/PlayingNext/index.jsx')
 const History = require('./components/History/index.jsx')
@@ -52,6 +53,7 @@ ReactDOM.render(
           <IndexRoute component={Placeholder}/>
           <Route path='songs' component={Songs}/>
           <Route path='albums' component={Albums}/>
+          <Route path='artists' component={Artists}/>
           <Route path='favorites' component={Favorites}/>
           <Route path='playing-next' component={PlayingNext}/>
           <Route path='history' component={History}/>

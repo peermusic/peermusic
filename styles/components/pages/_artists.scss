@@ -1,0 +1,33 @@
+.artist-album {
+    margin-top: 70px;
+
+    &:first-child {
+        margin-top: 40px;
+    }
+
+    .album-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 25px;
+
+        img {
+            width: 85px;
+            height: 85px;
+        }
+
+        > div {
+            margin-top: 0;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        h3 {
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+
+    }
+}
