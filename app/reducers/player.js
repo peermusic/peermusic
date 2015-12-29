@@ -10,7 +10,8 @@ const initialState = {
   automaticQueue: [],
   possibleQueue: [],
   randomPlayback: false,
-  repeatPlayback: true
+  repeatPlayback: true,
+  radioPlayback: false
 }
 
 const automaticQueue = (state = [], action) => {
@@ -105,6 +106,8 @@ const player = (state = initialState, action) => {
       return {...state, randomPlayback: !state.randomPlayback}
     case 'TOGGLE_REPEAT_PLAYBACK':
       return {...state, repeatPlayback: !state.repeatPlayback}
+    case 'TOGGLE_RADIO_PLAYBACK':
+      return {...state, radioPlayback: !state.radioPlayback}
     default:
       return state
   }

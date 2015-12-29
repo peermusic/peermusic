@@ -11,7 +11,8 @@ const {
     PLAYBACK_BACK,
     TOGGLE_SONG_FAVORITE,
     TOGGLE_RANDOM_PLAYBACK,
-    TOGGLE_REPEAT_PLAYBACK
+    TOGGLE_REPEAT_PLAYBACK,
+    TOGGLE_RADIO_PLAYBACK
 } = require('../actions')
 const Duration = require('./Duration.jsx')
 
@@ -55,7 +56,11 @@ class Player extends React.Component {
   }
 
   render () {
-    const { player, currentSong, backEnabled, playingNextPanel, randomPlayback, repeatPlayback, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK, TOGGLE_REPEAT_PLAYBACK } = this.props
+    const {
+        player, currentSong, backEnabled, playingNextPanel, randomPlayback, radioPlayback,
+        repeatPlayback, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYBACK_NEXT,
+        PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK, TOGGLE_REPEAT_PLAYBACK, TOGGLE_RADIO_PLAYBACK
+    } = this.props
 
     const backButton = (backEnabled)
         ? <button onClick={() => PLAYBACK_BACK()}><i className='fa fa-step-backward'/></button>
@@ -68,6 +73,7 @@ class Player extends React.Component {
     var favoriteClass = classNames('favorite', {active: currentSong && currentSong.favorite})
     var playlistClass = classNames('playlist', {active: playingNextPanel})
     var shuffleClass = classNames('shuffle', {active: randomPlayback})
+    var radioClass = classNames('radio', {active: radioPlayback})
     var currentDuration = 0
     var maxDuration = 0
 
@@ -116,8 +122,8 @@ class Player extends React.Component {
             <a onClick={() => TOGGLE_RANDOM_PLAYBACK()}><i className='fa fa-random'/></a>
           </div>
 
-          <div className='radio'>
-            <a>Radio</a>
+          <div className={radioClass}>
+            <a onClick={() => TOGGLE_RADIO_PLAYBACK()}>Radio</a>
           </div>
 
           <div className={playlistClass}>
@@ -139,7 +145,8 @@ module.exports = connect(
       backEnabled: state.player.history.currentIndex !== 0,
       playingNextPanel: state.interfaceStatus.playingNextPanel,
       randomPlayback: state.player.randomPlayback,
-      repeatPlayback: state.player.repeatPlayback
+      repeatPlayback: state.player.repeatPlayback,
+      radioPlayback: state.player.radioPlayback
     }),
-    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK, TOGGLE_REPEAT_PLAYBACK}
+    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK, TOGGLE_REPEAT_PLAYBACK, TOGGLE_RADIO_PLAYBACK}
 )(Player)

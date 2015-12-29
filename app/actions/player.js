@@ -99,13 +99,13 @@ var actions = {
   },
 
   // Play a song and queue the next songs to be played
-  PLAYBACK_SONG: (songs, index, push = false) => {
+  PLAYBACK_SONG: (songs, index, play = true, replace = true) => {
     return (dispatch, getState) => {
       const state = getState()
 
       songs = songs.map(x => x.id || x)
 
-      if (!push) {
+      if (play) {
         // Take the first song and play it
         dispatch(actions.PLAYER_SET_SONG(songs[index]))
         dispatch({type: 'SAVE_POSSIBLE_SONG_QUEUE', songs})
@@ -122,14 +122,14 @@ var actions = {
       }
 
       // Queue the rest, but *not* for single songs
-      if (songs.length > 0 && !push) {
+      if (songs.length > 0 && replace) {
         dispatch({
           type: 'PLAYBACK_AUTOMATIC_QUEUE',
           songs
         })
       }
 
-      if (songs.length > 0 && push) {
+      if (songs.length > 0 && !replace) {
         dispatch({
           type: 'PLAYBACK_AUTOMATIC_QUEUE_PUSH',
           songs
@@ -184,11 +184,19 @@ var actions = {
         return
       }
 
-      // If we are on infinite playback, make sure that we have songs added to the automatic queue
       const automaticQueue = state.player.automaticQueue
-      if (state.player.repeatPlayback && automaticQueue.length <= 15) {
+
+      // If we are on radio playback, make sure we have songs in the automatic queue
+      if (state.player.radioPlayback && automaticQueue.length <= 15) {
+        getRadioSongs(getSong(state.player.songId, state), state, songs => {
+          actions.PLAYBACK_SONG(songs, 0, false, false)(dispatch, getState)
+        })
+      }
+
+      // If we are on infinite playback, make sure that we have songs added to the automatic queue
+      if (state.player.radioPlayback && state.player.repeatPlayback && automaticQueue.length <= 15) {
         const index = !state.player.randomPlayback ? 0 : Math.floor(Math.random() * state.player.possibleQueue.length)
-        actions.PLAYBACK_SONG(state.player.possibleQueue, index, true)(dispatch, getState)
+        actions.PLAYBACK_SONG(state.player.possibleQueue, index, false, false)(dispatch, getState)
       }
 
       // Take the automatically queued songs
@@ -247,6 +255,36 @@ var actions = {
 
       dispatch({type: 'TOGGLE_REPEAT_PLAYBACK'})
     }
+  },
+
+  // Toggle radio playback
+  TOGGLE_RADIO_PLAYBACK: () => {
+    return (dispatch, getState) => {
+      const state = getState()
+
+      // Toggle the view state
+      dispatch({type: 'TOGGLE_RADIO_PLAYBACK'})
+
+      // Undo the radio playback and just take the songs we were going to play anyway
+      if (state.player.radioPlayback) {
+        const index = state.player.possibleQueue.indexOf(state.player.songId)
+        const songs = [...state.player.possibleQueue.slice(index + 1)]
+        dispatch({
+          type: 'PLAYBACK_AUTOMATIC_QUEUE',
+          songs: state.player.randomPlayback ? shuffle(songs, {copy: true}) : songs
+        })
+        return
+      }
+
+      // Grab radio stuff for the current song
+      const currentSong = getSong(state.player.songId, state)
+      if (!currentSong) {
+        return
+      }
+      getRadioSongs(currentSong, state, songs => {
+        actions.PLAYBACK_SONG(songs, 0, false, true)(dispatch, getState)
+      })
+    }
   }
 
 }
@@ -254,6 +292,19 @@ var actions = {
 // Get the song off the state based on a song id
 function getSong (songId, state) {
   return state.songs.filter(x => x.id === songId)[0]
+}
+
+// Get songs off the similarity information
+function getRadioSongs (song, state, callback) {
+  console.log('Getting radio songs!', song)
+
+  // TODO Implement logic
+  // - Gets the meta off the song (song.title, ...)
+  // - Gets similarity information from the scraping servers (state.scrapingServers)
+  // - Checks which tracks we have on our PC (state.songs)
+  // - Returns a list of song ids in the callback: callback(['7041c9216d3a2715146a4d260e450dbbbade023c', ...])
+
+  callback(['7041c9216d3a2715146a4d260e450dbbbade023c'])
 }
 
 module.exports = actions
