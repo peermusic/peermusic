@@ -194,7 +194,7 @@ var actions = {
       }
 
       // If we are on infinite playback, make sure that we have songs added to the automatic queue
-      if (state.player.radioPlayback && state.player.repeatPlayback && automaticQueue.length <= 15) {
+      if (!state.player.radioPlayback && state.player.repeatPlayback && automaticQueue.length <= 15) {
         const index = !state.player.randomPlayback ? 0 : Math.floor(Math.random() * state.player.possibleQueue.length)
         actions.PLAYBACK_SONG(state.player.possibleQueue, index, false, false)(dispatch, getState)
       }
