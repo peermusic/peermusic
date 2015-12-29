@@ -1,5 +1,6 @@
 var engine = require('player-engine')()
 var coversActions = require('./covers.js')
+var shuffle = require('shuffle-array')
 
 var actions = {
 
@@ -99,13 +100,21 @@ var actions = {
 
   // Play a song and queue the next songs to be played
   PLAYBACK_SONG: (songs, index) => {
-    return (dispatch) => {
-      // Take the songs that we can queue
-      songs = [...songs.slice(index)].map(x => x.id)
+    return (dispatch, getState) => {
+      const state = getState()
 
-      // Play the first song and set up the rest for queueing to play later
-      dispatch(actions.PLAYER_SET_SONG(songs[0]))
-      songs = [...songs.slice(1)]
+      // Take the first song and play it, keep the rest for queueing later
+      songs = songs.map(x => x.id)
+      dispatch(actions.PLAYER_SET_SONG(songs[index]))
+      songs = [...songs.slice(0, index), ...songs.slice(index + 1)]
+
+      if (state.player.randomPlayback) {
+        // Random playback, shuffle all possible songs
+        shuffle(songs)
+      } else {
+        // Normal playback, take the songs *after* the clicked song
+        songs = [...songs.slice(index)]
+      }
 
       // Queue the rest, but *not* for single songs
       if (songs.length > 0) {
@@ -178,6 +187,19 @@ var actions = {
       console.log('Queue empty')
       dispatch(actions.PLAYER_SET_PLAYING(false))
       dispatch(actions.PLAYER_SEEK(0))
+    }
+  },
+
+  // Toggle random playback
+  TOGGLE_RANDOM_PLAYBACK: () => {
+    return (dispatch, getState) => {
+      const state = getState()
+
+      if (!state.player.randomPlayback) {
+        dispatch({type: 'SHUFFLE_AUTOMATIC_QUEUE'})
+      }
+
+      dispatch({type: 'TOGGLE_RANDOM_PLAYBACK'})
     }
   }
 

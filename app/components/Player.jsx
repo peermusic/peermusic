@@ -2,7 +2,16 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
-const { TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE } = require('../actions')
+const {
+    TOGGLE_PLAYING_NEXT_PANEL,
+    PLAYER_SET_PLAYING,
+    PLAYER_SEEK,
+    PLAYER_SET_VOLUME,
+    PLAYBACK_NEXT,
+    PLAYBACK_BACK,
+    TOGGLE_SONG_FAVORITE,
+    TOGGLE_RANDOM_PLAYBACK
+} = require('../actions')
 const Duration = require('./Duration.jsx')
 
 class Player extends React.Component {
@@ -45,7 +54,7 @@ class Player extends React.Component {
   }
 
   render () {
-    const { player, currentSong, backEnabled, playingNextPanel, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE } = this.props
+    const { player, currentSong, backEnabled, playingNextPanel, randomPlayback, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK } = this.props
 
     const backButton = (backEnabled)
         ? <button onClick={() => PLAYBACK_BACK()}><i className='fa fa-step-backward'/></button>
@@ -56,6 +65,7 @@ class Player extends React.Component {
     var playButton = player.playing ? <i className='fa fa-pause'/> : <i className='fa fa-play'/>
     var favoriteClass = classNames('favorite', {active: currentSong && currentSong.favorite})
     var playlistClass = classNames('playlist', {active: playingNextPanel})
+    var shuffleClass = classNames('shuffle', {active: randomPlayback})
     var currentDuration = 0
     var maxDuration = 0
 
@@ -100,8 +110,8 @@ class Player extends React.Component {
             <a onClick={() => TOGGLE_PLAYING_NEXT_PANEL() }><i className='flaticon-queue'/></a>
           </div>
 
-          <div className='shuffle'>
-            <a><i className='fa fa-random'/></a>
+          <div className={shuffleClass}>
+            <a onClick={() => TOGGLE_RANDOM_PLAYBACK()}><i className='fa fa-random'/></a>
           </div>
 
           <div className='radio'>
@@ -121,7 +131,8 @@ module.exports = connect(
       currentSong: state.songs.filter(s => s.id === state.player.songId)[0],
       player: state.player,
       backEnabled: state.player.history.currentIndex !== 0,
-      playingNextPanel: state.interfaceStatus.playingNextPanel
+      playingNextPanel: state.interfaceStatus.playingNextPanel,
+      randomPlayback: state.player.randomPlayback
     }),
-    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE}
+    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK}
 )(Player)

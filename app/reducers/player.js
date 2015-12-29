@@ -1,3 +1,5 @@
+var shuffle = require('shuffle-array')
+
 const initialState = {
   songId: 0,
   currentDuration: 0,
@@ -5,11 +7,14 @@ const initialState = {
   playing: false,
   history: {currentIndex: 0, songs: []},
   userQueue: [],
-  automaticQueue: []
+  automaticQueue: [],
+  randomPlayback: false
 }
 
 const automaticQueue = (state = [], action) => {
   switch (action.type) {
+    case 'SHUFFLE_AUTOMATIC_QUEUE':
+      return shuffle(state, {copy: true})
     case 'PLAYBACK_AUTOMATIC_QUEUE':
       return [...action.songs]
     case 'PLAYBACK_AUTOMATIC_QUEUE_POP':
@@ -85,9 +90,12 @@ const player = (state = initialState, action) => {
     case 'PLAYBACK_USER_QUEUE_PUSH':
     case 'PLAYBACK_USER_QUEUE_POP':
       return {...state, userQueue: userQueue(state.userQueue, action)}
+    case 'SHUFFLE_AUTOMATIC_QUEUE':
     case 'PLAYBACK_AUTOMATIC_QUEUE':
     case 'PLAYBACK_AUTOMATIC_QUEUE_POP':
       return {...state, automaticQueue: automaticQueue(state.automaticQueue, action)}
+    case 'TOGGLE_RANDOM_PLAYBACK':
+      return {...state, randomPlayback: !state.randomPlayback}
     default:
       return state
   }

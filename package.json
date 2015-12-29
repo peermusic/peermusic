@@ -39,6 +39,7 @@
     "redux-storage": "^1.4.0",
     "redux-thunk": "^1.0.2",
     "rusha": "0.8.*",
+    "shuffle-array": "^0.1.1",
     "subfolders-too": "git+https://github.com/peermusic/subfolders-too.git",
     "xhr": "^2.2.0"
   },
