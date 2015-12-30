@@ -3,7 +3,7 @@ const { connect } = require('react-redux')
 const SongTable = require('../Songs/SongTable.jsx')
 const { Link } = require('react-router')
 
-function AlbumDetail ({ album, artist, songs, currentCover, artistPage }) {
+function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPage }) {
   if (songs.length > 0) {
     var albumDuration = Math.round(songs.map(x => x.length).reduce((a, b) => a + b) / 60)
     var year = songs.map(s => s.year).filter(s => s)[0]
@@ -41,7 +41,7 @@ function AlbumDetail ({ album, artist, songs, currentCover, artistPage }) {
             </h3>
           </div>
         </div>
-        <SongTable songs={songs} options={{track: true, artist: false, album: false}}/>
+        <SongTable songs={songs} totalSongs={totalSongs ? totalSongs : songs} options={{track: true, artist: false, album: false}}/>
       </div>
   )
 }

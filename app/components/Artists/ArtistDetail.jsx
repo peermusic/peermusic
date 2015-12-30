@@ -2,7 +2,7 @@ const React = require('react')
 const { connect } = require('react-redux')
 const AlbumDetail = require('../Albums/AlbumDetail.jsx')
 
-function ArtistDetail ({ artist, albums }) {
+function ArtistDetail ({ artist, totalSongs, albums }) {
   return (
       <div>
         <h2>{artist}</h2>
@@ -10,7 +10,7 @@ function ArtistDetail ({ artist, albums }) {
         {albums.map((album, i) => {
           return (
               <div className='artist-album' key={i}>
-                <AlbumDetail artist={artist} album={album.name} artistPage={true}/>
+                <AlbumDetail totalSongs={totalSongs} artist={artist} album={album.name} artistPage={true}/>
               </div>
           )
         })}
@@ -21,19 +21,28 @@ function ArtistDetail ({ artist, albums }) {
 
 function mapStateToProps (state, ownProps) {
   // Get all songs of this artist
-  const totalSongs = state.songs.filter(x => x.artist === ownProps.artist)
-  var albums = _uniqueArray(totalSongs.map(x => x.album).filter(x => x))
+  const artistSongs = state.songs.filter(x => x.artist === ownProps.artist)
+  var albums = _uniqueArray(artistSongs.map(x => x.album).filter(x => x))
 
   // Get the year for each album
   albums = albums.map(a => {
-    const year = Math.min(...totalSongs.filter(x => x.album === a).map(s => s.year).filter(s => s))
-    return {name: a, year: year === Infinity ? null : year}
+    var songs = artistSongs.filter(x => x.album === a)
+    songs.sort((a, b) => (a.track > b.track) ? 1 : ((b.track > a.track) ? -1 : 0))
+    const year = Math.min(...songs.map(s => s.year).filter(s => s))
+    return {name: a, songs: songs, year: year === Infinity ? null : year}
   })
 
   // Order the albums by year
   albums.sort((a, b) => (a.year < b.year) ? 1 : ((b.year < a.year) ? -1 : 0))
 
-  return {albums}
+  // Grab the total songs off the albums (same order as in display)
+  // so we can play all songs of an artist after each other
+  var totalSongs = albums.map(x => x.songs)
+  if (totalSongs.length > 0) {
+    totalSongs = totalSongs.reduce((a, b) => a.concat(b))
+  }
+
+  return {albums, totalSongs}
 }
 
 function _uniqueArray (array) {
