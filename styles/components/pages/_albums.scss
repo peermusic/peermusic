@@ -2,7 +2,9 @@
 
 .album-header {
     display: flex;
+    flex-direction: row;
     margin-bottom: 40px;
+    max-width: 960px;
 
     .artist {
         color: $color-gray;
@@ -34,6 +36,15 @@
     > div {
         margin-top: 10px;
         margin-left: 25px;
+        flex: 1;
+    }
+
+    .play-all {
+        align-self: center;
+
+        i {
+            margin-right: 5px;
+        }
     }
 
     .padder {

@@ -2,8 +2,9 @@ const React = require('react')
 const { connect } = require('react-redux')
 const SongTable = require('../Songs/SongTable.jsx')
 const { Link } = require('react-router')
+const { PLAYBACK_SONG } = require('../../actions')
 
-function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPage }) {
+function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPage, PLAYBACK_SONG }) {
   if (songs.length > 0) {
     var albumDuration = Math.round(songs.map(x => x.length).reduce((a, b) => a + b) / 60)
     var year = songs.map(s => s.year).filter(s => s)[0]
@@ -40,6 +41,12 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
               {albumDuration} minutes
             </h3>
           </div>
+          {!artistPage &&
+            <button className='play-all'
+                    onClick={() => PLAYBACK_SONG(songs, 0)}>
+              <i className='fa fa-play'/> Play all
+            </button>
+          }
         </div>
         <SongTable songs={songs} totalSongs={totalSongs ? totalSongs : songs} options={{track: true, artist: false, album: false}}/>
       </div>
@@ -61,4 +68,4 @@ function mapStateToProps (state, ownProps) {
   }
 }
 
-module.exports = connect(mapStateToProps)(AlbumDetail)
+module.exports = connect(mapStateToProps, {PLAYBACK_SONG})(AlbumDetail)

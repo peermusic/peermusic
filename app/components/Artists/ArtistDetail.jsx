@@ -1,11 +1,18 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const AlbumDetail = require('../Albums/AlbumDetail.jsx')
+const { PLAYBACK_SONG } = require('../../actions')
 
-function ArtistDetail ({ artist, totalSongs, albums }) {
+function ArtistDetail ({ artist, totalSongs, albums, PLAYBACK_SONG }) {
   return (
       <div>
-        <h2>{artist}</h2>
+        <div className='page-heading'>
+          <h2>{artist}</h2>
+          <button className='play-all'
+                  onClick={() => PLAYBACK_SONG(totalSongs, 0)}>
+            <i className='fa fa-play'/> Play all
+          </button>
+        </div>
         <div>
         {albums.map((album, i) => {
           return (
@@ -51,4 +58,4 @@ function _uniqueArray (array) {
   return array.map(x => JSON.parse(x))
 }
 
-module.exports = connect(mapStateToProps)(ArtistDetail)
+module.exports = connect(mapStateToProps, {PLAYBACK_SONG})(ArtistDetail)
