@@ -11,7 +11,7 @@ function ScrapingServerTable ({ servers, REMOVE_SCRAPING_SERVER }) {
           <th className='number'>#</th>
           <th>Server URL</th>
           <th>Description</th>
-          <th/>
+          <th className='remove-button'/>
         </tr>
         {servers.map((server, i) => {
           var descriptionClass = classNames({inactive: !server.description})
@@ -20,7 +20,7 @@ function ScrapingServerTable ({ servers, REMOVE_SCRAPING_SERVER }) {
                 <td className='number'>{i + 1}</td>
                 <td>{server.url}</td>
                 <td className={descriptionClass}>{server.description || '—'}</td>
-                <td><a onClick={() => REMOVE_SCRAPING_SERVER(i)}><i className='fa fa-trash'/></a></td>
+                <td className='remove-button'><a onClick={() => REMOVE_SCRAPING_SERVER(i)}><i className='fa fa-trash'/></a></td>
               </tr>
           )
         })}

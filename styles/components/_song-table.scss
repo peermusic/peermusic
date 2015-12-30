@@ -40,6 +40,10 @@
             opacity: .5;
         }
 
+        .break-cell {
+            word-break: break-all;
+        }
+
         // Specific styles for cells
         .artist a, .album a {
             color: $color-light-gray;

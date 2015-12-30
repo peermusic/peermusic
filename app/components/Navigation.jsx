@@ -23,6 +23,7 @@ function Navigation () {
             <li><Link to='/playing-next' className='flaticon-queue' {...linkStyle}>Playing Next</Link></li>
             <li><Link to='/history' className='flaticon-history' {...linkStyle}>History</Link></li>
             <li className='heading'>Manage</li>
+            <li><Link to='/manage-friends' className='flaticon-friends' {...linkStyle}>Friends</Link></li>
             <li><Link to='/manage-songs' className='flaticon-songs' {...linkStyle}>Songs</Link></li>
             <li><Link to='/manage-servers' className='flaticon-servers' {...linkStyle}>Servers</Link></li>
             <li><Link to='/manage-downloads' className='flaticon-download' {...linkStyle}>Downloads</Link></li>
