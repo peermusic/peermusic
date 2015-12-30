@@ -6,7 +6,7 @@ const { PLAYBACK_SONG } = require('../../actions')
 function Favorites ({ songs, PLAYBACK_SONG }) {
   var favoritesDisplay = songs.length === 0
       ? <h3>You didn't add any favorites yet!<br/>Click the heart next to any song for them to appear here.</h3>
-      : <SongTable songs={songs}/>
+      : <SongTable songs={songs} options={{availability: false}}/>
 
   return (
       <div>

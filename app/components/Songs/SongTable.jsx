@@ -15,7 +15,8 @@ var defaultColumns = {
   length: true,
   queue: true,
   favorite: true,
-  remove: false
+  remove: false,
+  availability: true
 }
 
 function SongTable ({ songs, totalSongs, currentSong, options }) {
@@ -27,15 +28,16 @@ function SongTable ({ songs, totalSongs, currentSong, options }) {
         <tr>
           {options.index && <th className='number'>#</th>}
           {options.track && <th className='number'>#</th>}
-          {options.play && <th/>}
+          {options.play && <th className='play-button'/>}
           {options.title && <th>Title</th>}
           {options.artist && <th>Artist</th>}
           {options.album && <th>Album</th>}
           {options.added && <th className='creation-date'>Added</th>}
           {options.length && <th className='song-time'>Length</th>}
-          {options.queue && <th/>}
-          {options.favorite && <th/>}
-          {options.remove && <th/>}
+          {options.availability && <th className='availability'/>}
+          {options.queue && <th className='add-button'/>}
+          {options.favorite && <th className='favorite-button'/>}
+          {options.remove && <th className='remove-button'/>}
         </tr>
         {songs.map((song, i) => {
           const playing = song.id === currentSong

@@ -7,7 +7,7 @@ const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
 
 function SongRow ({ song, songs, index, playing, PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, options }) {
-  var number, track, play, title, artist, album, added, length, queue, favorite, remove, rowClass
+  var number, track, play, title, artist, album, added, length, availability, queue, favorite, remove, rowClass
 
   // Generate a playback function based on the options
   const playback = (options.playbackSingle) ? () => PLAYBACK_SONG([song], 0) : () => PLAYBACK_SONG(songs, index)
@@ -53,6 +53,11 @@ function SongRow ({ song, songs, index, playing, PLAYBACK_SONG, PLAYBACK_USER_QU
     length = <td className='song-time'><Duration seconds={song.length}/></td>
   }
 
+  if (options.availability) {
+    // TODO availability for friends: <td className='availability (good|average|bad)'><i className='flaticon-download'/></td>
+    availability = <td className='availability'><i className='flaticon-harddrive'/></td>
+  }
+
   if (options.queue) {
     queue = <td className='add-button'><a onClick={() => PLAYBACK_USER_QUEUE(song.id)}><i className='fa fa-plus'/></a></td>
   }
@@ -80,6 +85,7 @@ function SongRow ({ song, songs, index, playing, PLAYBACK_SONG, PLAYBACK_USER_QU
         {album}
         {added}
         {length}
+        {availability}
         {queue}
         {favorite}
         {remove}

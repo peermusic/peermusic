@@ -5,7 +5,7 @@ const SongTable = require('../Songs/SongTable.jsx')
 function History ({ songs }) {
   var historyDisplay = songs.length === 0
       ? <h3>You didn't play any songs yet!</h3>
-      : <SongTable songs={songs} options={{index: true, activeRow: false, playbackSingle: true}}/>
+      : <SongTable songs={songs} options={{index: true, activeRow: false, playbackSingle: true, availability: false}}/>
 
   return (
       <div>

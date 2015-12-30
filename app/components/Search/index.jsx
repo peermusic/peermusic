@@ -43,4 +43,4 @@ function matches (needle, haystack) {
   return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1
 }
 
-module.exports = connect(mapStateToProps,{PLAYBACK_SONG})(Search)
+module.exports = connect(mapStateToProps, {PLAYBACK_SONG})(Search)

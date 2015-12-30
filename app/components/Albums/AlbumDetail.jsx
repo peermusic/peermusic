@@ -48,7 +48,7 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
             }
           </div>
         </div>
-        <SongTable songs={songs} totalSongs={totalSongs ? totalSongs : songs} options={{track: true, artist: false, album: false}}/>
+        <SongTable songs={songs} totalSongs={totalSongs || songs} options={{track: true, artist: false, album: false}}/>
       </div>
   )
 }

@@ -4,9 +4,11 @@
     width: 100%;
     max-width: 960px;
     font-size: 14px;
+    table-layout: fixed;
 
     tr {
 
+        // General styles
         td, th {
             padding: 10px;
             border-bottom: 1px solid $background-light-gray;
@@ -30,10 +32,15 @@
             }
         }
 
-        .title, .artist, .album {
-            flex: 1;
+        .inactive {
+            color: $color-dark-gray;
         }
 
+        &.desaturated {
+            opacity: .5;
+        }
+
+        // Specific styles for cells
         .artist a, .album a {
             color: $color-light-gray;
             text-decoration: none;
@@ -50,12 +57,27 @@
             text-align: center;
         }
 
-        .inactive {
-            color: $color-dark-gray;
-        }
-
         .number {
             width: 25px;
+        }
+
+        .availability {
+            width: 25px;
+            color: $color-light-gray;
+            text-align: center;
+            opacity: .4;
+
+            &.good {
+                color: $availability-green;
+            }
+
+            &.average {
+                color: $availability-yellow;
+            }
+
+            &.bad {
+                color: $availability-red;
+            }
         }
 
         .song-time {
@@ -66,11 +88,12 @@
             width: 75px;
         }
 
-        .play-button, .add-button, .favorite-button {
+        .play-button, .add-button, .favorite-button, .remove-button {
             width: 25px;
-            padding: 10px 15px;
             text-align: center;
+        }
 
+        .play-button, .add-button, .favorite-button {
             a {
                 color: $color-gray;
                 text-decoration: none;
@@ -87,27 +110,12 @@
             }
         }
 
-        .remove-button {
-            width: 25px;
-            padding: 10px 15px;
-            text-align: center;
+        .favorite-button.active a, .favorite-button.active a:hover {
+            color: $color-brand;
+            visibility: visible;
         }
 
-        .play-button {
-            padding-right: 10px;
-        }
-
-        .favorite-button {
-            padding-right: 20px;
-            padding-left: 0;
-
-            &.active a, &.active a:hover {
-                color: $color-brand;
-                visibility: visible;
-            }
-
-        }
-
+        // Specific styles for cells when active
         &.active {
             .title, .artist, .album, .play-button {
                 color: $color-brand;
@@ -117,10 +125,6 @@
                     color: $color-brand;
                 }
             }
-        }
-
-        &.desaturated {
-            opacity: .5;
         }
 
     }

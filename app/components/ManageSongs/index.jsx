@@ -27,7 +27,7 @@ class ManageSongs extends React.Component {
 
   render () {
     const { songs } = this.props
-    const options = {play: false, queue: false, favorite: false, remove: true}
+    const options = {play: false, queue: false, favorite: false, remove: true, availability: false}
     const songDisplay = songs.length > 0 ? <SongTable songs={songs} options={options}/> : <h3>You didn't add any songs yet!<br/>Start by dragging and dropping some songs into this window.</h3>
 
     return (

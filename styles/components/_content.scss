@@ -12,23 +12,6 @@
         color: $color-brand;
     }
 
-    .page-heading {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        max-width: 960px;
-        margin-bottom: 25px;
-
-        h2 {
-            flex: 1;
-            margin-bottom: 0 !important;
-        }
-
-        .play-all i {
-            margin-right: 5px;
-        }
-    }
-
     h2 {
         margin: 0;
         margin-bottom: 25px;
@@ -44,6 +27,23 @@
         font-size: 25px;
         font-weight: 300;
         letter-spacing: 1px;
+    }
+
+    .page-heading {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        max-width: 960px;
+        margin-bottom: 25px;
+
+        h2 {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .play-all i {
+            margin-right: 5px;
+        }
     }
 
     @import 'song-table';

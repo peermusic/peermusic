@@ -6,7 +6,8 @@ var defaultColumns = {
   index: true,
   activeRow: false,
   queue: false,
-  playbackSingle: true
+  playbackSingle: true,
+  availability: false
 }
 
 function PlayingNext ({ songs, options }) {

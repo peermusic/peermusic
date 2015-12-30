@@ -17,7 +17,7 @@ function ArtistDetail ({ artist, totalSongs, albums, PLAYBACK_SONG }) {
         {albums.map((album, i) => {
           return (
               <div className='artist-album' key={i}>
-                <AlbumDetail totalSongs={totalSongs} artist={artist} album={album.name} artistPage={true}/>
+                <AlbumDetail totalSongs={totalSongs} artist={artist} album={album.name} artistPage/>
               </div>
           )
         })}

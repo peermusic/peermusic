@@ -3,8 +3,8 @@
 .album-header {
     display: flex;
     flex-direction: row;
-    margin-bottom: 40px;
     max-width: 960px;
+    margin-bottom: 40px;
 
     .artist {
         color: $color-gray;
@@ -34,9 +34,9 @@
     }
 
     > div {
+        flex: 1;
         margin-top: 10px;
         margin-left: 25px;
-        flex: 1;
     }
 
     .play-all {
