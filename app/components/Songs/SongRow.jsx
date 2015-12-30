@@ -54,7 +54,8 @@ function SongRow ({ song, songs, index, playing, PLAYBACK_SONG, PLAYBACK_USER_QU
   }
 
   if (options.availability) {
-    // TODO availability for friends: <td className='availability (good|average|bad)'><i className='flaticon-download'/></td>
+    // TODO availability for friends: availability = <td className='availability (good|average|bad)'><i className='flaticon-download'/></td>
+    // TODO when downloading: availability = <td className='availability downloading'><i className='flaticon-downloading'/></td>
     availability = <td className='availability'><i className='flaticon-harddrive'/></td>
   }
 
@@ -72,11 +73,11 @@ function SongRow ({ song, songs, index, playing, PLAYBACK_SONG, PLAYBACK_USER_QU
   }
 
   var classes = (options.activeRow) ? {active: playing} : {}
-  classes = Object.assign({}, classes, {desaturated: song.desaturated})
+  classes = {...classes, desaturated: song.desaturated}
   rowClass = classNames(classes)
 
   return (
-      <tr className={rowClass} onDoubleClick={() => playback() }>
+      <tr className={rowClass} onDoubleClick={() => playback()}>
         {number}
         {track}
         {play}

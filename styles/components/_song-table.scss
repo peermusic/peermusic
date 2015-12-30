@@ -78,6 +78,30 @@
             &.bad {
                 color: $availability-red;
             }
+
+            &.downloading {
+                @keyframes pulsate {
+                    0% {
+                        opacity: .3;
+                    }
+
+                    50% {
+                        opacity: 1;
+                    }
+
+                    100% {
+                        opacity: .3;
+                    }
+                }
+
+                animation: pulsate 4s;
+                animation-iteration-count: infinite;
+
+                i {
+                    position: relative;
+                    top: -1px;
+                }
+            }
         }
 
         .song-time {
@@ -91,6 +115,10 @@
         .play-button, .add-button, .favorite-button, .remove-button {
             width: 25px;
             text-align: center;
+        }
+
+        .add-button {
+            width: 20px;
         }
 
         .play-button, .add-button, .favorite-button {
