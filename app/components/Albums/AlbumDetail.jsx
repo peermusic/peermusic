@@ -40,13 +40,13 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
               <span className='padder'>&mdash;</span>
               {albumDuration} minutes
             </h3>
+            {!artistPage &&
+              <button className='play-all'
+                      onClick={() => PLAYBACK_SONG(songs, 0)}>
+                <i className='fa fa-play'/> Play all
+              </button>
+            }
           </div>
-          {!artistPage &&
-            <button className='play-all'
-                    onClick={() => PLAYBACK_SONG(songs, 0)}>
-              <i className='fa fa-play'/> Play all
-            </button>
-          }
         </div>
         <SongTable songs={songs} totalSongs={totalSongs ? totalSongs : songs} options={{track: true, artist: false, album: false}}/>
       </div>
