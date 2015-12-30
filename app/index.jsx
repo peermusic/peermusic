@@ -2,7 +2,7 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 const { createStore, applyMiddleware, combineReducers } = require('redux')
 const { Provider } = require('react-redux')
-const { Router, Route, IndexRoute } = require('react-router')
+const { Router, Route, IndexRedirect } = require('react-router')
 const createHistory = require('history/lib/createHashHistory')
 const { syncReduxAndRouter } = require('redux-simple-router')
 const thunk = require('redux-thunk')
@@ -50,7 +50,7 @@ ReactDOM.render(
   <Provider store={store}>
       <Router history={history}>
         <Route path='/' component={App}>
-          <IndexRoute component={Placeholder}/>
+          <IndexRedirect to='songs'/>
           <Route path='songs' component={Songs}/>
           <Route path='albums' component={Albums}/>
           <Route path='artists' component={Artists}/>
