@@ -72,6 +72,10 @@ function SongRow ({ song, songs, index, playing, PLAYBACK_SONG, PLAYBACK_USER_QU
     remove = <td className='remove-button'><a onClick={() => REMOVE_SONG(song.id)}><i className='fa fa-trash'/></a></td>
   }
 
+  if (options.removeDownload) {
+    remove = <td className='remove-button'><a><i className='fa fa-trash'/></a></td>
+  }
+
   var classes = (options.activeRow) ? {active: playing} : {}
   classes = {...classes, desaturated: song.desaturated}
   rowClass = classNames(classes)

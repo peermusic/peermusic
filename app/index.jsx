@@ -42,7 +42,7 @@ const PlayingNext = require('./components/PlayingNext/index.jsx')
 const History = require('./components/History/index.jsx')
 const ManageServers = require('./components/ManageServers/index.jsx')
 const ManageSongs = require('./components/ManageSongs/index.jsx')
-const Placeholder = require('./components/Placeholder.jsx')
+const ManageDownloads = require('./components/ManageDownloads/index.jsx')
 const Search = require('./components/Search/index.jsx')
 
 // Render our application
@@ -59,6 +59,7 @@ ReactDOM.render(
           <Route path='history' component={History}/>
           <Route path='manage-songs' component={ManageSongs}/>
           <Route path='manage-servers' component={ManageServers}/>
+          <Route path='manage-downloads' component={ManageDownloads}/>
           <Route path='search' component={Search}/>
         </Route>
       </Router>

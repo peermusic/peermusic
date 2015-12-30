@@ -38,6 +38,7 @@ function SongTable ({ songs, totalSongs, currentSong, options }) {
           {options.queue && <th className='add-button'/>}
           {options.favorite && <th className='favorite-button'/>}
           {options.remove && <th className='remove-button'/>}
+          {options.removeDownload && <th className='remove-button'/>}
         </tr>
         {songs.map((song, i) => {
           const playing = song.id === currentSong

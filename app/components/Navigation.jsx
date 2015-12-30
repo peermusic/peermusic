@@ -25,6 +25,7 @@ function Navigation () {
             <li className='heading'>Manage</li>
             <li><Link to='/manage-songs' className='flaticon-songs' {...linkStyle}>Songs</Link></li>
             <li><Link to='/manage-servers' className='flaticon-servers' {...linkStyle}>Servers</Link></li>
+            <li><Link to='/manage-downloads' className='flaticon-download' {...linkStyle}>Downloads</Link></li>
           </ul>
         </div>
         <CurrentSong/>
