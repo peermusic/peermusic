@@ -129,10 +129,6 @@ class Player extends React.Component {
           <div className={playlistClass}>
             <a onClick={() => TOGGLE_PLAYING_NEXT_PANEL() }><i className='flaticon-queue'/></a>
           </div>
-
-          <div className='share'>
-            <a><i className='fa fa-share-square'/></a>
-          </div>
         </div>
     )
   }

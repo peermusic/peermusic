@@ -150,6 +150,7 @@
     }
 
     .playlist {
+        margin-right: 50px;
         margin-left: 35px;
 
         i {
@@ -182,15 +183,5 @@
         font-size: 60%;
         letter-spacing: 2px;
         text-transform: uppercase;
-    }
-
-    .share {
-        margin-right: 50px;
-        margin-left: 30px;
-
-        i {
-            position: relative;
-            top: -2px;
-        }
     }
 }
