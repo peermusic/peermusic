@@ -7,20 +7,13 @@ class ScrapingServerForm extends React.Component {
   onSubmit (e) {
     e.preventDefault()
 
-    var url = ReactDOM.findDOMNode(this.refs.url)
     var description = ReactDOM.findDOMNode(this.refs.description)
-    var authentication = ReactDOM.findDOMNode(this.refs.authentication)
+    var serverUrl = ReactDOM.findDOMNode(this.refs.serverUrl)
 
-    if (url.value === '' || !url.value.match(/(https?:\/\/)(([a-zA-ZäöüÄÖÜ\d.-]+)(\/.*)?)/)) {
-      window.alert('Please enter a valid URL')
-      return
-    }
+    this.props.ADD_SCRAPING_SERVER(description.value, serverUrl.value)
 
-    this.props.ADD_SCRAPING_SERVER(url.value, description.value, authentication.value)
-
-    url.value = ''
     description.value = ''
-    authentication.value = ''
+    serverUrl.value = ''
 
     return false
   }
@@ -30,21 +23,15 @@ class ScrapingServerForm extends React.Component {
         <form className='pretty-form' onSubmit={(e) => this.onSubmit(e)}>
           <div>
             <label>
-              Server URL
-            </label>
-            <input type='url' placeholder='http://localhost:8080' ref='url' required/>
-          </div>
-          <div>
-            <label>
               Description
             </label>
             <input type='text' placeholder='My local server' ref='description'/>
           </div>
           <div className='no-border'>
             <label>
-              Authentication Token
+              Server URL
             </label>
-            <textarea placeholder='6DQp1a3U3SlVYY1ZwdDA...4REZTY2VDRVg5dW5DdU1j=' ref='authentication'/>
+            <textarea placeholder='peermusic://host:port/#user-id:secret-key' ref='serverUrl'/>
           </div>
 
           <div className='no-border'>

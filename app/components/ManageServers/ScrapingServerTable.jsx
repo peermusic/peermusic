@@ -9,8 +9,8 @@ function ScrapingServerTable ({ servers, REMOVE_SCRAPING_SERVER }) {
         <tbody>
         <tr>
           <th className='number'>#</th>
-          <th>Server URL</th>
           <th>Description</th>
+          <th>Server URL</th>
           <th className='remove-button'/>
         </tr>
         {servers.map((server, i) => {
@@ -18,8 +18,8 @@ function ScrapingServerTable ({ servers, REMOVE_SCRAPING_SERVER }) {
           return (
               <tr key={i}>
                 <td className='number'>{i + 1}</td>
-                <td>{server.url}</td>
                 <td className={descriptionClass}>{server.description || '—'}</td>
+                <td className='break-cell'>{server.serverUrl}</td>
                 <td className='remove-button'><a onClick={() => REMOVE_SCRAPING_SERVER(i)}><i className='fa fa-trash'/></a></td>
               </tr>
           )
