@@ -35,7 +35,7 @@ var actions = {
       const scrapingServer = state.scrapingServers[0]
 
       // Encrypt the request to the server
-      var encryptedRequest = messaging.encrypt({album, artist}, scrapingServer.keyPair)
+      var encryptedRequest = messaging.encrypt({album, artist}, scrapingServer.key)
       encryptedRequest.id = scrapingServer.id
 
       xhr({
@@ -51,7 +51,7 @@ var actions = {
           return
         }
 
-        const payload = messaging.decrypt(JSON.parse(body), scrapingServer.keyPair)
+        const payload = messaging.decrypt(JSON.parse(body), scrapingServer.key)
 
         if (!payload) {
           console.error('Failed decrypting response from scraping server')

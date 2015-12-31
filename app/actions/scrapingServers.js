@@ -1,5 +1,3 @@
-const nacl = require('tweetnacl')
-
 var actions = {
 
   // Add a new scraping server
@@ -7,7 +5,6 @@ var actions = {
     // Parse the URL into parts and generate the public key of the private key
     const regex = /^peermusic:\/\/([^#]*)#([^:]*):(.*)$/
     const matches = serverUrl.replace(regex, '$1~~~$2~~~$3').split('~~~')
-    const keyPair = nacl.sign.keyPair.fromSecretKey(nacl.util.decodeBase64(matches[2]))
 
     return {
       type: 'ADD_SCRAPING_SERVER',
@@ -15,10 +12,7 @@ var actions = {
       serverUrl,
       url: 'http://' + matches[0],
       id: matches[1],
-      keyPair: {
-        publicKey: nacl.util.encodeBase64(keyPair.publicKey),
-        secretKey: nacl.util.encodeBase64(keyPair.secretKey)
-      }
+      key: matches[2]
     }
   },
 

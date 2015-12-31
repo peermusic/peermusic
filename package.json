@@ -42,7 +42,6 @@
     "secure-client-server-messaging": "git+https://github.com/peermusic/secure-client-server-messaging.git",
     "shuffle-array": "^0.1.1",
     "subfolders-too": "git+https://github.com/peermusic/subfolders-too.git",
-    "tweetnacl": "^0.13.2",
     "xhr": "^2.2.0"
   },
   "devDependencies": {

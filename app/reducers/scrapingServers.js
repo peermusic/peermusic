@@ -6,7 +6,7 @@ const scrapingServer = (state = {}, action) => {
         serverUrl: action.serverUrl,
         url: action.url,
         id: action.id,
-        keyPair: action.keyPair
+        key: action.key
       }
     default:
       return state
