@@ -1,5 +1,6 @@
 var xhr = require('xhr')
 var fs = require('file-system')(['image/jpeg', 'image/jpg'])
+var messaging = require('secure-client-server-messaging')
 
 var inflightCoverRequests = []
 
@@ -31,11 +32,16 @@ var actions = {
       // Call the scraping server and in the end dispatch the action
       // that saves the url to the file and the id into states.covers
       var filename = coverId + '.jpeg'
+      const scrapingServer = state.scrapingServers[0]
+
+      // Encrypt the request to the server
+      var encryptedRequest = messaging.encrypt({album, artist}, scrapingServer.key)
+      encryptedRequest.id = scrapingServer.id
 
       xhr({
-        url: state.scrapingServers[0].url + '/Cover',
+        url: scrapingServer.url + 'Cover',
         method: 'POST',
-        body: JSON.stringify({payload: {album, artist}}),
+        body: JSON.stringify(encryptedRequest),
         headers: {'Content-Type': 'application/json'}
       }, function (error, response, body) {
         inflightCoverRequests.splice(inflightCoverRequests.indexOf(coverId), 1)
@@ -45,8 +51,14 @@ var actions = {
           return
         }
 
-        body = JSON.parse(body)
-        var blob = dataURLToBlob(body.response)
+        const payload = messaging.decrypt(JSON.parse(body), scrapingServer.key)
+
+        if (!payload) {
+          console.error('Failed decrypting response from scraping server')
+          return
+        }
+
+        var blob = dataURLToBlob(payload)
 
         // Add the song to the file system
         fs.add({filename: filename, file: blob}, (err) => {

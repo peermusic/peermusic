@@ -2,9 +2,11 @@ const scrapingServer = (state = {}, action) => {
   switch (action.type) {
     case 'ADD_SCRAPING_SERVER':
       return {
-        url: action.url,
         description: !action.description || action.description === '' ? null : action.description,
-        authorization: action.authorization
+        serverUrl: action.serverUrl,
+        url: action.url,
+        id: action.id,
+        key: action.key
       }
     default:
       return state
