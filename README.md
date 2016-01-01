@@ -1,4 +1,8 @@
-# peermusic-desktop
+# peermusic (WIP!)
+
+> Music player in a browsertab that works with your own mp3 files and can share music with your friends automatically. Features fully encrypted communication with all endpoints.
+> 
+> This is the main repository for the interface of peermusic, that ties all other repositories together. 
 
 ![peermusic interface](http://i.imgur.com/6K1W5mQ.png)
 
