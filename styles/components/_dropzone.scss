@@ -1,0 +1,28 @@
+@import '../colors';
+
+.dropzone {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border: 5px solid $color-brand;
+    background-color: rgba($background-dark-gray, .7);
+    z-index: 999;
+
+    &.active {
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        display: block;
+        animation: fadein .3s;
+    }
+}

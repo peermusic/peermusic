@@ -1,0 +1,53 @@
+@import '../../colors';
+
+.album-header {
+    display: flex;
+    flex-direction: row;
+    max-width: 960px;
+    margin-bottom: 40px;
+
+    .artist {
+        color: $color-gray;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    img {
+        width: 175px;
+        height: 175px;
+    }
+
+    h2 {
+        margin-bottom: 15px;
+
+        a {
+            color: $color-light-gray;
+            text-decoration: none;
+        }
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    > div {
+        flex: 1;
+        margin-top: 10px;
+        margin-left: 25px;
+    }
+
+    .play-all {
+        margin-top: 15px;
+
+        i {
+            margin-right: 5px;
+        }
+    }
+
+    .padder {
+        margin: 0 5px;
+    }
+}

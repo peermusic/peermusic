@@ -4,71 +4,13 @@
     <meta charset="UTF-8">
     <title>peermusic</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="index.css">
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="./build/bundle.css">
 </head>
 <body>
 
-<h1 id="logo">peermusic</h1>
-
-<div id="outerContainer">
-
-    <img src="" height="90" width="90" id="coverArt">
-
-    <div class="text">
-
-        <div id="fileContainer">
-        </div>
-
-        <div id="controlsContainer">
-            <button id="previous" disabled><i class="fa fa-fast-backward"></i></button>
-
-            <button id="play"><i class="fa fa-play"></i></button>
-
-            <button id="next"><i class="fa fa-fast-forward"></i></button>
-        </div>
-
-        <div id="progressOuterCountainer">
-            <div id="currentTime">
-            </div>
-            <input type="range" id="progressBar"/>
-            <div id="songLength">
-            </div>
-        </div>
-
-        <div id="volumeOuterContainer">
-            <i class="fa fa-volume-up"></i>
-            <input type="range" id="volumeBar"/>
-        </div>
-
-        <div class="clearfix"></div>
-
-        <small>Similar tracks: <span id="similarTracks"></span></small>
-
-    </div>
-
-</div>
-
-<div id="fileList">
-
-    <h2>Files</h2>
-    Import files: <input type="file" id="fileUpload" multiple/><br>
-    Import directory: <input type="file" id="directoryUpload" webkitdirectory directory/><br>
-    Clear files: <input type="button" id="deleteFSContent" value="Clear"/>
-
-    <h2>Scraping servers</h2>
-    <input type="url" placeholder="http://url-to-server.com" id="serverURL" required>
-    <input type="text" placeholder="description" id="serverDescription">
-    <input type="button" id="addNewScraping" value="Add">
-    <ul id="scraping-servers"></ul>
-
-    <h2>Queued</h2>
-    <table id="queued"></table>
-
-    <h2>Library</h2>
-    <table id="list"></table>
-</div>
-
-<script src="bundle.js"></script>
+<div class="page-wrapper" id="render"></div>
+<script src="./build/bundle.js"></script>
 
 </body>
 </html>

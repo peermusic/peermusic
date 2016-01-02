@@ -1,0 +1,86 @@
+@import '../colors';
+@import '../mixins/custom-scrollbar';
+
+.content {
+    @include custom-scrollbar($background-light-gray);
+    flex-grow: 1;
+    padding: 25px;
+    color: $color-light-gray;
+    overflow-y: auto;
+
+    a {
+        color: $color-brand;
+    }
+
+    h2 {
+        margin: 0;
+        margin-bottom: 25px;
+        font-size: 40px;
+        font-weight: 300;
+        letter-spacing: 1px;
+    }
+
+    h3 {
+        margin: 0;
+        margin-bottom: 15px;
+        color: $color-gray;
+        font-size: 25px;
+        font-weight: 300;
+        letter-spacing: 1px;
+    }
+
+    .page-heading {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        max-width: 960px;
+        margin-bottom: 25px;
+
+        h2 {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .play-all i {
+            margin-right: 5px;
+        }
+    }
+
+    @import 'song-table';
+    @import 'album-table';
+    @import 'input';
+
+    &.queue {
+        flex-grow: 0;
+        flex-shrink: 0;
+        width: 580px;
+        margin-left: 20px;
+
+        @media (max-width: 1600px) {
+            display: none;
+        }
+    }
+
+    p {
+        max-width: 400px;
+        margin-bottom: 25px;
+        color: $color-gray;
+        font-size: 14px;
+    }
+
+    @import 'pages/albums';
+    @import 'pages/artists';
+    @import 'pages/manage-servers';
+    @import 'pages/search';
+
+    // TODO remove
+    .work-in-progress {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        margin-top: 250px;
+        color: $color-gray;
+    }
+
+}

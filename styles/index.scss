@@ -1,0 +1,37 @@
+@import 'normalize';
+@import 'colors';
+@import 'icons';
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+    letter-spacing: .03em;
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: $background-dark-gray;
+    cursor: default;
+    overflow: hidden;
+    -webkit-user-select: none;
+
+    a {
+        cursor: pointer;
+    }
+
+    .top-content {
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+    }
+
+    @import 'components/navigation';
+    @import 'components/content';
+    @import 'components/player';
+}
+
+@import 'components/dropzone';

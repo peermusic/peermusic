@@ -1,0 +1,164 @@
+@import '../colors';
+
+.song-table {
+    width: 100%;
+    max-width: 960px;
+    font-size: 14px;
+    table-layout: fixed;
+
+    tr {
+
+        // General styles
+        td, th {
+            padding: 10px;
+            border-bottom: 1px solid $background-light-gray;
+        }
+
+        th {
+            padding: 5px 10px;
+            color: $color-gray;
+            font-size: 12px;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-align: left;
+            text-transform: uppercase;
+        }
+
+        &:not(:first-child):hover {
+            background: $background-light-gray;
+
+            .play-button a, .add-button a, .favorite-button a {
+                visibility: visible;
+            }
+        }
+
+        .inactive {
+            color: $color-dark-gray;
+        }
+
+        &.desaturated {
+            opacity: .5;
+        }
+
+        .break-cell {
+            word-break: break-all;
+        }
+
+        // Specific styles for cells
+        .artist a, .album a {
+            color: $color-light-gray;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+
+        }
+
+        .creation-date, .song-time, .number {
+            color: $color-gray;
+            font-size: 80%;
+            text-align: center;
+        }
+
+        .number {
+            width: 25px;
+        }
+
+        .availability {
+            width: 25px;
+            color: $color-light-gray;
+            text-align: center;
+            opacity: .4;
+
+            &.good {
+                color: $availability-green;
+            }
+
+            &.average {
+                color: $availability-yellow;
+            }
+
+            &.bad {
+                color: $availability-red;
+            }
+
+            &.downloading {
+                @keyframes pulsate {
+                    0% {
+                        opacity: .3;
+                    }
+
+                    50% {
+                        opacity: 1;
+                    }
+
+                    100% {
+                        opacity: .3;
+                    }
+                }
+
+                animation: pulsate 4s;
+                animation-iteration-count: infinite;
+
+                i {
+                    position: relative;
+                    top: -1px;
+                }
+            }
+        }
+
+        .song-time {
+            width: 50px;
+        }
+
+        .creation-date {
+            width: 75px;
+        }
+
+        .play-button, .add-button, .favorite-button, .remove-button {
+            width: 25px;
+            text-align: center;
+        }
+
+        .add-button {
+            width: 20px;
+        }
+
+        .play-button, .add-button, .favorite-button {
+            a {
+                color: $color-gray;
+                text-decoration: none;
+                visibility: hidden;
+
+                &:hover {
+                    color: $color-light-gray;
+                }
+            }
+
+            i {
+                position: relative;
+                top: -1px;
+            }
+        }
+
+        .favorite-button.active a, .favorite-button.active a:hover {
+            color: $color-brand;
+            visibility: visible;
+        }
+
+        // Specific styles for cells when active
+        &.active {
+            .title, .artist, .album, .play-button {
+                color: $color-brand;
+                visibility: visible;
+
+                a {
+                    color: $color-brand;
+                }
+            }
+        }
+
+    }
+
+}
