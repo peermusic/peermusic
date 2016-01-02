@@ -297,68 +297,58 @@ function getSong (songId, state) {
 
 // Get songs off the similarity information
 function getRadioSongs (song, state, callback) {
-  console.log('Getting radio songs!', song)
-  // Get the metadata off the song
-  var metadata = {}
-  metadata.title = song.title
-  metadata.album = song.album
-  metadata.artist = song.artist
-  metadata.genre = song.genre
-
-
-
-  // Get similarTrack by metadata
-  musicSimilarity(state.scrapingServers, metadata, function (list) {
-    if (list === []) {
-      list = [].concat(fillBy(song, state, 'album'))
-      .concat(fillBy(song, state, 'artist'))
-      .concat(fillBy(song, state, 'random'))
-
-      callback(list)
-      return
-    }
-    // Check if the songs are available
-    list = checkAvailability(state, list)
-    callback(list)
-   }
-  )
-}
-
-// Checks if the supplied list of songs is available in the library
-function checkAvailability (state, list) {
-
-  var results = state.songs.filter(song => {
-    return list.filter(listSong =>
-      listSong.artist === song.artist
-      && listSong.album === song.album
-      && listSong.title === song.title
-    ).length > 0
-  })
-
-  return results.map(s => s.id)
-}
-
-// Gets tracks from same artist and album
-function fillBy(song, state, options) {
-  console.log('fillBy:' + options)
-  var results = []
-  var filter = 'random'
-  filter = options === 'album' ? listSong => listSong.artist === song.artist && listSong.album === song.album : filter
-  filter = options === 'artist' ? listSong => listSong.artist === song.artist : filter
-
-  if (filter === 'random') {
-    for(var i = 19; i >= 0; i--) {
-      results.push(state.songs[Math.floor((Math.random() * state.songs.length))].id)
-      results = results.filter(r => state.player.history.songs.indexOf(r.id) === -1)
-    }
-    return results
+  var metadata = {
+    title: song.title,
+    album: song.album,
+    artist: song.artist,
+    genre: song.genre
   }
 
-  results = state.songs.filter(filter)
-  console.log(results)
+  // Get a similar track by metadata
+  musicSimilarity(state.scrapingServers, metadata, function (list) {
+    // Only get the songs that are currently available in the local library
+    list = state.songs.filter(song => {
+      return list.filter(listSong => listSong.artist === song.artist &&
+        listSong.album === song.album &&
+        listSong.title === song.title
+      ).length > 0
+    })
+
+    // If we got no songs, fill it with songs out of the library
+    // first by matching album, then by matching artist and then randomly
+    if (list.length === 0) {
+      list = getSimilarLibrarySongs(song, state)
+    }
+
+    // We only want the ids back, callback to caller!
+    callback(list.map(s => s.id))
+  })
+}
+
+// Get similar songs out of the library
+// First by matching album, then by matching artist and then randomly
+function getSimilarLibrarySongs (song, state) {
+  var results = []
+
+  // Match album
+  results = results.concat(state.songs.filter(s => s.artist === song.artist && s.album === song.album))
+
+  // Match artist
+  results = results.concat(state.songs.filter(s => s.artist === song.artist))
+
+  // Random
+  for (var i = 0; i < 6; i++) {
+    results.push(state.songs[Math.floor((Math.random() * state.songs.length))])
+  }
+
+  // Remove tracks that we just listened to
   results = results.filter(r => state.player.history.songs.indexOf(r.id) === -1)
-  console.log(results)
-  return results.map(s => s.id)
+
+  // Remove tracks already in the queue
+  results = results.filter(r => state.player.automaticQueue.indexOf(r.id) === -1)
+
+  // Only return 5 tracks
+  return results.slice(0, 5)
 }
 
 module.exports = actions
