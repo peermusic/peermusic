@@ -305,16 +305,22 @@ function getRadioSongs (song, state, callback) {
   metadata.artist = song.artist
   metadata.genre = song.genre
 
+
+
   // Get similarTrack by metadata
   musicSimilarity(state.scrapingServers, metadata, function (list) {
-      if (list === []) {
-        callback(list)
-        return
-      }
-      // Check if the songs are available
-      list = checkAvailability(state, list)
+    if (list === []) {
+      list = [].concat(fillBy(song, state, 'album'))
+      .concat(fillBy(song, state, 'artist'))
+      .concat(fillBy(song, state, 'random'))
+
       callback(list)
+      return
     }
+    // Check if the songs are available
+    list = checkAvailability(state, list)
+    callback(list)
+   }
   )
 }
 
@@ -323,12 +329,35 @@ function checkAvailability (state, list) {
 
   var results = state.songs.filter(song => {
     return list.filter(listSong =>
-      listSong.artist == song.artist
-      && listSong.album == song.album
-      && listSong.title == song.title
+      listSong.artist === song.artist
+      && listSong.album === song.album
+      && listSong.title === song.title
     ).length > 0
   })
 
+  return results.map(s => s.id)
+}
+
+// Gets tracks from same artist and album
+function fillBy(song, state, options) {
+  console.log('fillBy:' + options)
+  var results = []
+  var filter = 'random'
+  filter = options === 'album' ? listSong => listSong.artist === song.artist && listSong.album === song.album : filter
+  filter = options === 'artist' ? listSong => listSong.artist === song.artist : filter
+
+  if (filter === 'random') {
+    for(var i = 19; i >= 0; i--) {
+      results.push(state.songs[Math.floor((Math.random() * state.songs.length))].id)
+      results = results.filter(r => state.player.history.songs.indexOf(r.id) === -1)
+    }
+    return results
+  }
+
+  results = state.songs.filter(filter)
+  console.log(results)
+  results = results.filter(r => state.player.history.songs.indexOf(r.id) === -1)
+  console.log(results)
   return results.map(s => s.id)
 }
 
