@@ -1,6 +1,7 @@
 var engine = require('player-engine')()
 var coversActions = require('./covers.js')
 var shuffle = require('shuffle-array')
+var musicSimilarity = require('music-similarity')
 
 var actions = {
 
@@ -297,14 +298,38 @@ function getSong (songId, state) {
 // Get songs off the similarity information
 function getRadioSongs (song, state, callback) {
   console.log('Getting radio songs!', song)
+  // Get the metadata off the song
+  var metadata = {}
+  metadata.title = song.title
+  metadata.album = song.album
+  metadata.artist = song.artist
+  metadata.genre = song.genre
 
-  // TODO Implement logic
-  // - Gets the meta off the song (song.title, ...)
-  // - Gets similarity information from the scraping servers (state.scrapingServers)
-  // - Checks which tracks we have on our PC (state.songs)
-  // - Returns a list of song ids in the callback: callback(['7041c9216d3a2715146a4d260e450dbbbade023c', ...])
+  // Get similarTrack by metadata
+  musicSimilarity(state.scrapingServers, metadata, function (list) {
+      if (list === []) {
+        callback(list)
+        return
+      }
+      // Check if the songs are available
+      list = checkAvailability(state, list)
+      callback(list)
+    }
+  )
+}
 
-  callback(['7041c9216d3a2715146a4d260e450dbbbade023c'])
+// Checks if the supplied list of songs is available in the library
+function checkAvailability (state, list) {
+
+  var results = state.songs.filter(song => {
+    return list.filter(listSong =>
+      listSong.artist == song.artist
+      && listSong.album == song.album
+      && listSong.title == song.title
+    ).length > 0
+  })
+
+  return results.map(s => s.id)
 }
 
 module.exports = actions
