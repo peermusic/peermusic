@@ -25,11 +25,11 @@ var actions = {
         metadataReader(file, meta => {
           // Add the song to the file system
           fs.add({filename: hashName, file: file}, (err) => {
-            if (err) throw 'Error adding file: ' + err
+            if (err) throw new Error('Error adding file: ' + err)
 
             // Read the file as an url from the filesystem
             fs.get(hashName, (err, url) => {
-              if (err) throw 'Error getting file: ' + err
+              if (err) throw new Error('Error getting file: ' + err)
 
               // Create an audio element to check on the duration
               var audio = document.createElement('audio')
@@ -73,7 +73,7 @@ var actions = {
       var state = getState()
       const filename = state.songs.filter(x => x.id === id)[0].hashName
       fs.delete(filename, (err) => {
-        if (err) throw 'Error removing song: ' + err
+        if (err) throw new Error('Error removing song: ' + err)
         dispatch({
           type: 'REMOVE_SONG',
           id
@@ -94,7 +94,7 @@ var actions = {
   CLEAR_DATA: () => {
     return (dispatch) => {
       fs.clear((err) => {
-        if (err) throw 'Error clearing filesystem: ' + err
+        if (err) throw new Error('Error clearing filesystem: ' + err)
         dispatch({
           type: 'CLEAR_DATA'
         })

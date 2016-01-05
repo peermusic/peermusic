@@ -67,4 +67,9 @@ class DropPageWrapper extends React.Component {
   }
 }
 
+DropPageWrapper.propTypes = {
+  ADD_SONG: React.PropTypes.func,
+  children: React.PropTypes.node
+}
+
 module.exports = connect(null, {ADD_SONG})(DropPageWrapper)

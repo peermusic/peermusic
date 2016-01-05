@@ -42,4 +42,8 @@ class ScrapingServerForm extends React.Component {
   }
 }
 
+ScrapingServerForm.propTypes = {
+  ADD_SCRAPING_SERVER: React.PropTypes.func
+}
+
 module.exports = connect(null, {ADD_SCRAPING_SERVER})(ScrapingServerForm)

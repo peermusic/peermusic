@@ -4,7 +4,6 @@ const SongTable = require('../Songs/SongTable.jsx')
 var shuffle = require('shuffle-array')
 
 class ManageDownloads extends React.Component {
-
   render () {
     const { songs } = this.props
     const options = {activeRow: false, play: false, queue: false, favorite: false, removeDownload: true}
@@ -17,6 +16,10 @@ class ManageDownloads extends React.Component {
         </div>
     )
   }
+}
+
+ManageDownloads.propTypes = {
+  songs: React.PropTypes.array
 }
 
 function mapStateToProps (state) {

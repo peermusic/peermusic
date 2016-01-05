@@ -1,3 +1,4 @@
+/*
 const friend = (state = {}, action) => {
   switch (action.type) {
     case 'ADD_FRIEND':
@@ -9,6 +10,7 @@ const friend = (state = {}, action) => {
       return state
   }
 }
+*/
 
 const instances = (state = {
   keyPair: null,

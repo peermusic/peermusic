@@ -6,7 +6,7 @@ const { Router, Route, IndexRedirect } = require('react-router')
 const createHistory = require('history/lib/createHashHistory')
 const { syncReduxAndRouter } = require('redux-simple-router')
 const thunk = require('redux-thunk')
-const logger = require('redux-logger')()
+// const logger = require('redux-logger')()
 const reduxStorage = require('redux-storage')
 const storageEngine = require('redux-storage/engines/localStorage').default('peermusic-storage')
 const { PLAYER_SYNCHRONIZE, INSTANCES_CONNECT } = require('./actions')
@@ -25,7 +25,7 @@ const store = applyMiddleware(storage, thunk)(createStore)(reducer)
 // and sync that state into the player engine
 const load = reduxStorage.createLoader(storageEngine)
 load(store).then(() => {
-  PLAYER_SYNCHRONIZE()(store.dispatch, store.getState),
+  PLAYER_SYNCHRONIZE()(store.dispatch, store.getState)
   INSTANCES_CONNECT()(store.dispatch, store.getState)
 })
 

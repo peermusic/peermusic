@@ -1,7 +1,7 @@
 var Connect = require('connect-instances')
 var nacl = require('tweetnacl')
 
-var swarm = null
+var swarm
 
 var actions = {
   // Connect to associated instances
@@ -42,6 +42,7 @@ var actions = {
   },
 
   RECEIVE_INVITE: () => {
+    console.log(swarm)
   },
 
   // Add a new scraping server

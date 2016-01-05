@@ -42,4 +42,8 @@ class FriendsForm extends React.Component {
   }
 }
 
+FriendsForm.propTypes = {
+  ADD_FRIEND: React.PropTypes.func
+}
+
 module.exports = connect(null, {ADD_FRIEND})(FriendsForm)

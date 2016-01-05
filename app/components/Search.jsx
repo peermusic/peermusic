@@ -27,6 +27,11 @@ class Search extends React.Component {
   }
 }
 
+Search.propTypes = {
+  pushPath: React.PropTypes.func,
+  placeholder: React.PropTypes.node
+}
+
 module.exports = connect(
     null,
     {pushPath}

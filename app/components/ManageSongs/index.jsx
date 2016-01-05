@@ -55,6 +55,12 @@ class ManageSongs extends React.Component {
   }
 }
 
+ManageSongs.propTypes = {
+  ADD_SONG: React.PropTypes.func,
+  CLEAR_DATA: React.PropTypes.func,
+  songs: React.PropTypes.array
+}
+
 module.exports = connect(
     (state) => ({
       songs: state.songs

@@ -1,3 +1,4 @@
+/*globals Blob */
 var xhr = require('xhr')
 var fs = require('file-system')(['image/jpeg', 'image/jpg'])
 var messaging = require('secure-client-server-messaging')
@@ -62,11 +63,11 @@ var actions = {
 
         // Add the song to the file system
         fs.add({filename: filename, file: blob}, (err) => {
-          if (err) throw 'Error adding file: ' + err
+          if (err) throw new Error('Error adding file: ' + err)
 
           // Read the file as an url from the filesystem
           fs.get(filename, (err, url) => {
-            if (err) throw 'Error getting file: ' + err
+            if (err) throw new Error('Error getting file: ' + err)
             dispatch({
               type: 'GET_COVER',
               id: coverId,

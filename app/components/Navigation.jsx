@@ -1,5 +1,9 @@
+/*globals Link */
 const React = require('react')
-const { IndexLink, Link } = require('react-router')
+const {
+  // IndexLink,
+  Link
+} = require('react-router')
 const { connect } = require('react-redux')
 const CurrentSong = require('./CurrentSong.jsx')
 const Search = require('./Search.jsx')

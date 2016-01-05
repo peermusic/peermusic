@@ -134,6 +134,26 @@ class Player extends React.Component {
   }
 }
 
+Player.propTypes = {
+  PLAYER_SEEK: React.PropTypes.func,
+  PLAYER_SET_VOLUME: React.PropTypes.func,
+  player: React.PropTypes.object,
+  currentSong: React.PropTypes.object,
+  backEnabled: React.PropTypes.bool,
+  playingNextPanel: React.PropTypes.bool,
+  randomPlayback: React.PropTypes.bool,
+  radioPlayback: React.PropTypes.bool,
+  repeatPlayback: React.PropTypes.bool,
+  TOGGLE_PLAYING_NEXT_PANEL: React.PropTypes.func,
+  PLAYER_SET_PLAYING: React.PropTypes.func,
+  PLAYBACK_NEXT: React.PropTypes.func,
+  PLAYBACK_BACK: React.PropTypes.func,
+  TOGGLE_SONG_FAVORITE: React.PropTypes.func,
+  TOGGLE_RANDOM_PLAYBACK: React.PropTypes.func,
+  TOGGLE_REPEAT_PLAYBACK: React.PropTypes.func,
+  TOGGLE_RADIO_PLAYBACK: React.PropTypes.func
+}
+
 module.exports = connect(
     (state) => ({
       currentSong: state.songs.filter(s => s.id === state.player.songId)[0],
