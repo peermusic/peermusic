@@ -23,6 +23,7 @@
   "dependencies": {
     "async": "1.5.*",
     "classnames": "^2.2.1",
+    "connect-instances": "git+https://github.com/peermusic/connect-instances.git",
     "file-system": "git+https://github.com/peermusic/file-system.git#chore/slim-filesystem",
     "history": "^1.17.0",
     "music-metadata": "git+https://github.com/peermusic/music-metadata.git",

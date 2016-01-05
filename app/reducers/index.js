@@ -7,7 +7,8 @@ var reducers = {
   interfaceStatus: require('./interfaceStatus.js'),
   scrapingServers: require('./scrapingServers.js'),
   covers: require('./covers.js'),
-  friends: require('./friends.js')
+  friends: require('./friends.js'),
+  instances: require('./instances.js')
 }
 
 module.exports = reducers
