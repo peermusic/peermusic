@@ -25,8 +25,6 @@ const instances = (state = {
     case 'SET_HUB_URLS':
       return {...state, hubUrls:
         [...state.hubUrls, ...action.hubUrls]}
-    case 'REMOVE_FRIEND':
-      return [...state.slice(0, action.index), ...state.slice(action.index + 1)]
     default:
       return state
   }
