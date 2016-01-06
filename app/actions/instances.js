@@ -38,13 +38,24 @@ var actions = {
 
   ISSUE_INVITE: (description, hubUrl) => {
     var invite = connections.issueInvite(hubUrl)
-
     return (dispatch, getState) => {
       dispatch({
         type: 'ISSUE_INVITE',
         description,
         sharedSignPubKey: invite[0],
         uri: invite[1]
+      })
+    }
+  },
+
+  RECEIVE_INVITE: (description, uri) => {
+    var invite = connections.receiveInvite(uri)
+    return (dispatch, getState) => {
+      dispatch({
+        type: 'RECEIVE_INVITE',
+        description,
+        theirPubKey: invite[1],
+        invite: invite[2]
       })
     }
   }

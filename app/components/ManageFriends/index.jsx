@@ -1,16 +1,20 @@
 const React = require('react')
 const { connect } = require('react-redux')
-const FriendsReceiveInviteForm = require('./FriendsReceiveInviteForm.jsx')
+const ReceiveInviteForm = require('./ReceiveInviteForm.jsx')
+const ReceivedInvitesTable = require('./ReceivedInvitesTable.jsx')
 const IssueInviteForm = require('./IssueInviteForm.jsx')
 const IssuedInvitesTable = require('./IssuedInvitesTable.jsx')
 const FriendsTable = require('./FriendsTable.jsx')
 
-function ManageFriends ({ friends, issuedInvitesList }) {
+function ManageFriends ({ friends, issuedInvitesList, receivedInvitesList }) {
   var issuedInvitesTable = issuedInvitesList.length === 0
     ? <p>No invites issued yet.</p>
     : <IssuedInvitesTable issuedInvitesList={issuedInvitesList}/>
+  var receivedInvitesTable = receivedInvitesList.length === 0
+    ? <p>No invites received yet.</p>
+    : <ReceivedInvitesTable receivedInvitesList={receivedInvitesList}/>
   var friendsTable = friends.length === 0
-    ? <p>No friends added yet.</p>
+    ? <p>No friends authenticated yet.</p>
     : <FriendsTable friends={friends}/>
 
   return (
@@ -22,10 +26,13 @@ function ManageFriends ({ friends, issuedInvitesList }) {
         <h4>Pending</h4>
         {issuedInvitesTable}
 
+        <br/><br/>
         <h3>Receive Invites</h3>
-        <FriendsReceiveInviteForm/>
+        <ReceiveInviteForm/>
         <h4>Pending</h4>
+        {receivedInvitesTable}
 
+        <br/><br/>
         <h3>Authenticated Friends</h3>
         {friendsTable}
       </div>
@@ -35,6 +42,7 @@ function ManageFriends ({ friends, issuedInvitesList }) {
 module.exports = connect(
     (state) => ({
       friends: state.friends,
-      issuedInvitesList: state.instances.issuedInvitesList
+      issuedInvitesList: state.instances.issuedInvitesList,
+      receivedInvitesList: state.instances.receivedInvitesList
     })
 )(ManageFriends)

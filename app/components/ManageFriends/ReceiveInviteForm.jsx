@@ -1,17 +1,16 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
 const { connect } = require('react-redux')
-const { ADD_FRIEND } = require('../../actions')
+const { RECEIVE_INVITE } = require('../../actions')
 
-class FriendsForm extends React.Component {
+class ReceiveInviteForm extends React.Component {
   onSubmit (e) {
     e.preventDefault()
 
     var description = ReactDOM.findDOMNode(this.refs.description)
     var friendUrl = ReactDOM.findDOMNode(this.refs.friendUrl)
 
-    this.props.ADD_FRIEND(description.value, friendUrl.value)
-    this.props.RECEIVE_INVITE(friendUrl.value)
+    this.props.RECEIVE_INVITE(description.value, friendUrl.value)
 
     description.value = ''
     friendUrl.value = ''
@@ -43,9 +42,8 @@ class FriendsForm extends React.Component {
   }
 }
 
-FriendsForm.propTypes = {
-  ADD_FRIEND: React.PropTypes.func,
+ReceiveInviteForm.propTypes = {
   RECEIVE_INVITE: React.PropTypes.func
 }
 
-module.exports = connect(null, {ADD_FRIEND})(FriendsForm)
+module.exports = connect(null, {RECEIVE_INVITE})(ReceiveInviteForm)

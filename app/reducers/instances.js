@@ -4,6 +4,7 @@ const instances = (
     swarm: null,
     hubUrls: [],
     receivedInvites: {},
+    receivedInvitesList: [],
     issuedInvites: [],
     issuedInvitesList: [],
     inviteList: {}
@@ -29,6 +30,18 @@ const instances = (
       // issuedInvites is set too, why/where? Should be here!
       return Object.assign(state, {
         issuedInvitesList
+      })
+
+    case 'RECEIVE_INVITE':
+      var receivedInvitesList = state.receivedInvitesList
+      receivedInvitesList.push({
+        description: action.description,
+        theirPubKey: action.theirPubKey
+      })
+
+      // same here. Why is receivedInvites set?
+      return Object.assign(state, {
+        receivedInvitesList
       })
 
     default:
