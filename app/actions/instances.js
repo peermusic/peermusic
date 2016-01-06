@@ -1,13 +1,11 @@
-var Connect = require('connect-instances')
-var nacl = require('tweetnacl')
+const Connect = require('connect-instances')
+const nacl = require('tweetnacl')
 
-var swarm
+var connections
 
 var actions = {
-  // Connect to associated instances
   INSTANCES_CONNECT: () => {
     return (dispatch, getState) => {
-      // Get the current state (just after loading)
       const state = getState()
 
       var keyPair = state.instances.keyPair
@@ -34,15 +32,21 @@ var actions = {
         issuedInvites
       }
 
-      swarm = new Connect(keyPair, peers, hubUrls, opts)
+      connections = new Connect(keyPair, peers, hubUrls, opts)
     }
   },
 
-  ISSUE_INVITE: () => {
-  },
+  ISSUE_INVITE: (description, hubUrl) => {
+    var invite = connections.issueInvite(hubUrl)
 
-  RECEIVE_INVITE: () => {
-    console.log(swarm)
+    return (dispatch, getState) => {
+      dispatch({
+        type: 'ISSUE_INVITE',
+        description,
+        sharedSignPubKey: invite[0],
+        uri: invite[1]
+      })
+    }
   }
 }
 
