@@ -57,6 +57,7 @@
     "gulp-sass": "^2.1.1",
     "http": "0.0.0",
     "st": "^1.1.0",
+    "standard": "^5.4.1",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.6.1"
   }
