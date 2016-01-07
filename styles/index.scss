@@ -29,6 +29,7 @@ html, body {
         flex-direction: row;
     }
 
+    @import 'components/popover';
     @import 'components/navigation';
     @import 'components/content';
     @import 'components/player';
