@@ -1,6 +1,7 @@
 const initialState = {
   initialPopover: true,
-  playingNextPanel: false
+  playingNextPanel: false,
+  horizontalNavigations: {}
 }
 
 const interfaceStatus = (state = initialState, action) => {
@@ -9,6 +10,10 @@ const interfaceStatus = (state = initialState, action) => {
       return {...state, initialPopover: false}
     case 'TOGGLE_PLAYING_NEXT_PANEL':
       return {...state, playingNextPanel: !state.playingNextPanel}
+    case 'TOGGLE_HORIZONTAL_NAVIGATION':
+      let tmp = {...state.horizontalNavigations}
+      tmp[action.identifier] = action.index
+      return {...state, horizontalNavigations: tmp}
     default:
       return state
   }

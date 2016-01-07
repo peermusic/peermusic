@@ -1,6 +1,6 @@
 var actions = {
 
-  // Hide the inital popover on first application startup
+  // Hide the initial popover on first application startup
   HIDE_INITIAL_POPOVER: () => {
     return {
       type: 'HIDE_INITIAL_POPOVER'
@@ -11,6 +11,15 @@ var actions = {
   TOGGLE_PLAYING_NEXT_PANEL: () => {
     return {
       type: 'TOGGLE_PLAYING_NEXT_PANEL'
+    }
+  },
+
+  // Toggle the horizontal navigation for a specified key to the specified index
+  TOGGLE_HORIZONTAL_NAVIGATION: (identifier, index) => {
+    return {
+      type: 'TOGGLE_HORIZONTAL_NAVIGATION',
+      identifier,
+      index
     }
   }
 
