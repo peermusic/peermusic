@@ -11,7 +11,7 @@
 
 ## Run online
 
-[You can use the player directly via Github Pages.](http://peermusic.github.io/desktop)
+[You can use the player directly via Github Pages.](http://peermusic.github.io/)
 
 ## Install & run locally
 
