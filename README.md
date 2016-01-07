@@ -7,7 +7,7 @@
 
 > Music player in a browsertab that works with your own mp3 files and can share music with your friends and own devices automatically. Features fully encrypted communication with all endpoints, cover art, radio, favorites, ...
 
-[![peermusic interface](http://i.imgur.com/zkNgtMO.png)](http://peermusic.github.io/desktop)
+[![peermusic interface](http://i.imgur.com/zkNgtMO.png)](http://peermusic.github.io/)
 
 ## Run online
 
