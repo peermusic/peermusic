@@ -7,18 +7,17 @@
 
 > Music player in a browsertab that works with your own mp3 files and can share music with your friends and own devices automatically. Features fully encrypted communication with all endpoints, cover art, radio, favorites, ...
 
-![peermusic interface](http://i.imgur.com/6K1W5mQ.png)
+[![peermusic interface](http://i.imgur.com/zkNgtMO.png)](http://peermusic.github.io/desktop)
 
-## Install
+## Run online
+
+[You can use the player directly via Github Pages.](http://peermusic.github.io/desktop)
+
+## Install & run locally
 
 ```sh
 npm install -g gulp
 npm install
-```
-
-## Run
-
-```sh
 gulp
 ```
 
