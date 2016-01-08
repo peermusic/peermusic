@@ -3,7 +3,7 @@ const { connect } = require('react-redux')
 const classNames = require('classnames')
 const { DISCARD_ISSUED_INVITE } = require('../../actions')
 
-function IssuedInvitesTable ({ issuedInvitesList }) {
+function IssuedInvitesTable ({ issuedInvitesList, DISCARD_ISSUED_INVITE }) {
   return (
       <table className='song-table'>
         <tbody>
