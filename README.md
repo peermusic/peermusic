@@ -1,9 +1,9 @@
 # peermusic
 
-[![GitHub release](https://img.shields.io/github/release/peermusic/desktop.svg?style=flat-square)](https://github.com/peermusic/desktop/releases)
+[![GitHub release](https://img.shields.io/badge/release-v0.1.0-blue.svg?style=flat-square)](https://github.com/peermusic/desktop/releases)
 [![Travis](https://img.shields.io/travis/peermusic/desktop/master.svg?style=flat-square)](https://travis-ci.org/peermusic/desktop)
 [![David](https://img.shields.io/david/peermusic/desktop.svg?style=flat-square)]()
-[![GitHub license](https://img.shields.io/github/license/peermusic/desktop.svg?style=flat-square)](https://github.com/peermusic/desktop/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/licence-AGPL_v3.0-blue.svg?style=flat-square)](https://github.com/peermusic/desktop/blob/master/LICENSE)
 
 > Music player in a browsertab that works with your own mp3 files and can share music with your friends and own devices automatically. Features fully encrypted communication with all endpoints, cover art, radio, favorites, ...
 
