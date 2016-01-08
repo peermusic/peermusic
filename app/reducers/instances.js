@@ -2,6 +2,7 @@ const instances = (
   state = {
     keyPair: null,
     swarm: null,
+    whitelist: [],
     hubUrls: [],
     receivedInvites: {},
     receivedInvitesList: [],
@@ -11,38 +12,49 @@ const instances = (
   },
   action
 ) => {
+  var issuedInvites, receivedInvites
   switch (action.type) {
     case 'SET_KEYPAIR':
       return {...state, keyPair: action.keyPair}
 
-    case 'SET_HUB_URLS':
-      return {...state, hubUrls:
-        [...state.hubUrls, ...action.hubUrls]}
+    case 'ADD_HUB_URL':
+      if (state.hubUrls.indexOf(action.hubUrl) !== -1) return state
+      return {...state, hubUrls: [...state.hubUrls, action.hubUrl]}
 
     case 'ISSUE_INVITE':
-      var issuedInvitesList = state.issuedInvitesList
-      issuedInvitesList.push({
+      var issuedInvitesList = [...state.issuedInvitesList, {
         description: action.description,
         sharedSignPubKey: action.sharedSignPubKey,
         uri: action.uri
-      })
-
-      // issuedInvites is set too, why/where? Should be here!
+      }]
+      issuedInvites = [...state.issuedInvites, action.sharedSignPubKey]
       return Object.assign(state, {
-        issuedInvitesList
+        issuedInvitesList,
+        issuedInvites
       })
 
     case 'RECEIVE_INVITE':
-      var receivedInvitesList = state.receivedInvitesList
-      receivedInvitesList.push({
+      var receivedInvitesList = [...state.receivedInvitesList, {
         description: action.description,
         theirPubKey: action.theirPubKey
+      }]
+      receivedInvites = [...state.receivedInvites, action.invite]
+      return Object.assign(state, {
+        receivedInvitesList,
+        receivedInvites
       })
 
-      // same here. Why is receivedInvites set?
-      return Object.assign(state, {
-        receivedInvitesList
-      })
+    case 'ACCEPT_INVITE':
+      var whitelist = [...state.whitelist, action.peerId]
+      if (state.sharedSignPubKey) {
+        var index = state.sharedSignPubKey.indexOf(action.sharedSignPubKey)
+        console.log('removing item', index, 'from', state.sharedSignPubKey)
+        issuedInvites = state.sharedSignPubKey.filter((_, i) => i !== index)
+        return {...state, whitelist, issuedInvites}
+      }
+      receivedInvites = Object.assign({}, state.receivedInvites)
+      delete receivedInvites[action.peerId]
+      return {...state, whitelist, receivedInvites}
 
     default:
       return state

@@ -21,10 +21,10 @@ var actions = {
         })
       }
 
-      var hubUrls = state.instances.hubUrls
-      var peers = state.instances.peers
-      var receivedInvites = state.instances.receivedInvites
-      var issuedInvites = state.instances.issuedInvites
+      var hubUrls = state.instances.hubUrls.slice()
+      var whitelist = state.instances.whitelist.slice()
+      var receivedInvites = Object.assign({}, state.instances.receivedInvites)
+      var issuedInvites = state.instances.issuedInvites.slice()
 
       var opts = {
         namespace: 'peermusic',
@@ -32,7 +32,16 @@ var actions = {
         issuedInvites
       }
 
-      connections = new Connect(keyPair, peers, hubUrls, opts)
+      connections = new Connect(keyPair, whitelist, hubUrls, opts)
+
+      connections.metaSwarm.on('accept', function (peerId, sharedSignPubKey) {
+        console.log('accept invite ----------------')
+        dispatch({
+          type: 'ACCEPT_INVITE',
+          peerId,
+          sharedSignPubKey
+        })
+      })
     }
   },
 
@@ -45,6 +54,10 @@ var actions = {
         sharedSignPubKey: invite[0],
         uri: invite[1]
       })
+      dispatch({
+        type: 'ADD_HUB_URL',
+        hubUrl
+      })
     }
   },
 
@@ -56,6 +69,10 @@ var actions = {
         description,
         theirPubKey: invite[1],
         invite: invite[2]
+      })
+      dispatch({
+        type: 'ADD_HUB_URL',
+        hubUrl: invite[0]
       })
     }
   }
