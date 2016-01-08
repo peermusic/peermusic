@@ -3,6 +3,8 @@ var source = require('vinyl-source-stream')
 var browserify = require('browserify')
 var watchify = require('watchify')
 var babelify = require('babelify')
+var notifier = require('node-notifier')
+var chalk = require('chalk')
 var concat = require('gulp-concat')
 var sass = require('gulp-sass')
 var livereload = require('gulp-livereload')
@@ -13,9 +15,18 @@ var st = require('st')
 livereload({start: true})
 
 // Log errors in the watchers to the console
-function handleErrors () {
-  var args = Array.prototype.slice.call(arguments)
-  console.error('Error in watcher!', args)
+function handleErrors (error) {
+  // Generate a clean error message
+  var regex = new RegExp(__dirname.replace(/\\/g, '[\\\\\/]*'), 'gi')
+  error = error.toString().replace(regex, '')
+
+  // Write in console and notify the user
+  console.log(chalk.bold.red('[Build failed] ' + error))
+  notifier.notify({
+    title: 'Gulp build failed',
+    message: error,
+    sound: true
+  })
 }
 
 // Compile the javascript and watch for file changes
@@ -33,13 +44,14 @@ gulp.task('browserify', function () {
   var watcher = watchify(bundler, { poll: true })
 
   function compileJS () {
-    console.time('Compiling JS')
+    var start = Date.now()
     watcher.bundle()
       .on('error', handleErrors)
       .pipe(source('bundle.js'))
       .pipe(gulp.dest('./public/build/'))
       .pipe(livereload())
-    console.timeEnd('Compiling JS')
+    var ms = Date.now() - start
+    console.log(chalk.green('Compiled JS in %dms'), ms)
   }
 
   // Listen for updates and run one time for the initial task
@@ -50,13 +62,14 @@ gulp.task('browserify', function () {
 // Compile SCSS into CSS on file changes
 gulp.task('scss', function () {
   function compileSCSS () {
-    console.time('Compiling CSS')
+    var start = Date.now()
     gulp.src('./styles/**/*.scss')
       .pipe(sass().on('error', sass.logError))
       .pipe(concat('bundle.css'))
       .pipe(gulp.dest('./public/build/'))
       .pipe(livereload())
-    console.timeEnd('Compiling CSS')
+    var ms = Date.now() - start
+    console.log(chalk.green('Compiled CSS in %dms'), ms)
   }
 
   // Listen for updates and run one time for the initial task
