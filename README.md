@@ -1,21 +1,23 @@
-# peermusic (WIP!)
+# peermusic
 
-> Music player in a browsertab that works with your own mp3 files and can share music with your friends automatically. Features fully encrypted communication with all endpoints.
-> 
-> This is the main repository for the interface of peermusic, that ties all other repositories together. 
+[![GitHub release](https://img.shields.io/badge/release-v0.1.0-blue.svg?style=flat-square)](https://github.com/peermusic/desktop/releases)
+[![Travis](https://img.shields.io/travis/peermusic/desktop/master.svg?style=flat-square)](https://travis-ci.org/peermusic/desktop)
+[![David](https://img.shields.io/david/peermusic/desktop.svg?style=flat-square)]()
+[![GitHub license](https://img.shields.io/badge/licence-AGPL_v3.0-blue.svg?style=flat-square)](https://github.com/peermusic/desktop/blob/master/LICENSE)
 
-![peermusic interface](http://i.imgur.com/6K1W5mQ.png)
+> Music player in a browsertab that works with your own mp3 files and can share music with your friends and own devices automatically. Features fully encrypted communication with all endpoints, cover art, radio, favorites, ...
 
-## Install
+[![peermusic interface](http://i.imgur.com/zkNgtMO.png)](http://peermusic.github.io/)
+
+## Run online
+
+[You can use the player directly via Github Pages.](http://peermusic.github.io/)
+
+## Install & run locally
 
 ```sh
 npm install -g gulp
 npm install
-```
-
-## Run
-
-```sh
 gulp
 ```
 

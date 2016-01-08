@@ -1,0 +1,32 @@
+@import '../colors';
+@import '../mixins/reset-list';
+
+.horizontal-navigation {
+    display: flex;
+    position: relative;
+    top: -10px;
+    max-width: 960px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid $background-gray;
+
+    a {
+        margin-right: 25px;
+        padding: 15px 0;
+        color: $color-gray;
+        font-size: 80%;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+
+        &:hover {
+            color: $color-light-gray;
+        }
+
+        &.active {
+            padding-bottom: 13px;
+            border-bottom: 2px solid $color-brand;
+            color: $color-light-gray;
+        }
+
+    }
+
+}

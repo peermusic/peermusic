@@ -313,6 +313,7 @@ function getRadioSongs (song, state, callback) {
         listSong.title === song.title
       ).length > 0
     })
+    list = filterSimilarSongs(list, state)
 
     // If we got no songs, fill it with songs out of the library
     // first by matching album, then by matching artist and then randomly
@@ -341,14 +342,24 @@ function getSimilarLibrarySongs (song, state) {
     results.push(state.songs[Math.floor((Math.random() * state.songs.length))])
   }
 
+  results = filterSimilarSongs(results, state)
+
+  // Only return 5 tracks
+  return results.slice(0, 5)
+}
+
+// Remove all songs that are in the history or queue
+function filterSimilarSongs (results, state) {
+  // Remove the current track
+  results = results.filter(r => state.player.songId !== r.id)
+
   // Remove tracks that we just listened to
   results = results.filter(r => state.player.history.songs.indexOf(r.id) === -1)
 
   // Remove tracks already in the queue
   results = results.filter(r => state.player.automaticQueue.indexOf(r.id) === -1)
 
-  // Only return 5 tracks
-  return results.slice(0, 5)
+  return results
 }
 
 module.exports = actions
