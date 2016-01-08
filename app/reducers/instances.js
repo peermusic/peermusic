@@ -28,10 +28,7 @@ const instances = (
         uri: action.uri
       }]
       issuedInvites = [...state.issuedInvites, action.sharedSignPubKey]
-      return Object.assign(state, {
-        issuedInvitesList,
-        issuedInvites
-      })
+      return {...state, issuedInvitesList, issuedInvites}
 
     case 'RECEIVE_INVITE':
       var receivedInvitesList = [...state.receivedInvitesList, {
@@ -39,16 +36,13 @@ const instances = (
         theirPubKey: action.theirPubKey
       }]
       receivedInvites = [...state.receivedInvites, action.invite]
-      return Object.assign(state, {
-        receivedInvitesList,
-        receivedInvites
-      })
+      return {...state, receivedInvitesList, receivedInvites}
 
     case 'ACCEPT_INVITE':
       var whitelist = [...state.whitelist, action.peerId]
-      if (state.sharedSignPubKey) {
+      if (action.sharedSignPubKey) {
         var index = state.sharedSignPubKey.indexOf(action.sharedSignPubKey)
-        console.log('removing item', index, 'from', state.sharedSignPubKey)
+        console.log('removing item', index, 'from', action.sharedSignPubKey)
         issuedInvites = state.sharedSignPubKey.filter((_, i) => i !== index)
         return {...state, whitelist, issuedInvites}
       }
