@@ -15,7 +15,11 @@ var st = require('st')
 livereload({start: true})
 
 // Log errors in the watchers to the console
+var failing = false
 function handleErrors (error) {
+  // Save the error status for the compile functions
+  failing = true
+
   // Generate a clean error message
   var regex = new RegExp(__dirname.replace(/\\/g, '[\\\\\/]*'), 'gi')
   error = error.toString().replace(regex, '')
@@ -52,6 +56,15 @@ gulp.task('browserify', function () {
       .pipe(livereload())
     var ms = Date.now() - start
     console.log(chalk.green('Compiled JS in %dms'), ms)
+
+    if (failing) {
+      failing = false
+      notifier.notify({
+        title: 'Gulp build passed!',
+        message: 'Compiled JS',
+        sound: true
+      })
+    }
   }
 
   // Listen for updates and run one time for the initial task
@@ -70,6 +83,15 @@ gulp.task('scss', function () {
       .pipe(livereload())
     var ms = Date.now() - start
     console.log(chalk.green('Compiled CSS in %dms'), ms)
+
+    if (failing) {
+      failing = false
+      notifier.notify({
+        title: 'Gulp build passed!',
+        message: 'Compiled CSS',
+        sound: true
+      })
+    }
   }
 
   // Listen for updates and run one time for the initial task
