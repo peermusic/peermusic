@@ -21,6 +21,7 @@ var actions = {
           keyPair
         })
       }
+      debug('my UUID:', keyPair.publicKey)
 
       var hubUrls = state.instances.hubUrls.slice()
       var whitelist = state.instances.whitelist.slice()
@@ -33,11 +34,10 @@ var actions = {
         issuedInvites
       }
 
+      debug('connecting to', hubUrls)
       connections = new Connect(keyPair, whitelist, hubUrls, opts)
+      window.c = connections
 
-      connections.metaSwarm.on('connect', function (peer, peerId) {
-        debug('peer connected', peerId, peer)
-      })
       connections.metaSwarm.on('accept', function (peerId, sharedSignPubKey) {
         debug('invite accepted', peerId, sharedSignPubKey)
         dispatch({
@@ -45,6 +45,9 @@ var actions = {
           peerId,
           sharedSignPubKey
         })
+      })
+      connections.metaSwarm.on('connect', function (peer, peerId) {
+        debug('peer connected', peerId)
       })
     }
   },
@@ -77,6 +80,26 @@ var actions = {
       dispatch({
         type: 'ADD_HUB_URL',
         hubUrl: invite[0]
+      })
+    }
+  },
+
+  DISCARD_RECEIVED_INVITE: (index) => {
+    console.log('trying to discard')
+    return (dispatch, getState) => {
+      dispatch({
+        type: 'DISCARD_RECEIVED_INVITE',
+        index
+      })
+    }
+  },
+
+  DISCARD_ISSUED_INVITE: (index) => {
+    console.log('trying to discard')
+    return (dispatch, getState) => {
+      dispatch({
+        type: 'DISCARD_ISSUED_INVITE',
+        index
       })
     }
   }

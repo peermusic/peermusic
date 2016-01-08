@@ -1,7 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
-const { REMOVE_FRIEND } = require('../../actions')
+const { DISCARD_RECEIVED_INVITE } = require('../../actions')
 
 function ReceivedInvitesTable ({ receivedInvitesList }) {
   return (
@@ -22,7 +22,7 @@ function ReceivedInvitesTable ({ receivedInvitesList }) {
               <td className={descriptionClass}>
                 <input type='text' value={invite.theirPubKey || '—'} readOnly/>
               </td>
-              <td className='remove-button'><a onClick={() => REMOVE_FRIEND(i)}><i className='fa fa-trash'/></a></td>
+              <td className='remove-button'><a onClick={() => DISCARD_RECEIVED_INVITE(i)}><i className='fa fa-trash'/></a></td>
             </tr>
           )
         })}
@@ -31,4 +31,4 @@ function ReceivedInvitesTable ({ receivedInvitesList }) {
   )
 }
 
-module.exports = connect(null, {REMOVE_FRIEND})(ReceivedInvitesTable)
+module.exports = connect(null, {DISCARD_RECEIVED_INVITE})(ReceivedInvitesTable)
