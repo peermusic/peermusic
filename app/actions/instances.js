@@ -1,5 +1,5 @@
 const Connect = require('connect-instances')
-const debug = require('debug')('peermusic:instances')
+const debug = require('debug')('peermusic:instances:actions')
 const nacl = require('tweetnacl')
 
 var connections
@@ -36,15 +36,10 @@ var actions = {
 
       debug('connecting to', hubUrls)
       connections = new Connect(keyPair, whitelist, hubUrls, opts)
-      window.c = connections
 
       connections.metaSwarm.on('accept', function (peerId, sharedSignPubKey) {
-        debug('invite accepted', peerId, sharedSignPubKey)
-        dispatch({
-          type: 'ACCEPT_INVITE',
-          peerId,
-          sharedSignPubKey
-        })
+        debug('invite validated', peerId, sharedSignPubKey)
+        actions.INVITE_VALIDATED(peerId, sharedSignPubKey)(dispatch, getState)
       })
       connections.metaSwarm.on('connect', function (peer, peerId) {
         debug('peer connected', peerId)
@@ -100,6 +95,61 @@ var actions = {
       dispatch({
         type: 'DISCARD_ISSUED_INVITE',
         index
+      })
+    }
+  },
+
+  INVITE_VALIDATED: (peerId, sharedSignPubKey) => {
+    debug('closing invite', peerId, sharedSignPubKey)
+    return (dispatch, getState) => {
+      var receivedInvites = getState().instances.receivedInvites
+      var issuedInvites = getState().instances.issuedInvites
+      var invite, index
+
+      if (receivedInvites[peerId]) {
+        var receivedInvitesList = getState().instances.receivedInvitesList
+        receivedInvitesList.some(function (elem, i) {
+          if (elem.theirPubKey === peerId) {
+            index = i
+            return true
+          }
+        })
+        invite = receivedInvitesList[index]
+      }
+      if (issuedInvites.indexOf(sharedSignPubKey) !== -1) {
+        var issuedInvitesList = getState().instances.issuedInvitesList
+        issuedInvitesList.some(function (elem, i) {
+          if (elem.sharedSignPubKey === sharedSignPubKey) {
+            index = i
+            return true
+          }
+        })
+        invite = issuedInvitesList[index]
+      }
+
+      dispatch({
+        type: 'ADD_FRIEND',
+        description: invite.description,
+        peerId
+      })
+      dispatch({
+        type: 'INVITE_VALIDATED',
+        peerId,
+        sharedSignPubKey
+      })
+    }
+  },
+
+  REMOVE_PEER: (peerId, index) => {
+    debug('removing peer', peerId)
+    return (dispatch, getState) => {
+      dispatch({
+        type: 'REMOVE_FRIEND',
+        index
+      })
+      dispatch({
+        type: 'REMOVE_PEER',
+        peerId
       })
     }
   }

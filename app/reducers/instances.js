@@ -1,4 +1,4 @@
-const debug = require('debug')('peermusic:instances')
+const debug = require('debug')('peermusic:instances:reducers')
 
 const instances = (
   state = {
@@ -14,7 +14,7 @@ const instances = (
   },
   action
 ) => {
-  var index, issuedInvites, issuedInvitesList, receivedInvites, receivedInvitesList
+  var index, issuedInvites, issuedInvitesList, receivedInvites, receivedInvitesList, whitelist
   switch (action.type) {
     case 'SET_KEYPAIR':
       return {...state, keyPair: action.keyPair}
@@ -40,8 +40,9 @@ const instances = (
       receivedInvites = Object.assign({}, state.receivedInvites, action.invite)
       return {...state, receivedInvitesList, receivedInvites}
 
-    case 'ACCEPT_INVITE':
-      var whitelist = [...state.whitelist, action.peerId]
+    case 'INVITE_VALIDATED':
+      debug('closing invite')
+      whitelist = [...state.whitelist, action.peerId]
       if (action.sharedSignPubKey) {
         debug('closing issued invite')
         index = state.issuedInvites.indexOf(action.sharedSignPubKey)
@@ -58,7 +59,6 @@ const instances = (
         issuedInvitesList = state.issuedInvitesList.filter((_, i) => i !== index)
         return {...state, whitelist, issuedInvites, issuedInvitesList}
       }
-      debug('closing received invite')
       receivedInvites = Object.assign({}, state.receivedInvites)
       delete receivedInvites[action.peerId]
       // removing from pending invite list
@@ -74,15 +74,21 @@ const instances = (
       return {...state, whitelist, receivedInvites, receivedInvitesList}
 
     case 'DISCARD_RECEIVED_INVITE':
-      console.log('discarding')
       receivedInvitesList = [...state.receivedInvitesList.slice(0, action.index), ...state.receivedInvitesList.slice(action.index + 1)]
       return {...state, receivedInvitesList}
 
     case 'DISCARD_ISSUED_INVITE':
-      console.log('discarding')
-      issuedInvitesList = [...state.issuedInvitesList.slice(0, action.index), ...state.issuedInvitesList.slice(action.index + 1)]
+      issuedInvitesList = [...state.issuedInvitesList.slice(0, action.index),
+        ...state.issuedInvitesList.slice(action.index + 1)]
       console.log(issuedInvitesList)
       return {...state, issuedInvitesList}
+
+    case 'REMOVE_PEER':
+      debug('removing peer', action.peerId)
+      index = state.whitelist.indexOf(action.peerId)
+      whitelist = [...state.whitelist.slice(0, index),
+        ...state.whitelist.slice(index + 1)]
+      return {...state, whitelist}
 
     default:
       return state
