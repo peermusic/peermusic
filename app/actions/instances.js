@@ -1,4 +1,5 @@
 const Connect = require('connect-instances')
+const debug = require('debug')('peermusic:instances')
 const nacl = require('tweetnacl')
 
 var connections
@@ -34,8 +35,11 @@ var actions = {
 
       connections = new Connect(keyPair, whitelist, hubUrls, opts)
 
+      connections.metaSwarm.on('connect', function (peer, peerId) {
+        debug('peer connected', peerId, peer)
+      })
       connections.metaSwarm.on('accept', function (peerId, sharedSignPubKey) {
-        console.log('accept invite ----------------')
+        debug('invite accepted', peerId, sharedSignPubKey)
         dispatch({
           type: 'ACCEPT_INVITE',
           peerId,
