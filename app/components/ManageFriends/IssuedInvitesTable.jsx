@@ -20,7 +20,7 @@ function IssuedInvitesTable ({ issuedInvitesList, DISCARD_ISSUED_INVITE }) {
               <td className='number'>{i + 1}</td>
               <td className={descriptionClass}>{invite.description || '—'}</td>
               <td className={descriptionClass}>
-                <input type='text' value={invite.uri || '—'} readOnly/>
+                <input type='text' value={invite.uri || '—'} readOnly onFocus={e => e.target.select()}/>
               </td>
               <td className='remove-button'><a onClick={() => DISCARD_ISSUED_INVITE(i)}><i className='fa fa-trash'/></a></td>
             </tr>

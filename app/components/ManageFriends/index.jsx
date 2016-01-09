@@ -5,36 +5,45 @@ const ReceivedInvitesTable = require('./ReceivedInvitesTable.jsx')
 const IssueInviteForm = require('./IssueInviteForm.jsx')
 const IssuedInvitesTable = require('./IssuedInvitesTable.jsx')
 const FriendsTable = require('./FriendsTable.jsx')
+const HorizontalNavigation = require('../HorizontalNavigation.jsx')
 
 function ManageFriends ({ friends, issuedInvitesList, receivedInvitesList }) {
-  var issuedInvitesTable = issuedInvitesList.length === 0
-    ? <p>No invites issued yet.</p>
-    : <IssuedInvitesTable issuedInvitesList={issuedInvitesList}/>
-  var receivedInvitesTable = receivedInvitesList.length === 0
-    ? <p>No invites received yet.</p>
-    : <ReceivedInvitesTable receivedInvitesList={receivedInvitesList}/>
-  var friendsTable = friends.length === 0
-    ? <p>No friends authenticated yet.</p>
-    : <FriendsTable friends={friends}/>
+  const friendsView = (
+      <div>
+        {friends.length > 0 ? <FriendsTable friends={friends}/>
+            : <div>
+                <h3>No friends authenticated yet.</h3>
+                <p>To authenticate friends, create a new invite on the "issue invites" page, send the resulting URL to a friend and let him paste the URL into the "recieve invites" page.</p>
+              </div>}
+      </div>
+  )
+
+  const issueView = (
+      <div>
+        <IssueInviteForm/>
+        {issuedInvitesList.length > 0 ? <div><h3>Pending</h3><br/><IssuedInvitesTable issuedInvitesList={issuedInvitesList}/></div>
+            : <h3>No invites issued yet.</h3>}
+      </div>
+  )
+
+  const receiveView = (
+      <div>
+        <ReceiveInviteForm/>
+        {receivedInvitesList.length > 0 ? <div><h3>Pending</h3><br/><ReceivedInvitesTable receivedInvitesList={receivedInvitesList}/></div>
+            : <h3>No invites to receive added yet.</h3>}
+      </div>
+  )
+
+  const views = [
+    {name: 'Authenticated Friends (' + friends.length + ')', content: friendsView},
+    {name: 'Issue Invites (' + issuedInvitesList.length + ')', content: issueView},
+    {name: 'Receive Invites (' + receivedInvitesList.length + ')', content: receiveView}
+  ]
 
   return (
       <div>
         <h2>Manage friends</h2>
-
-        <h3>Issue Invites</h3>
-        <IssueInviteForm/>
-        <h4>Pending</h4>
-        {issuedInvitesTable}
-
-        <br/><br/>
-        <h3>Receive Invites</h3>
-        <ReceiveInviteForm/>
-        <h4>Pending</h4>
-        {receivedInvitesTable}
-
-        <br/><br/>
-        <h3>Authenticated Friends</h3>
-        {friendsTable}
+        <HorizontalNavigation views={views} identifier='friends'/>
       </div>
   )
 }
