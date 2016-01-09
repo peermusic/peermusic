@@ -11,7 +11,7 @@ class IssueInviteForm extends React.Component {
     var hubUrl = ReactDOM.findDOMNode(this.refs.hubUrl)
 
     this.props.ISSUE_INVITE(description.value,
-      hubUrl.value ? hubUrl.value : 'localhost:7000' // todo
+      hubUrl.value ? hubUrl.value : 'localhost:7000'
     )
 
     description.value = ''

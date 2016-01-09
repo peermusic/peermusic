@@ -26,12 +26,12 @@ var actions = {
       if (!keyPair) keyPair = generateKeyPair()
       debug('my UUID:', keyPair.publicKey)
 
-      var hubUrls = state.instances.hubUrls.slice()
-      var whitelist = state.instances.whitelist.slice()
+      var hubUrls = [...state.instances.hubUrls]
+      var whitelist = [...state.instances.whitelist]
       var opts = {
         namespace: 'peermusic',
-        receivedInvites: Object.assign({}, state.instances.receivedInvites),
-        issuedInvites: state.instances.issuedInvites.slice()
+        receivedInvites: {...state.instances.receivedInvites},
+        issuedInvites: [...state.instances.issuedInvites]
       }
 
       debug('connecting to', hubUrls)
@@ -49,7 +49,7 @@ var actions = {
 
   ISSUE_INVITE: (description, hubUrl) => {
     var invite = connections.issueInvite(hubUrl)
-    return (dispatch, getState) => {
+    return (dispatch) => {
       dispatch({
         type: 'ISSUE_INVITE',
         description,
@@ -65,7 +65,7 @@ var actions = {
 
   RECEIVE_INVITE: (description, uri) => {
     var invite = connections.receiveInvite(uri)
-    return (dispatch, getState) => {
+    return (dispatch) => {
       dispatch({
         type: 'RECEIVE_INVITE',
         description,
@@ -80,7 +80,7 @@ var actions = {
   },
 
   DISCARD_RECEIVED_INVITE: (index) => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
       dispatch({
         type: 'DISCARD_RECEIVED_INVITE',
         index
@@ -89,7 +89,7 @@ var actions = {
   },
 
   DISCARD_ISSUED_INVITE: (index) => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
       dispatch({
         type: 'DISCARD_ISSUED_INVITE',
         index
@@ -101,27 +101,15 @@ var actions = {
     return (dispatch, getState) => {
       var receivedInvites = getState().instances.receivedInvites
       var issuedInvites = getState().instances.issuedInvites
-      var invite, index
+      var invite
 
       if (receivedInvites[peerId]) {
         var receivedInvitesList = getState().instances.receivedInvitesList
-        receivedInvitesList.some(function (elem, i) {
-          if (elem.theirPubKey === peerId) {
-            index = i
-            return true
-          }
-        })
-        invite = receivedInvitesList[index]
+        invite = receivedInvitesList.filter(x => x.theirPubKey === peerId)[0]
       }
       if (issuedInvites.indexOf(sharedSignPubKey) !== -1) {
         var issuedInvitesList = getState().instances.issuedInvitesList
-        issuedInvitesList.some(function (elem, i) {
-          if (elem.sharedSignPubKey === sharedSignPubKey) {
-            index = i
-            return true
-          }
-        })
-        invite = issuedInvitesList[index]
+        invite = issuedInvitesList.filter(x => x.sharedSignPubKey === sharedSignPubKey)[0]
       }
 
       dispatch({
@@ -138,7 +126,7 @@ var actions = {
   },
 
   REMOVE_PEER: (peerId, index) => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
       dispatch({
         type: 'REMOVE_FRIEND',
         index
