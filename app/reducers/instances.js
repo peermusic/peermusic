@@ -9,12 +9,12 @@ const instances = (
     receivedInvites: {},
     receivedInvitesList: [],
     issuedInvites: [],
-    issuedInvitesList: [],
-    inviteList: {}
+    issuedInvitesList: []
   },
   action
 ) => {
   var index, issuedInvites, issuedInvitesList, receivedInvites, receivedInvitesList, whitelist
+
   switch (action.type) {
     case 'SET_KEYPAIR':
       return {...state, keyPair: action.keyPair}
@@ -41,7 +41,6 @@ const instances = (
       return {...state, receivedInvitesList, receivedInvites}
 
     case 'INVITE_VALIDATED':
-      debug('closing invite')
       whitelist = [...state.whitelist, action.peerId]
       if (action.sharedSignPubKey) {
         debug('closing issued invite')
@@ -84,7 +83,6 @@ const instances = (
       return {...state, issuedInvitesList}
 
     case 'REMOVE_PEER':
-      debug('removing peer', action.peerId)
       index = state.whitelist.indexOf(action.peerId)
       whitelist = [...state.whitelist.slice(0, index),
         ...state.whitelist.slice(index + 1)]

@@ -9,9 +9,8 @@ var actions = {
     return (dispatch, getState) => {
       const state = getState()
 
-      var keyPair = state.instances.keyPair
-      if (!keyPair) {
-        keyPair = nacl.box.keyPair()
+      function generateKeyPair () {
+        var keyPair = nacl.box.keyPair()
         keyPair = {
           secretKey: nacl.util.encodeBase64(keyPair.secretKey),
           publicKey: nacl.util.encodeBase64(keyPair.publicKey)
@@ -20,18 +19,19 @@ var actions = {
           type: 'SET_KEYPAIR',
           keyPair
         })
+        return keyPair
       }
+
+      var keyPair = state.instances.keyPair
+      if (!keyPair) keyPair = generateKeyPair()
       debug('my UUID:', keyPair.publicKey)
 
       var hubUrls = state.instances.hubUrls.slice()
       var whitelist = state.instances.whitelist.slice()
-      var receivedInvites = Object.assign({}, state.instances.receivedInvites)
-      var issuedInvites = state.instances.issuedInvites.slice()
-
       var opts = {
         namespace: 'peermusic',
-        receivedInvites,
-        issuedInvites
+        receivedInvites: Object.assign({}, state.instances.receivedInvites),
+        issuedInvites: state.instances.issuedInvites.slice()
       }
 
       debug('connecting to', hubUrls)
@@ -80,7 +80,6 @@ var actions = {
   },
 
   DISCARD_RECEIVED_INVITE: (index) => {
-    console.log('trying to discard')
     return (dispatch, getState) => {
       dispatch({
         type: 'DISCARD_RECEIVED_INVITE',
@@ -90,7 +89,6 @@ var actions = {
   },
 
   DISCARD_ISSUED_INVITE: (index) => {
-    console.log('trying to discard')
     return (dispatch, getState) => {
       dispatch({
         type: 'DISCARD_ISSUED_INVITE',
@@ -100,7 +98,6 @@ var actions = {
   },
 
   INVITE_VALIDATED: (peerId, sharedSignPubKey) => {
-    debug('closing invite', peerId, sharedSignPubKey)
     return (dispatch, getState) => {
       var receivedInvites = getState().instances.receivedInvites
       var issuedInvites = getState().instances.issuedInvites
@@ -141,7 +138,6 @@ var actions = {
   },
 
   REMOVE_PEER: (peerId, index) => {
-    debug('removing peer', peerId)
     return (dispatch, getState) => {
       dispatch({
         type: 'REMOVE_FRIEND',
