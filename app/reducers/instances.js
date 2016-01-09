@@ -1,5 +1,3 @@
-const debug = require('debug')('peermusic:instances:reducers')
-
 const instances = (
   state = {
     keyPair: null,
@@ -13,41 +11,45 @@ const instances = (
   },
   action
 ) => {
-  var index, issuedInvites, issuedInvitesList, receivedInvites, receivedInvitesList, whitelist
+  var reducer = {
+    'SET_KEYPAIR': x => ({...state, keyPair: action.keyPair}),
 
-  switch (action.type) {
-    case 'SET_KEYPAIR':
-      return {...state, keyPair: action.keyPair}
-
-    case 'ADD_HUB_URL':
+    'ADD_HUB_URL': x => {
       if (state.hubUrls.indexOf(action.hubUrl) !== -1) return state
       return {...state, hubUrls: [...state.hubUrls, action.hubUrl]}
+    },
 
-    case 'ISSUE_INVITE':
-      issuedInvitesList = [...state.issuedInvitesList, {
+    'ISSUE_INVITE': x => {
+      var issuedInvitesList = [...state.issuedInvitesList, {
         description: action.description,
         sharedSignPubKey: action.sharedSignPubKey,
         uri: action.uri
       }]
-      issuedInvites = [...state.issuedInvites, action.sharedSignPubKey]
-      return {...state, issuedInvitesList, issuedInvites}
+      var issuedInvites = [...state.issuedInvites, action.sharedSignPubKey]
 
-    case 'RECEIVE_INVITE':
-      receivedInvitesList = [...state.receivedInvitesList, {
+      return {...state, issuedInvitesList, issuedInvites}
+    },
+
+    'RECEIVE_INVITE': x => {
+      var receivedInvitesList = [...state.receivedInvitesList, {
         description: action.description,
         theirPubKey: action.theirPubKey
       }]
-      receivedInvites = Object.assign({}, state.receivedInvites, action.invite)
-      return {...state, receivedInvitesList, receivedInvites}
+      var receivedInvites = Object.assign({}, state.receivedInvites, action.invite)
 
-    case 'INVITE_VALIDATED':
-      whitelist = [...state.whitelist, action.peerId]
+      return {...state, receivedInvitesList, receivedInvites}
+    },
+
+    'INVITE_VALIDATED': x => {
+      var whitelist = [...state.whitelist, action.peerId]
+
       if (action.sharedSignPubKey) {
-        debug('closing issued invite')
-        index = state.issuedInvites.indexOf(action.sharedSignPubKey)
-        issuedInvites = state.issuedInvites.filter((_, i) => i !== index)
-        // removing from pending invite list
-        issuedInvitesList = []
+        // closing issued invite:
+
+        var index = state.issuedInvites.indexOf(action.sharedSignPubKey)
+        var issuedInvites = state.issuedInvites.filter((_, i) => i !== index)
+
+        var issuedInvitesList = []
         index = null
         state.issuedInvitesList.some(function (elem, i) {
           if (elem.sharedSignPubKey === action.sharedSignPubKey) {
@@ -56,41 +58,48 @@ const instances = (
           }
         })
         issuedInvitesList = state.issuedInvitesList.filter((_, i) => i !== index)
+
         return {...state, whitelist, issuedInvites, issuedInvitesList}
+      } else {
+        // closing received invite
+
+        var receivedInvites = Object.assign({}, state.receivedInvites)
+        delete receivedInvites[action.peerId]
+
+        var receivedInvitesList = []
+        index = null
+        state.receivedInvitesList.some(function (elem, i) {
+          if (elem.theirPubKey === action.peerId) {
+            index = i
+            return true
+          }
+        })
+        receivedInvitesList = state.receivedInvitesList.filter((_, i) => i !== index)
+
+        return {...state, whitelist, receivedInvites, receivedInvitesList}
       }
-      receivedInvites = Object.assign({}, state.receivedInvites)
-      delete receivedInvites[action.peerId]
-      // removing from pending invite list
-      receivedInvitesList = []
-      index = null
-      state.receivedInvitesList.some(function (elem, i) {
-        if (elem.theirPubKey === action.peerId) {
-          index = i
-          return true
-        }
-      })
-      receivedInvitesList = state.receivedInvitesList.filter((_, i) => i !== index)
-      return {...state, whitelist, receivedInvites, receivedInvitesList}
+    },
 
-    case 'DISCARD_RECEIVED_INVITE':
-      receivedInvitesList = [...state.receivedInvitesList.slice(0, action.index), ...state.receivedInvitesList.slice(action.index + 1)]
+    'DISCARD_RECEIVED_INVITE': x => {
+      var receivedInvitesList = [...state.receivedInvitesList.slice(0, action.index), ...state.receivedInvitesList.slice(action.index + 1)]
       return {...state, receivedInvitesList}
+    },
 
-    case 'DISCARD_ISSUED_INVITE':
-      issuedInvitesList = [...state.issuedInvitesList.slice(0, action.index),
+    'DISCARD_ISSUED_INVITE': x => {
+      var issuedInvitesList = [...state.issuedInvitesList.slice(0, action.index),
         ...state.issuedInvitesList.slice(action.index + 1)]
-      console.log(issuedInvitesList)
       return {...state, issuedInvitesList}
+    },
 
-    case 'REMOVE_PEER':
-      index = state.whitelist.indexOf(action.peerId)
-      whitelist = [...state.whitelist.slice(0, index),
+    'REMOVE_PEER': x => {
+      var index = state.whitelist.indexOf(action.peerId)
+      var whitelist = [...state.whitelist.slice(0, index),
         ...state.whitelist.slice(index + 1)]
       return {...state, whitelist}
-
-    default:
-      return state
+    }
   }
+
+  return reducer[action.type] ? reducer[action.type]() : state
 }
 
 module.exports = instances
