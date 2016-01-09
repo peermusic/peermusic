@@ -77,7 +77,7 @@ gulp.task('scss', function () {
   function compileSCSS () {
     var start = Date.now()
     gulp.src('./styles/**/*.scss')
-      .pipe(sass().on('error', sass.logError))
+      .pipe(sass().on('error', handleErrors))
       .pipe(concat('bundle.css'))
       .pipe(gulp.dest('./public/build/'))
       .pipe(livereload())
