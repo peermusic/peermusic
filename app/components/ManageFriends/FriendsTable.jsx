@@ -1,16 +1,16 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
-const { REMOVE_FRIEND } = require('../../actions')
+const { REMOVE_PEER } = require('../../actions')
 
-function FriendsTable ({ friends, REMOVE_FRIEND }) {
+function FriendsTable ({ friends, REMOVE_PEER }) {
   return (
       <table className='song-table'>
         <tbody>
         <tr>
           <th className='number'>#</th>
           <th>Description</th>
-          <th>Friend URL</th>
+          <th>Friend ID</th>
           <th className='remove-button'/>
         </tr>
         {friends.map((friend, i) => {
@@ -19,8 +19,8 @@ function FriendsTable ({ friends, REMOVE_FRIEND }) {
               <tr key={i}>
                 <td className='number'>{i + 1}</td>
                 <td className={descriptionClass}>{friend.description || '—'}</td>
-                <td className='break-cell'>{friend.friendUrl}</td>
-                <td className='remove-button'><a onClick={() => REMOVE_FRIEND(i)}><i className='fa fa-trash'/></a></td>
+                <td className='break-cell'>{friend.peerId}</td>
+                <td className='remove-button'><a onClick={() => REMOVE_PEER(friend.peerId, i)}><i className='fa fa-trash'/></a></td>
               </tr>
           )
         })}
@@ -29,4 +29,4 @@ function FriendsTable ({ friends, REMOVE_FRIEND }) {
   )
 }
 
-module.exports = connect(null, {REMOVE_FRIEND})(FriendsTable)
+module.exports = connect(null, {REMOVE_PEER})(FriendsTable)

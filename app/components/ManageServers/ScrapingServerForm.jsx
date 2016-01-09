@@ -10,6 +10,11 @@ class ScrapingServerForm extends React.Component {
     var description = ReactDOM.findDOMNode(this.refs.description)
     var serverUrl = ReactDOM.findDOMNode(this.refs.serverUrl)
 
+    if (serverUrl.value === '') {
+      window.alert('A server URL is needed')
+      return
+    }
+
     this.props.ADD_SCRAPING_SERVER(description.value, serverUrl.value)
 
     description.value = ''

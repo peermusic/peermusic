@@ -24,6 +24,16 @@ gulp
 After that, the server is now running on `localhost:8000` and the files get recompiled into `public/build/` on change. 
 If you have http://livereload.com/extensions/ installed, they even get instantly reloaded in the browser.
 
+## Connect with friends
+
+To connect with friends the application will ask you for a "hub url". 
+The easiest way is to run a [signalhub server](https://github.com/mafintosh/signalhub) locally using the following commands.
+
+```
+npm install -g signalhub
+signalhub listen -h localhost -p 7000
+```
+
 ## Styleguides
 
 ```sh
