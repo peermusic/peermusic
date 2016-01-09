@@ -29,7 +29,7 @@ class IssueInviteForm extends React.Component {
           </label>
           <input type='text' placeholder='Alice from Work' ref='description'/>
         </div>
-        <div>
+        <div className='no-border'>
           <label>
             HUB URL
           </label>

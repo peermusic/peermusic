@@ -44,6 +44,10 @@
             word-break: break-all;
         }
 
+        input {
+            width: 90%;
+        }
+
         // Specific styles for cells
         .artist a, .album a {
             color: $color-light-gray;

@@ -10,6 +10,11 @@ class ReceiveInviteForm extends React.Component {
     var description = ReactDOM.findDOMNode(this.refs.description)
     var friendUrl = ReactDOM.findDOMNode(this.refs.friendUrl)
 
+    if (friendUrl.value === '') {
+      window.alert('A friend URL is needed')
+      return
+    }
+
     this.props.RECEIVE_INVITE(description.value, friendUrl.value)
 
     description.value = ''
