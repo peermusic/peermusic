@@ -1,0 +1,21 @@
+@import '../colors';
+
+.navigation {
+    display: none;
+}
+
+.content {
+    .actual-page-content {
+        overflow-y: auto;
+        padding: 0 5px 20px 15px;
+    }
+
+    .page-heading {
+        display: none;
+    }
+
+    @import 'components/horizontal-navigation';
+    @import 'components/song-table';
+}
+
+@import 'components/player';

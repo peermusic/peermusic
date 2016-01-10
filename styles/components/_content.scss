@@ -2,11 +2,22 @@
 @import '../mixins/custom-scrollbar';
 
 .content {
-    @include custom-scrollbar($background-light-gray);
     flex-grow: 1;
-    padding: 25px;
     color: $color-light-gray;
-    overflow-y: auto;
+    overflow: hidden;
+    display: flex;
+
+    > div {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .actual-page-content {
+        @include custom-scrollbar($background-light-gray);
+        overflow-y: auto;
+        padding: 25px;
+    }
 
     a {
         color: $color-brand;
@@ -38,7 +49,7 @@
         flex-direction: row;
         align-items: center;
         max-width: 960px;
-        margin-bottom: 25px;
+        padding: 25px;
 
         h2 {
             flex: 1;
@@ -77,15 +88,4 @@
     @import 'pages/artists';
     @import 'pages/manage-servers';
     @import 'pages/search';
-
-    // TODO remove
-    .work-in-progress {
-        display: flex;
-        flex: 1;
-        align-items: center;
-        justify-content: center;
-        margin-top: 250px;
-        color: $color-gray;
-    }
-
 }

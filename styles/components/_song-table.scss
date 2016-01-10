@@ -59,6 +59,10 @@
 
         }
 
+        .title .mobile {
+            display: none
+        }
+
         .creation-date, .song-time, .number {
             color: $color-gray;
             font-size: 80%;

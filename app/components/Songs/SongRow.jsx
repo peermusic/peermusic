@@ -5,6 +5,7 @@ const { PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE } 
 const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
+var Tappable = require('react-tappable')
 
 class SongRow extends React.Component {
 
@@ -23,10 +24,18 @@ class SongRow extends React.Component {
     return <td className='play-button'>{playButton}</td>
   }
 
-  renderTitle () {
+  renderTitle (playback) {
     return (
         <td className='title'>
-          {this.props.song.title}
+          <div className='desktop'>
+            {this.props.song.title}
+          </div>
+          <div className='mobile'>
+            <Tappable onTap={() => playback()}>
+              {this.props.song.title}
+              <small>{this.props.song.artist} - {this.props.song.album}</small>
+            </Tappable>
+          </div>
         </td>
     )
   }
@@ -101,7 +110,7 @@ class SongRow extends React.Component {
           {this.props.options.index ? this.renderIndex() : undefined}
           {this.props.options.track ? this.renderTrack() : undefined}
           {this.props.options.play ? this.renderPlay(playback) : undefined}
-          {this.props.options.title ? this.renderTitle() : undefined}
+          {this.props.options.title ? this.renderTitle(playback) : undefined}
           {this.props.options.artist ? this.renderArtist() : undefined}
           {this.props.options.album ? this.renderAlbum() : undefined}
           {this.props.options.added ? this.renderAdded() : undefined}

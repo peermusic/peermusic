@@ -11,6 +11,9 @@ class Search extends React.Component {
 
     if (search.value.length > 0) {
       this.props.pushPath('/search?query=' + search.value)
+      if (this.props.callback) {
+        this.props.callback()
+      }
     }
 
     search.value = ''
@@ -29,7 +32,8 @@ class Search extends React.Component {
 
 Search.propTypes = {
   pushPath: React.PropTypes.func,
-  placeholder: React.PropTypes.node
+  placeholder: React.PropTypes.node,
+  callback: React.PropTypes.func
 }
 
 module.exports = connect(

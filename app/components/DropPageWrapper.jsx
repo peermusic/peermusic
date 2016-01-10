@@ -52,10 +52,14 @@ class DropPageWrapper extends React.Component {
   }
 
   render () {
+    var pageWrapperClasses = classNames('page-wrapper', 'route-' + this.props.routePath, {
+      'mobile-navigation': this.props.mobileNavigation,
+      'mobile-content': !this.props.mobileNavigation
+    })
     var dropZoneClasses = classNames('dropzone', {active: this.state.isHovering})
 
     return (
-        <div className='page-wrapper'
+        <div className={pageWrapperClasses}
              onDragStart={(e) => this.dragging(e)}
              onDragOver={(e) => this.dragging(e)}
              onDragLeave={(e) => this.stopDragging(e)}
@@ -72,4 +76,10 @@ DropPageWrapper.propTypes = {
   children: React.PropTypes.node
 }
 
-module.exports = connect(null, {ADD_SONG})(DropPageWrapper)
+module.exports = connect(
+    (state) => ({
+      mobileNavigation: state.interfaceStatus.mobileNavigation,
+      routePath: state.routing.path.replace(/\//g, '')
+    }),
+    {ADD_SONG}
+)(DropPageWrapper)

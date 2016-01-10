@@ -1,0 +1,100 @@
+@import '../../colors';
+
+.player.bottom {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    padding: 10px 0px;
+
+    .buttons, .volume, .playlist, .extra-buttons {
+        display: none;
+    }
+
+    .seeker {
+        display: flex;
+        position: absolute;
+        top: -3px;
+        left: 0;
+        right: 0;
+        padding: 0;
+        pointer-events: none;
+
+        .progressbar {
+            margin: 0;
+            border-radius: 0px;
+            height: 3px;
+
+            &::-webkit-slider-thumb {
+                width: 3px;
+                height: 3px;
+                border-radius: 100px;
+                background-color: $color-brand;
+
+                &::before {
+                    height: 3px;
+                    top: 0px;
+                    right: 0px;
+                }
+
+            }
+        }
+
+        .current-time, .song-length {
+            display: none;
+        }
+    }
+
+    .mobile-current-song {
+        flex: 1;
+        display: flex;
+
+        .current-song {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 8px;
+
+            img {
+                width: 45px;
+                height: 45px;
+                margin-right: 10px;
+                flex-shrink: 0;
+            }
+
+            .text {
+                display: block;
+                color: $color-light-gray;
+                font-size: 14px;
+
+                .song-artist {
+                    margin-top: 3px;
+                    font-size: 11px;
+                    color: $color-gray;
+
+                    a {
+                        text-decoration: none;
+                        color: $color-gray;
+                    }
+                }
+
+            }
+
+        }
+
+    }
+
+    .mobile-buttons {
+        display: flex;
+        width: auto;
+        padding: 0;
+        margin: 0;
+        flex-shrink: 0;
+
+        .play {
+            margin: 0 15px 0 0;
+            position: relative;
+            top: 2px;
+        }
+    }
+}

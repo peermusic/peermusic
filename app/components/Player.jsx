@@ -15,6 +15,7 @@ const {
     TOGGLE_RADIO_PLAYBACK
 } = require('../actions')
 const Duration = require('./Duration.jsx')
+const CurrentSong = require('./CurrentSong.jsx')
 
 class Player extends React.Component {
   constructor () {
@@ -69,6 +70,7 @@ class Player extends React.Component {
     var volume = player.volume
     var playingToggle = !player.playing
     var playButton = player.playing ? <i className='fa fa-pause'/> : <i className='fa fa-play'/>
+    var playerClass = classNames('player', {bottom: !this.props.inline})
     var repeatClass = classNames('repeat', {active: repeatPlayback})
     var favoriteClass = classNames('favorite', {active: currentSong && currentSong.favorite})
     var playlistClass = classNames('playlist', {active: playingNextPanel})
@@ -83,7 +85,7 @@ class Player extends React.Component {
     }
 
     return (
-        <div className='player'>
+        <div className={playerClass}>
           <div className='buttons'>
             {backButton}
             <button className='play' onClick={() => PLAYER_SET_PLAYING(playingToggle)}>{playButton}</button>
@@ -98,8 +100,10 @@ class Player extends React.Component {
                    max={maxDuration}
                    value={currentDuration}
                    onMouseDown={() => this.startSeeking()}
+                   onTouchStart={() => this.startSeeking()}
                    onChange={() => this.seeking()}
                    onMouseUp={() => this.stopSeeking()}
+                   onTouchEnd={() => this.stopSeeking()}
                    ref='seeker'/>
             <div className='song-length'><Duration seconds={maxDuration}/></div>
           </div>
@@ -110,25 +114,35 @@ class Player extends React.Component {
                    onChange={() => this.setVolume()} ref='volume'/>
           </div>
 
-          <div className={favoriteClass}>
-            <a onClick={() => TOGGLE_SONG_FAVORITE(currentSong.id)}><i className='flaticon-favorite'/></a>
+          <div className='extra-buttons'>
+            <div className={favoriteClass}>
+              <a onClick={() => TOGGLE_SONG_FAVORITE(currentSong.id)}><i className='flaticon-favorite'/></a>
+            </div>
+
+            <div className={repeatClass}>
+              <a onClick={() => TOGGLE_REPEAT_PLAYBACK()}><i className='fa fa-repeat'/></a>
+            </div>
+
+            <div className={shuffleClass}>
+              <a onClick={() => TOGGLE_RANDOM_PLAYBACK()}><i className='fa fa-random'/></a>
+            </div>
+
+            <div className={radioClass}>
+              <a onClick={() => TOGGLE_RADIO_PLAYBACK()}>Radio</a>
+            </div>
+
+            <div className={playlistClass}>
+              <a onClick={() => TOGGLE_PLAYING_NEXT_PANEL() }><i className='flaticon-queue'/></a>
+            </div>
           </div>
 
-          <div className={repeatClass}>
-            <a onClick={() => TOGGLE_REPEAT_PLAYBACK()}><i className='fa fa-repeat'/></a>
+          <div className='mobile-current-song'>
+            <CurrentSong mobile={true}/>
           </div>
 
-          <div className={shuffleClass}>
-            <a onClick={() => TOGGLE_RANDOM_PLAYBACK()}><i className='fa fa-random'/></a>
-          </div>
-
-          <div className={radioClass}>
-            <a onClick={() => TOGGLE_RADIO_PLAYBACK()}>Radio</a>
-          </div>
-
-          <div className={playlistClass}>
-            <a onClick={() => TOGGLE_PLAYING_NEXT_PANEL() }><i className='flaticon-queue'/></a>
-          </div>
+          <div className='buttons mobile-buttons'>
+            <button className='play' onClick={() => PLAYER_SET_PLAYING(playingToggle)}>{playButton}</button>
+            </div>
         </div>
     )
   }
@@ -140,6 +154,7 @@ Player.propTypes = {
   player: React.PropTypes.object,
   currentSong: React.PropTypes.object,
   backEnabled: React.PropTypes.bool,
+  inline: React.PropTypes.bool,
   playingNextPanel: React.PropTypes.bool,
   randomPlayback: React.PropTypes.bool,
   radioPlayback: React.PropTypes.bool,

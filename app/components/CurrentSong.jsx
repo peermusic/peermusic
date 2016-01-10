@@ -1,19 +1,32 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const { Link } = require('react-router')
+import { pushPath } from 'redux-simple-router'
 
-function CurrentSong ({ currentSong, currentCover }) {
+function CurrentSong ({ currentSong, currentCover, mobile, pushPath }) {
   if (currentSong === undefined) {
     return <div className='current-song'></div>
   }
 
-  var linkTargetArtist = '/artists?artist=' + currentSong.artist
-  var linkTargetAlbum = '/albums?album=' + currentSong.album + '&artist=' + currentSong.artist
-  var artist = <Link to={linkTargetArtist}>{currentSong.artist}</Link>
-  var album = <Link to={linkTargetAlbum}>{currentSong.album}</Link>
+  var artist = currentSong.artist
+  var album = currentSong.album
+  var touchHandler = {}
+
+  if (!mobile) {
+    var linkTargetArtist = '/artists?artist=' + currentSong.artist
+    var linkTargetAlbum = '/albums?album=' + currentSong.album + '&artist=' + currentSong.artist
+    artist = <Link to={linkTargetArtist}>{currentSong.artist}</Link>
+    album = <Link to={linkTargetAlbum}>{currentSong.album}</Link>
+  }
+
+  if (mobile) {
+    touchHandler = {
+      onTouchStart: () => pushPath('/currently-playing')
+    }
+  }
 
   return (
-      <div className='current-song'>
+      <div className='current-song' {...touchHandler}>
         <img src={currentCover} className='cover-art'/>
         <div className='text'>
           <div className='song-title'>{currentSong.title}</div>
@@ -36,4 +49,4 @@ function mapStateToProps (state) {
   }
 }
 
-module.exports = connect(mapStateToProps)(CurrentSong)
+module.exports = connect(mapStateToProps, { pushPath })(CurrentSong)

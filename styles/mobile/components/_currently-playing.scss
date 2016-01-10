@@ -1,0 +1,110 @@
+@import '../../colors';
+
+.page-wrapper.mobile-content.route-currently-playing {
+
+    .player.bottom {
+        display: none;
+    }
+
+    .navigation {
+        .current-song {
+            display: none;
+        }
+    }
+
+    .content {
+        padding: 0;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+
+        &.queue {
+            display: none;
+        }
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            max-height: 800px;
+            max-width: 1000px;
+        }
+
+        .current-song {
+            width: 100%;
+            text-align: center;
+            align-self: center;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+
+            .cover-art {
+                margin-right: 0;
+                border: 0;
+                width: 175px;
+                height: 175px;
+            }
+
+            .text {
+                border: 0;
+                padding: 0;
+                margin-top: 15px;
+                color: $color-gray;
+
+                a {
+                    color: $color-gray;
+                    text-decoration: none;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+
+                .song-title {
+                    color: $color-light-gray;
+                }
+
+                .song-artist {
+                    margin-top: 5px;
+                    font-size: 12px;
+                }
+            }
+
+        }
+
+        .player {
+            border: 0;
+            height: auto;
+            background: transparent;
+            flex-direction: column;
+            padding: 20px;
+
+            .buttons {
+                width: 100%;
+            }
+
+            .seeker {
+                align-self: center;
+                width: 100%;
+                margin-top: 20px;
+                flex: 20px 0;
+            }
+
+            .volume, .playlist {
+                display: none
+            }
+
+            .extra-buttons {
+                margin-top: 30px;
+                margin-bottom: 10px;
+
+                > div {
+                    margin: 0 15px;
+                }
+            }
+
+        }
+    }
+}

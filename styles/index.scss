@@ -29,10 +29,16 @@ html, body {
         flex-direction: row;
     }
 
+    .mobile-only, .mobile-top-bar {
+        display: none;
+    }
+
     @import 'components/popover';
     @import 'components/navigation';
     @import 'components/content';
     @import 'components/player';
 }
 
+
+@import 'mobile/index';
 @import 'components/dropzone';
