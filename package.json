@@ -2,7 +2,6 @@
   "name": "peermusic-desktop",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "standard"
   },
