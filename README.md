@@ -1,4 +1,4 @@
-# peermusic
+# peermusic - [user stories])(https://github.com/peermusic/user-stories/issues)
 
 [![GitHub release](https://img.shields.io/badge/release-v0.1.0-blue.svg?style=flat-square)](https://github.com/peermusic/desktop/releases)
 [![Travis](https://img.shields.io/travis/peermusic/desktop/master.svg?style=flat-square)](https://travis-ci.org/peermusic/desktop)
