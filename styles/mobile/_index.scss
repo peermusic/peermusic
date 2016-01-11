@@ -65,3 +65,13 @@
         }
     }
 }
+
+@media screen and (max-height: 300px) {
+    .mobile-top-bar, .player, .horizontal-navigation, .actual-page-content > div > *:not(.pretty-form) {
+        display: none !important;
+    }
+
+    .pretty-form {
+        margin-top: 20px;
+    }
+}
