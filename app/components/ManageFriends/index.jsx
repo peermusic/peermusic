@@ -6,6 +6,7 @@ const IssueInviteForm = require('./IssueInviteForm.jsx')
 const IssuedInvitesTable = require('./IssuedInvitesTable.jsx')
 const FriendsTable = require('./FriendsTable.jsx')
 const HorizontalNavigation = require('../HorizontalNavigation.jsx')
+const MobilePageHeader = require('../MobilePageHeader.jsx')
 
 function ManageFriends ({ friends, issuedInvitesList, receivedInvitesList }) {
   const friendsView = (
@@ -42,7 +43,10 @@ function ManageFriends ({ friends, issuedInvitesList, receivedInvitesList }) {
 
   return (
       <div>
-        <h2>Manage friends</h2>
+        <MobilePageHeader title='Manage friends'/>
+        <div className='page-heading'>
+          <h2>Manage friends</h2>
+        </div>
         <HorizontalNavigation views={views} identifier='friends'/>
       </div>
   )

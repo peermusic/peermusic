@@ -14,7 +14,7 @@ function Navigation ({ TOGGLE_MOBILE_NAVIGATION }) {
   return (
       <div className='navigation'>
         <a onClick={() => TOGGLE_MOBILE_NAVIGATION()} className='mobile-only close-navigation'>
-          <i className='fa fa-times'/> Close
+          <i className='fa fa-times'/> Tap to close
         </a>
         <Search placeholder='Search...' callback={() => TOGGLE_MOBILE_NAVIGATION()}/>
         <div className='navigation-links'>

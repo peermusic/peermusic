@@ -27,13 +27,18 @@ class SongRow extends React.Component {
   renderTitle (playback) {
     return (
         <td className='title'>
-          <div className='desktop'>
+          <div className='desktop-only'>
             {this.props.song.title}
           </div>
-          <div className='mobile'>
+          <div className='mobile-only'>
             <Tappable onTap={() => playback()}>
               {this.props.song.title}
-              <small>{this.props.song.artist} - {this.props.song.album}</small>
+              <small>
+                {this.props.song.artist}
+                {this.props.options.album &&
+                <span> - {this.props.song.album}</span>
+                }
+              </small>
             </Tappable>
           </div>
         </td>

@@ -4,6 +4,10 @@
     display: flex;
     flex-wrap: wrap;
 
+    &.mobile-only {
+        display: none;
+    }
+
     > .album {
         width: 175px;
         margin-right: 15px;

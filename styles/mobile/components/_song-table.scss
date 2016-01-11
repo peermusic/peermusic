@@ -13,25 +13,17 @@
         background: transparent;
     }
 
-    .title .desktop {
-        display: none;
-    }
-
-    .title .mobile {
+    .title > div > span {
         display: block;
+        position: relative;
+        top: -10px;
+        margin-bottom: -20px;
+        padding: 10px 0;
 
-        > span {
+        small {
             display: block;
-            position: relative;
-            top: -10px;
-            margin-bottom: -20px;
-            padding: 10px 0;
-
-            small {
-                display: block;
-                margin-top: 2px;
-                color: $color-gray;
-            }
+            margin-top: 2px;
+            color: $color-gray;
         }
     }
 
@@ -47,5 +39,15 @@
         a {
             visibility: visible;
         }
+    }
+
+    .mobile-column-heading {
+        margin-bottom: 5px;
+        color: $color-gray;
+        font-size: 12px;
+    }
+
+    &.no-borders tr td {
+        border: 0;
     }
 }
