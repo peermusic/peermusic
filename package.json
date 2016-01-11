@@ -26,6 +26,7 @@
     "debug": "^2.2.0",
     "file-system": "git+https://github.com/peermusic/file-system.git",
     "history": "^1.17.0",
+    "inherits": "^2.0.1",
     "music-metadata": "git+https://github.com/peermusic/music-metadata.git",
     "music-similarity": "git+https://github.com/peermusic/music-similarity.git",
     "player-engine": "git+https://github.com/peermusic/player-engine.git",
