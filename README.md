@@ -38,8 +38,10 @@ signalhub listen -h localhost -p 7000
 
 ```sh
 # Javascript
-standard app/**/*
+npm install -g standard
+standard
 
 # SCSS
-scss-lint styles/* -e styles\_normalize.scss
+npm install -g sass-lint
+sass-lint -v
 ```

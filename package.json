@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "standard"
+    "test": "standard && sass-lint -v"
   },
   "repository": {
     "type": "git",
@@ -60,6 +60,7 @@
     "gulp-sass": "^2.1.1",
     "http": "0.0.0",
     "node-notifier": "^4.4.0",
+    "sass-lint": "^1.4.0",
     "st": "^1.1.0",
     "standard": "^5.4.1",
     "vinyl-source-stream": "^1.1.0",
