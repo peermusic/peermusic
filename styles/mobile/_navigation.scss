@@ -1,25 +1,25 @@
 @import '../colors';
 
 .navigation {
-    width: 100%;
     flex-direction: column;
+    width: 100%;
     background-color: transparent;
 
     .close-navigation {
-        flex-shrink: 0;
-        height: 64px;
         display: flex;
-        justify-content: center;
+        flex-shrink: 0;
         align-items: center;
+        justify-content: center;
         width: 100%;
-        color: $color-gray;
-        text-transform: uppercase;
+        height: 64px;
         background: $background-gray;
+        color: $color-gray;
         font-size: 13px;
+        text-transform: uppercase;
 
         i {
-            font-size: 18px;
             margin-right: 7px;
+            font-size: 18px;
         }
     }
 
@@ -35,6 +35,7 @@
         .heading {
             margin-top: 15px;
         }
+
         ul li a {
             padding-top: 7px;
             padding-bottom: 7px;

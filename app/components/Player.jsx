@@ -137,7 +137,7 @@ class Player extends React.Component {
           </div>
 
           <div className='mobile-current-song'>
-            <CurrentSong mobile={true}/>
+            <CurrentSong mobile/>
           </div>
 
           <div className='buttons mobile-buttons'>

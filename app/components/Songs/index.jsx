@@ -7,7 +7,7 @@ const MobilePageHeader = require('../MobilePageHeader.jsx')
 
 function Songs ({ songs, PLAYBACK_SONG }) {
   var songDisplay = <div className='actual-page-content'><h3>You didn't add any songs yet! <br className='desktop-only'/>Start by dragging and dropping some songs into this window.</h3></div>
-  var playButton = undefined
+  var playButton
 
   if (songs.length > 0) {
     const views = [

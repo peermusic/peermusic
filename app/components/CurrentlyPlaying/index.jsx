@@ -4,13 +4,13 @@ const MobilePageHeader = require('../MobilePageHeader.jsx')
 const CurrentSong = require('../CurrentSong.jsx')
 const Player = require('../Player.jsx')
 
-function CurrentlyPlaying ({ }) {
-    return (
-      <div>
-        <MobilePageHeader title='Currently playing'/>
-        <CurrentSong mobile={true}/>
-        <Player inline={true}/>
-      </div>
+function CurrentlyPlaying () {
+  return (
+    <div>
+      <MobilePageHeader title='Currently playing'/>
+      <CurrentSong mobile/>
+      <Player inline/>
+    </div>
   )
 }
 

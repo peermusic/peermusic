@@ -13,10 +13,10 @@
     }
 
     .content {
-        padding: 0;
-        overflow: hidden;
         display: flex;
         justify-content: center;
+        padding: 0;
+        overflow: hidden;
 
         &.queue {
             display: none;
@@ -24,33 +24,33 @@
 
         > div {
             display: flex;
-            flex-direction: column;
             flex: 1;
-            max-height: 800px;
+            flex-direction: column;
             max-width: 1000px;
+            max-height: 800px;
         }
 
         .current-song {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            align-items: center;
+            align-self: center;
+            justify-content: center;
             width: 100%;
             text-align: center;
-            align-self: center;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            justify-content: center;
-            flex: 1;
 
             .cover-art {
-                margin-right: 0;
-                border: 0;
                 width: 175px;
                 height: 175px;
+                margin-right: 0;
+                border: 0;
             }
 
             .text {
-                border: 0;
-                padding: 0;
                 margin-top: 15px;
+                padding: 0;
+                border: 0;
                 color: $color-gray;
 
                 a {
@@ -75,25 +75,25 @@
         }
 
         .player {
-            border: 0;
-            height: auto;
-            background: transparent;
             flex-direction: column;
+            height: auto;
             padding: 20px;
+            border: 0;
+            background: transparent;
 
             .buttons {
                 width: 100%;
             }
 
             .seeker {
+                flex: 20px 0;
                 align-self: center;
                 width: 100%;
                 margin-top: 20px;
-                flex: 20px 0;
             }
 
             .volume, .playlist {
-                display: none
+                display: none;
             }
 
             .extra-buttons {

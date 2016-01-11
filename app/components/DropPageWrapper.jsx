@@ -73,7 +73,9 @@ class DropPageWrapper extends React.Component {
 
 DropPageWrapper.propTypes = {
   ADD_SONG: React.PropTypes.func,
-  children: React.PropTypes.node
+  children: React.PropTypes.node,
+  mobileNavigation: React.PropTypes.bool,
+  routePath: React.PropTypes.string
 }
 
 module.exports = connect(

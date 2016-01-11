@@ -2,21 +2,21 @@
 @import '../mixins/custom-scrollbar';
 
 .content {
+    display: flex;
     flex-grow: 1;
     color: $color-light-gray;
     overflow: hidden;
-    display: flex;
 
     > div {
-        flex: 1;
         display: flex;
+        flex: 1;
         flex-direction: column;
     }
 
     .actual-page-content {
         @include custom-scrollbar($background-light-gray);
-        overflow-y: auto;
         padding: 25px;
+        overflow-y: auto;
     }
 
     a {

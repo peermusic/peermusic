@@ -7,11 +7,11 @@ function MobilePageHeader ({ title, TOGGLE_MOBILE_NAVIGATION }) {
       <div className='mobile-top-bar'>
         <div className='mobile-toggle'>
           <a className='burger' onClick={() => TOGGLE_MOBILE_NAVIGATION()}>
-            <i className="fa fa-bars"/>
+            <i className='fa fa-bars'/>
           </a>
           <div className='title'>{title}</div>
           <div className='padder'>
-            <i className="fa fa-bars"/>
+            <i className='fa fa-bars'/>
           </div>
         </div>
       </div>

@@ -1,16 +1,16 @@
 @import '../../colors';
 
 .horizontal-navigation {
+    top: 5px;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
     margin: 0 15px 15px;
-    top: 5px;
     border-bottom-color: $background-light-gray;
+    font-size: 14px;
 
     a {
-        padding: 0 0 7px;
         margin-right: 20px;
+        padding: 0 0 7px;
         text-align: center;
 
         &:last-child {

@@ -2,10 +2,10 @@
 
 .player.bottom {
     display: flex;
+    position: relative;
     flex-direction: row;
     align-items: center;
-    position: relative;
-    padding: 10px 0px;
+    padding: 10px 0;
 
     .buttons, .volume, .playlist, .extra-buttons {
         display: none;
@@ -15,15 +15,15 @@
         display: flex;
         position: absolute;
         top: -3px;
-        left: 0;
         right: 0;
+        left: 0;
         padding: 0;
         pointer-events: none;
 
         .progressbar {
-            margin: 0;
-            border-radius: 0px;
             height: 3px;
+            margin: 0;
+            border-radius: 0;
 
             &::-webkit-slider-thumb {
                 width: 3px;
@@ -32,9 +32,9 @@
                 background-color: $color-brand;
 
                 &::before {
+                    top: 0;
+                    right: 0;
                     height: 3px;
-                    top: 0px;
-                    right: 0px;
                 }
 
             }
@@ -46,8 +46,8 @@
     }
 
     .mobile-current-song {
-        flex: 1;
         display: flex;
+        flex: 1;
 
         .current-song {
             display: flex;
@@ -56,10 +56,10 @@
             padding: 8px;
 
             img {
+                flex-shrink: 0;
                 width: 45px;
                 height: 45px;
                 margin-right: 10px;
-                flex-shrink: 0;
             }
 
             .text {
@@ -69,12 +69,12 @@
 
                 .song-artist {
                     margin-top: 3px;
-                    font-size: 11px;
                     color: $color-gray;
+                    font-size: 11px;
 
                     a {
-                        text-decoration: none;
                         color: $color-gray;
+                        text-decoration: none;
                     }
                 }
 
@@ -86,15 +86,15 @@
 
     .mobile-buttons {
         display: flex;
-        width: auto;
-        padding: 0;
-        margin: 0;
         flex-shrink: 0;
+        width: auto;
+        margin: 0;
+        padding: 0;
 
         .play {
-            margin: 0 15px 0 0;
             position: relative;
             top: 2px;
+            margin: 0 15px 0 0;
         }
     }
 }

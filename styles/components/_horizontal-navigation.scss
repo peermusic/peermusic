@@ -2,15 +2,15 @@
 @import '../mixins/reset-list';
 
 .horizontal-navigation-wrapper {
-    overflow: hidden;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .horizontal-navigation {
     display: flex;
-    margin: -15px 25px 25px;
     max-width: 960px;
+    margin: -15px 25px 25px;
     border-bottom: 1px solid $background-gray;
 
     a {

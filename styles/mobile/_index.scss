@@ -25,15 +25,15 @@
                 align-items: center;
                 justify-content: center;
                 width: 100%;
-                box-sizing: border-box;
-                color: $color-gray;
-                background-color: $background-gray;
                 padding: 20px;
+                background-color: $background-gray;
+                color: $color-gray;
+                box-sizing: border-box;
 
                 .burger, .padder {
                     align-self: flex-start;
-                    font-size: 20px;
                     color: $color-gray;
+                    font-size: 20px;
                 }
 
                 .padder {
@@ -43,9 +43,9 @@
 
                 .title {
                     flex: 1;
+                    font-size: 13px;
                     text-align: center;
                     text-transform: uppercase;
-                    font-size: 13px;
                 }
             }
 
