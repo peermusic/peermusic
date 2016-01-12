@@ -64,7 +64,7 @@ class SongRow extends React.Component {
   }
 
   renderLength () {
-    return <td className='song-time'><Duration seconds={this.props.song.length}/></td>
+    return <td className='song-time'><Duration seconds={this.props.song.duration}/></td>
   }
 
   renderAvailability () {

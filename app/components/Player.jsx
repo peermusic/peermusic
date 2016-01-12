@@ -80,7 +80,7 @@ class Player extends React.Component {
     var maxDuration = 0
 
     if (currentSong) {
-      maxDuration = currentSong.length
+      maxDuration = currentSong.duration
       currentDuration = this.state.isSeeking || player.currentDuration === undefined ? this.state.seekingDuration : player.currentDuration
     }
 

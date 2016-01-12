@@ -38,7 +38,7 @@ var actions = {
               // Create an audio element to check on the duration
               var audio = document.createElement('audio')
               audio.src = url
-              audio.addEventListener('loadedmetadata', () => {
+              audio.addEventListener('durationchange', () => {
                 var duration = audio.duration
 
                 // Dispatch an action to update the view and save
@@ -48,7 +48,7 @@ var actions = {
                   filename: url,
                   ...meta,
                   addedAt: (new Date()).toString(),
-                  length: duration,
+                  duration: duration,
                   favorited: false,
                   coverId: getCoverId(meta),
                   availability: 0,

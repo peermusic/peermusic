@@ -7,7 +7,7 @@ const MobilePageHeader = require('../MobilePageHeader.jsx')
 
 function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPage, PLAYBACK_SONG }) {
   if (songs.length > 0) {
-    var albumDuration = Math.round(songs.map(x => x.length).reduce((a, b) => a + b) / 60)
+    var albumDuration = Math.round(songs.map(x => x.duration).reduce((a, b) => a + b) / 60)
     var year = songs.map(s => s.year).filter(s => s)[0]
   }
 
