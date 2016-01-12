@@ -51,9 +51,11 @@
 
         .current-song {
             display: flex;
+            flex: 1;
             flex-direction: row;
             align-items: center;
             padding: 8px;
+            text-decoration: none;
 
             img {
                 flex-shrink: 0;

@@ -10,23 +10,28 @@ function CurrentSong ({ currentSong, currentCover, mobile, pushPath }) {
 
   var artist = currentSong.artist
   var album = currentSong.album
-  var touchHandler = {}
-
-  if (!mobile) {
-    var linkTargetArtist = '/artists?artist=' + currentSong.artist
-    var linkTargetAlbum = '/albums?album=' + currentSong.album + '&artist=' + currentSong.artist
-    artist = <Link to={linkTargetArtist}>{currentSong.artist}</Link>
-    album = <Link to={linkTargetAlbum}>{currentSong.album}</Link>
-  }
 
   if (mobile) {
-    touchHandler = {
-      onTouchStart: () => pushPath('/currently-playing')
-    }
+    return (
+      <Link to='/currently-playing' className='current-song'>
+        <img src={currentCover} className='cover-art'/>
+        <div className='text'>
+          <div className='song-title'>{currentSong.title}</div>
+          <div className='song-artist'>
+            {artist} &mdash; {album}
+          </div>
+        </div>
+      </Link>
+    )
   }
 
+  const linkTargetArtist = '/artists?artist=' + currentSong.artist
+  const linkTargetAlbum = '/albums?album=' + currentSong.album + '&artist=' + currentSong.artist
+  artist = <Link to={linkTargetArtist}>{currentSong.artist}</Link>
+  album = <Link to={linkTargetAlbum}>{currentSong.album}</Link>
+
   return (
-      <div className='current-song' {...touchHandler}>
+      <div className='current-song'>
         <img src={currentCover} className='cover-art'/>
         <div className='text'>
           <div className='song-title'>{currentSong.title}</div>
