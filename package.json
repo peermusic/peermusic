@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "standard && sass-lint -v"
+    "test": "standard && sh sass-lint.sh"
   },
   "repository": {
     "type": "git",
