@@ -69,6 +69,7 @@
         flex-shrink: 0;
         width: 580px;
         margin-left: 20px;
+        background: $background-gray;
 
         @media (max-width: 1600px) {
             display: none;
