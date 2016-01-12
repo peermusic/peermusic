@@ -1,6 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const AlbumTable = require('./AlbumTable.jsx')
+const { values } = require('../../helpers')
 
 function AlbumOverview ({ albums }) {
   var albumsDisplay = albums.length > 0 ? <AlbumTable albums={albums}/>
@@ -16,7 +17,7 @@ function AlbumOverview ({ albums }) {
 
 function mapStateToProps (state) {
   // Grab the albums from the songs
-  var albums = _uniqueArray(state.songs.map((song) => ({
+  var albums = _uniqueArray(values(state.songs).map((song) => ({
     album: song.album,
     artist: song.artist,
     coverUrl: _getCover(song.coverId, state)

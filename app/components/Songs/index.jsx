@@ -3,6 +3,7 @@ const { connect } = require('react-redux')
 const SongTable = require('./SongTable.jsx')
 const HorizontalNavigation = require('../HorizontalNavigation.jsx')
 const { PLAYBACK_SONG } = require('../../actions')
+const { values } = require('../../helpers')
 
 function Songs ({ songs, PLAYBACK_SONG }) {
   var songDisplay = <h3>You didn't add any songs yet!<br/>Start by dragging and dropping some songs into this window.</h3>
@@ -34,7 +35,7 @@ function Songs ({ songs, PLAYBACK_SONG }) {
 
 module.exports = connect(
   (state) => ({
-    songs: state.songs
+    songs: values(state.songs)
   }),
   {PLAYBACK_SONG}
 )(Songs)

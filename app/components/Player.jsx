@@ -156,7 +156,7 @@ Player.propTypes = {
 
 module.exports = connect(
     (state) => ({
-      currentSong: state.songs.filter(s => s.id === state.player.songId)[0],
+      currentSong: state.songs[state.player.songId],
       player: state.player,
       backEnabled: state.player.history.currentIndex !== 0,
       playingNextPanel: state.interfaceStatus.playingNextPanel,

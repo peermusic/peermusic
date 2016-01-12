@@ -3,6 +3,7 @@ const { connect } = require('react-redux')
 const SongTable = require('../Songs/SongTable.jsx')
 const { Link } = require('react-router')
 const { PLAYBACK_SONG } = require('../../actions')
+const { values } = require('../../helpers')
 
 function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPage, PLAYBACK_SONG }) {
   if (songs.length > 0) {
@@ -54,7 +55,7 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
 }
 
 function mapStateToProps (state, ownProps) {
-  var songs = state.songs.filter(x => x.album === ownProps.album && x.artist === ownProps.artist)
+  var songs = values(state.songs).filter(x => x.album === ownProps.album && x.artist === ownProps.artist)
 
   // Order the songs by track
   songs.sort((a, b) => (a.track > b.track) ? 1 : ((b.track > a.track) ? -1 : 0))

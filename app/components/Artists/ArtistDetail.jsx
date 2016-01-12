@@ -2,6 +2,7 @@ const React = require('react')
 const { connect } = require('react-redux')
 const AlbumDetail = require('../Albums/AlbumDetail.jsx')
 const { PLAYBACK_SONG } = require('../../actions')
+const { values } = require('../../helpers')
 
 function ArtistDetail ({ artist, totalSongs, albums, PLAYBACK_SONG }) {
   return (
@@ -28,7 +29,7 @@ function ArtistDetail ({ artist, totalSongs, albums, PLAYBACK_SONG }) {
 
 function mapStateToProps (state, ownProps) {
   // Get all songs of this artist
-  const artistSongs = state.songs.filter(x => x.artist === ownProps.artist)
+  const artistSongs = values(state.songs).filter(x => x.artist === ownProps.artist)
   var albums = _uniqueArray(artistSongs.map(x => x.album).filter(x => x))
 
   // Get the year for each album

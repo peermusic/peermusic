@@ -2,6 +2,7 @@ const React = require('react')
 const { connect } = require('react-redux')
 const { ADD_SONG, CLEAR_DATA } = require('../../actions')
 const SongTable = require('../Songs/SongTable.jsx')
+const { values } = require('../../helpers')
 
 class ManageSongs extends React.Component {
 
@@ -63,7 +64,7 @@ ManageSongs.propTypes = {
 
 module.exports = connect(
     (state) => ({
-      songs: state.songs
+      songs: values(state.songs)
     }),
     {ADD_SONG, CLEAR_DATA}
 )(ManageSongs)
