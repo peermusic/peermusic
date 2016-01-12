@@ -6,3 +6,10 @@ node_js:
 branches:
   only:
     - master
+
+script: if [ "$TRAVIS_BRANCH" == "master" ]; then sh ./deploy-ghpages.sh; fi
+
+env:
+  global:
+    - GH_REF: github.com/peermusic/peermusic.github.io.git
+    - secure: TahqbLLicmE/EFzIfe4Imqgs1UktfmtUaxfx5oC/6PAzYsmCnvKJL0cDlR37Gz3C4slVpc+LREhpgueK7BmtXIYE4SdsEaJt7wdufI4d1gABv/hhCquRNlyFZp3xWhnM15dHLYxA+AnFiX25DmNtnvuR3BmyCZutRm1eejPJb+vvkXmfYJlJK2Bk98/e/jfU3Y57zUo3s7wCaolrhvrP47KK6goOgBRynXUmOfAk43mbjK+sOh3XoKV0O6TwzHO/Q6kAPSL1YwPI+2iO+Ytc4qB38ueqA0PdBuJAUX9oJseuD4wzIssqyR0KeakRSa3y4nFqZFuucQ6lmJC4OzCjlRQtB/Ecyd1UlUEWllrJ9Rcl9JunuHhkgZWEUmRbNAEE7E6ms+oFx18Wgj0fTvaUPemk4RRLOg7yCnE+cNoFtT4051vVxxBJMOvMWHrGlIR1Km3ncgw0PJttE7D0wyR6ugLuYrbkcvfuCVnU2FmdEZuhwgUfsEVyktjwjXeBjbD1/h/L3pSzDU8Qo+mStijMWLmn4OKMT4LPwuZ4WwI8oum7zmSBmjFWTd4yCoqxVSkTG03ilb9aXjZdYOMEDt4ODIOM8+EPZvIemDGiIugn6f5r0esRoebNfU3CSKdb4+JjN2WOeJRVY91OjQa42eenRA+p7t52w2pLcFKXCoqaX1k=
