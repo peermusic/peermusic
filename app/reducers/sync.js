@@ -1,6 +1,7 @@
 // const debug = require('debug')('peermusic:sync:reducers')
 
 const initialState = {
+  providers: {}
 }
 
 module.exports = (state = initialState, action) => {

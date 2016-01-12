@@ -8,7 +8,8 @@ var reducers = {
   scrapingServers: require('./scrapingServers.js'),
   covers: require('./covers.js'),
   friends: require('./friends.js'),
-  instances: require('./instances.js')
+  instances: require('./instances.js'),
+  sync: require('./sync.js')
 }
 
 module.exports = reducers

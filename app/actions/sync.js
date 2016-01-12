@@ -64,14 +64,70 @@ var actions = {
     }
   },
 
-  RECEIVE_INVENTORY: (songs, peerId) => {
+  RECEIVE_INVENTORY: (theirSongs, peerId) => {
     return (dispatch, getState) => {
       debug('receiving inventory from', peerId)
 
-      dispatch({
-        type: 'UPDATE_SYNCABLE_SONGS',
-        songs,
+      function mergeSongObject (localList, remoteList, peerId) {
+        var remainder = Object.assign({}, localList)
+        var mergedSongs = Object.assign({}, localList)
+        var providedByPeer = []
+        Object.keys(remoteList).forEach((songId) => {
+          delete remainder[songId]
+          if (!mergedSongs[songId]) {
+            mergedSongs[songId] = remoteList[songId]
+            mergedSongs[songId].addedAt = (new Date()).toString()
+            mergedSongs[songId].favorited = false
+            mergedSongs[songId].local = false
+          }
+          providedByPeer.push(songId)
+        })
+        var notSharedWithPeer = Object.keys(remainder)
+        return {mergedSongs, providedByPeer, notSharedWithPeer}
+      }
+
+      function updateProviders (providers, providedByPeer, notSharedWithPeer, peerId) {
+        var updatedProviders = Object.assign({}, providers)
+        providedByPeer.forEach((songId) => {
+          if (!providers[songId]) {
+            updatedProviders[songId] = [peerId]
+            return
+          }
+          if (providers[songId].indexOf(peerId) === -1) {
+            updatedProviders[songId].push(peerId)
+          }
+        })
+        notSharedWithPeer.forEach((songId) => {
+          // Go through all songs that are not shared, see if the other peer
+          // provided them in the past. If so remove him as he no longer does.
+          var index = providers[songId].indexOf(peerId)
+          if (providers[songId] && index !== -1) {
+            updatedProviders[songId].splice(index, 1)
+          }
+        })
+        return updatedProviders
+      }
+
+      var {mergedSongs, providedByPeer, notSharedWithPeer} = mergeSongObject(
+        getState().songs,
+        theirSongs,
         peerId
+      )
+      var updatedProviders = updateProviders(
+        getState().sync.providers,
+        providedByPeer,
+        notSharedWithPeer,
+        peerId
+      )
+
+      console.log('got', mergedSongs, updatedProviders)
+      dispatch({
+        type: 'SET_SYNCABLE_SONGS',
+        songs: mergedSongs
+      })
+      dispatch({
+        type: 'SET_PROVIDER_LIST',
+        providers: updatedProviders
       })
     }
   },
@@ -91,11 +147,6 @@ var actions = {
   REQUEST_SIMILARITY: (id) => {
     return null
   }
-}
-
-function mergeSongObject (local, remote, peerId) {
-  remote.forEach((value, index) => {
-  })
 }
 
 function Peers () {
@@ -122,11 +173,12 @@ function Peers () {
   }
 
   self.broadcast = (data) => {
-    debug('broadcasting', data.type)
+    debug('broadcasting to ' + Object.keys(self.remotes).length + ' peers', data.type)
     for (let peerId in self.remotes) {
       self.remotes[peerId].send(data)
     }
   }
 }
 
+window.ri = actions.REQUEST_INVENTORY
 module.exports = actions

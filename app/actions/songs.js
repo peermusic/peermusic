@@ -45,6 +45,7 @@ var actions = {
                   ...meta,
                   addedAt: (new Date()).toString(),
                   length: duration,
+                  local: true,
                   favorited: false,
                   coverId: getCoverId(meta),
                   availability: 0,
