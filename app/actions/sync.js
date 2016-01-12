@@ -2,53 +2,56 @@ const debug = require('debug')('peermusic:sync:actions')
 const events = require('events')
 const inherits = require('inherits')
 
+module.exports = {
+  'REGISTER_PEER': registerPeer,
+  'DEREGISTER_PEER': deregisterPeer,
+  'PROCESS_INCOMING_DATA': processIncomingData
+}
+
 inherits(Peers, events.EventEmitter)
 var peers = new Peers()
 
-var actions = {
-  'REGISTER_PEER': (peer, peerId) => {
-    peers.add(peer, peerId)
-    setTimeout(() => peer.send({test: 'hi!'}, 'test'), 300)
-  },
-  'DEREGISTER_PEER': (peer, peerId) => {
-    peers.remove(peerId)
-  },
-  'GET_INVENTORY': () => {
-    return null
-  },
-  'GET_SONG': (id) => {
-    return null
-  },
-  'GET_COVER': (id) => {
-    return null
-  },
-  'GET_SIMILARITY': (id) => {
-    return null
-  },
-  'START_CONTINUAL_SYNC': () => {
+peers.on('data', processIncomingData)
+peers.on('close', deregisterPeer)
 
-  },
-  'ANSWER_REQUEST': (data) => {
-    debug('hoho', data)
-  }
+function registerPeer (peer, peerId) {
+  peers.add(peer, peerId)
+  setTimeout(() => peers.broadcast({test: 'hi!'}), 300)
 }
 
-peers.on('data', actions.ANSWER_REQUEST)
-peers.on('close', actions.DEREGISTER_PEER)
+function deregisterPeer (peer, peerId) {
+  peers.remove(peerId)
+}
 
-module.exports = actions
+function processIncomingData (data) {
+  debug('hoho', data)
+}
 
 function Peers () {
-  this.remotes = {}
+  var self = this
+  self.remotes = {}
 
-  this.add = (peer, peerId) => {
-    var self = this
+  self.add = (peer, peerId) => {
     self.remotes[peerId] = peer
     peer.on('data', (data) => self.emit('data', data))
     peer.on('close', (data) => self.emit('close', peer, peerId))
   }
 
-  this.remove = (peerId) => {
+  self.remove = (peerId) => {
     delete this.peers[peerId]
+  }
+
+  self.send = (data, peerId) => {
+    if (!self.remotes[peerId]) {
+      debug('cannot send to unregistered peer', peerId)
+      return
+    }
+    self.remotes[peerId].send(data)
+  }
+
+  self.broadcast = (data) => {
+    for (let peerId in self.remotes) {
+      self.remotes[peerId].send(data)
+    }
   }
 }
