@@ -5,18 +5,24 @@ const inherits = require('inherits')
 inherits(Peers, events.EventEmitter)
 var peers = new Peers()
 
-peers.on('data', processIncomingData)
-peers.on('close', deregisterPeer)
-
 var actions = {
+  INITIATE_SYNC: () => {
+    return (dispatch, getState) => {
+      peers.on('data', function (data, peerId) {
+        actions.PROCESS_INCOMING_DATA(data, peerId)(dispatch, getState)
+      })
+      peers.on('close', function (peer, peerId) {
+        actions.DEREGISTER_PEER(peer, peerId)(dispatch, getState)
+      })
+    }
+  },
   REGISTER_PEER: (peer, peerId) => {
+    debug('registering WebRTC peer', peerId)
     peers.add(peer, peerId)
-    setTimeout(() => {
-      actions.REQUEST_INVENTORY()
-    }, 300)
   },
 
   DEREGISTER_PEER: (peer, peerId) => {
+    debug('deregistering WebRTC peer', peerId)
     peers.remove(peerId)
   },
 
@@ -26,7 +32,7 @@ var actions = {
     })
   },
 
-  SEND_INVENTORY: (songs, peerId) => {
+  SEND_INVENTORY: (peerId) => {
     return (dispatch, getState) => {
       peers.send({
         type: 'SEND_INVENTORY',
@@ -66,7 +72,6 @@ var actions = {
       debug('received', data.type)
       switch (data.type) {
         case 'REQUEST_INVENTORY':
-          debug('peer requested inventory', peerId)
           return actions.SEND_INVENTORY(peerId)(dispatch, getState)
 
         case 'SEND_INVENTORY':
@@ -79,12 +84,6 @@ var actions = {
     }
   }
 }
-
-function processIncomingData (data, peerId) {
-  // no getState available!?
-  actions.PROCESS_INCOMING_DATA(data, peerId)
-}
-function deregisterPeer (peer, peerId) { actions.DEREGISTER_PEER(peer, peerId) }
 
 function Peers () {
   var self = this
@@ -102,10 +101,10 @@ function Peers () {
 
   self.send = (data, peerId) => {
     if (!self.remotes[peerId]) {
-      debug('cannot send to unregistered peer', peerId)
+      debug('cannot send to offline peer', peerId)
       return
     }
-    debug('sending', data.type)
+    debug('sending', data.type, data)
     self.remotes[peerId].send(data)
   }
 

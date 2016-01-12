@@ -9,7 +9,7 @@ const thunk = require('redux-thunk')
 // const logger = require('redux-logger')()
 const reduxStorage = require('redux-storage')
 const storageEngine = require('redux-storage/engines/localStorage').default('peermusic-storage')
-const { PLAYER_SYNCHRONIZE, INSTANCES_CONNECT } = require('./actions')
+const { PLAYER_SYNCHRONIZE, INSTANCES_CONNECT, INITIATE_SYNC } = require('./actions')
 
 // Create our reducer composition via the reducers registered in reducers/index.js
 const reducer = reduxStorage.reducer(combineReducers(require('./reducers')))
@@ -27,6 +27,7 @@ const load = reduxStorage.createLoader(storageEngine)
 load(store).then(() => {
   PLAYER_SYNCHRONIZE()(store.dispatch, store.getState)
   INSTANCES_CONNECT()(store.dispatch, store.getState)
+  INITIATE_SYNC()(store.dispatch, store.getState)
 })
 
 // Setup redux-router with history and sync the state to the url
