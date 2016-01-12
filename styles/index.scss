@@ -1,6 +1,8 @@
-@import 'normalize';
+@import 'vendor/normalize';
+@import 'vendor/google-fonts';
+@import 'vendor/font-awesome';
+@import 'vendor/flaticon';
 @import 'colors';
-@import 'icons';
 
 html, body {
     height: 100%;
@@ -29,10 +31,15 @@ html, body {
         flex-direction: row;
     }
 
+    .mobile-only, .mobile-top-bar {
+        display: none;
+    }
+
     @import 'components/popover';
     @import 'components/navigation';
     @import 'components/content';
     @import 'components/player';
 }
 
+@import 'mobile/index';
 @import 'components/dropzone';

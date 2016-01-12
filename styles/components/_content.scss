@@ -2,27 +2,36 @@
 @import '../mixins/custom-scrollbar';
 
 .content {
-    @include custom-scrollbar($background-light-gray);
+    display: flex;
     flex-grow: 1;
-    padding: 25px;
     color: $color-light-gray;
-    overflow-y: auto;
+    overflow: hidden;
+
+    > div {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+    }
+
+    .actual-page-content {
+        @include custom-scrollbar($background-light-gray);
+        padding: 25px;
+        overflow-y: auto;
+    }
 
     a {
         color: $color-brand;
     }
 
     h2 {
-        margin: 0;
-        margin-bottom: 25px;
+        margin: 0 0 25px;
         font-size: 40px;
         font-weight: 300;
         letter-spacing: 1px;
     }
 
     h3 {
-        margin: 0;
-        margin-bottom: 15px;
+        margin: 0 0 15px;
         color: $color-gray;
         font-size: 25px;
         font-weight: 300;
@@ -38,7 +47,7 @@
         flex-direction: row;
         align-items: center;
         max-width: 960px;
-        margin-bottom: 25px;
+        padding: 25px 25px 0;
 
         h2 {
             flex: 1;
@@ -78,15 +87,4 @@
     @import 'pages/artists';
     @import 'pages/manage-servers';
     @import 'pages/search';
-
-    // TODO remove
-    .work-in-progress {
-        display: flex;
-        flex: 1;
-        align-items: center;
-        justify-content: center;
-        margin-top: 250px;
-        color: $color-gray;
-    }
-
 }

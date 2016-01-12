@@ -2,6 +2,7 @@ const React = require('react')
 const { connect } = require('react-redux')
 const SongTable = require('../Songs/SongTable.jsx')
 var shuffle = require('shuffle-array')
+const MobilePageHeader = require('../MobilePageHeader.jsx')
 
 class ManageDownloads extends React.Component {
   render () {
@@ -11,8 +12,13 @@ class ManageDownloads extends React.Component {
 
     return (
         <div>
-          <h2>Manage downloads</h2>
-          {songDisplay}
+          <MobilePageHeader title='Manage downloads'/>
+          <div className='page-heading'>
+            <h2>Manage downloads</h2>
+          </div>
+          <div className='actual-page-content'>
+            {songDisplay}
+          </div>
         </div>
     )
   }

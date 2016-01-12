@@ -53,6 +53,7 @@
             border: 0;
             outline: none;
             background: transparent;
+            color: $color-gray;
 
             &:hover {
                 color: $color-light-gray;
@@ -117,6 +118,16 @@
             margin-top: -2px;
             margin-right: 13px;
         }
+    }
+
+    .extra-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobile-current-song, .mobile-buttons {
+        display: none;
     }
 
     .favorite, .playlist, .shuffle, .radio, .share, .repeat {

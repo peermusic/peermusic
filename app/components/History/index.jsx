@@ -1,6 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const SongTable = require('../Songs/SongTable.jsx')
+const MobilePageHeader = require('../MobilePageHeader.jsx')
 
 function History ({ songs }) {
   var historyDisplay = songs.length === 0
@@ -9,8 +10,13 @@ function History ({ songs }) {
 
   return (
       <div>
-        <h2>History</h2>
-        {historyDisplay}
+        <MobilePageHeader title='History'/>
+        <div className='page-heading'>
+          <h2>History</h2>
+        </div>
+        <div className='actual-page-content'>
+          {historyDisplay}
+        </div>
       </div>
   )
 }

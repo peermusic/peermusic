@@ -17,7 +17,7 @@ function App ({ children, currentUrl, playingNextPanel, initialPopover, HIDE_INI
       <div className='popover content'>
         <div>
           <h3 className='white'>Please agree to only use licence-free music with this tool.</h3>
-          <button onClick={() => HIDE_INITIAL_POPOVER()}>Agree</button>
+          <div><button onClick={() => HIDE_INITIAL_POPOVER()}>Agree</button></div>
         </div>
       </div>
     )
