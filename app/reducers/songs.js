@@ -29,6 +29,8 @@ const songs = (state = [], action) => {
       return state.filter(x => x.id !== action.id)
     case 'CLEAR_DATA':
       return []
+    case 'UPDATE_SYNCABLE_SONGS':
+      return mergeSongObjects(state, action.songs, action.peerId)
     default:
       return state
   }

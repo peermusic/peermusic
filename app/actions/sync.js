@@ -12,10 +12,33 @@ var actions = {
         actions.PROCESS_INCOMING_DATA(data, peerId)(dispatch, getState)
       })
       peers.on('close', function (peer, peerId) {
-        actions.DEREGISTER_PEER(peer, peerId)(dispatch, getState)
+        actions.DEREGISTER_PEER(peer, peerId)
       })
     }
   },
+
+  PROCESS_INCOMING_DATA: (data, peerId) => {
+    return (dispatch, getState) => {
+      debug('received', data.type)
+
+      var networkActions = {
+        REQUEST_INVENTORY: () => {
+          actions.SEND_INVENTORY(peerId)(dispatch, getState)
+        },
+
+        SEND_INVENTORY: () => {
+          actions.RECEIVE_INVENTORY(data.songs, peerId)(dispatch, getState)
+        }
+      }
+
+      if (!networkActions[data.type]) {
+        debug('received invalid request type')
+      }
+
+      networkActions[data.type]()
+    }
+  },
+
   REGISTER_PEER: (peer, peerId) => {
     debug('registering WebRTC peer', peerId)
     peers.add(peer, peerId)
@@ -43,6 +66,8 @@ var actions = {
 
   RECEIVE_INVENTORY: (songs, peerId) => {
     return (dispatch, getState) => {
+      debug('receiving inventory from', peerId)
+
       dispatch({
         type: 'UPDATE_SYNCABLE_SONGS',
         songs,
@@ -65,24 +90,12 @@ var actions = {
 
   REQUEST_SIMILARITY: (id) => {
     return null
-  },
-
-  PROCESS_INCOMING_DATA: (data, peerId) => {
-    return (dispatch, getState) => {
-      debug('received', data.type)
-      switch (data.type) {
-        case 'REQUEST_INVENTORY':
-          return actions.SEND_INVENTORY(peerId)(dispatch, getState)
-
-        case 'SEND_INVENTORY':
-          debug('peer send her inventory', peerId)
-          return actions.RECEIVE_INVENTORY(data.songs, peerId)(dispatch, getState)
-
-        default:
-          debug('received invalid request type')
-      }
-    }
   }
+}
+
+function mergeSongObject (local, remote, peerId) {
+  remote.forEach((value, index) => {
+  })
 }
 
 function Peers () {
@@ -96,7 +109,7 @@ function Peers () {
   }
 
   self.remove = (peerId) => {
-    delete this.peers[peerId]
+    delete self.remotes[peerId]
   }
 
   self.send = (data, peerId) => {

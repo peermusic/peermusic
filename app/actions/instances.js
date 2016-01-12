@@ -43,11 +43,9 @@ var actions = {
         actions.INVITE_VALIDATED(peerId, sharedSignPubKey)(dispatch, getState)
       })
       connections.metaSwarm.on('connect', function (peer, peerId) {
-        debug('peer connected', peerId)
         sync.REGISTER_PEER(peer, peerId)
       })
       connections.metaSwarm.on('disconnect', function (peer, peerId) {
-        debug('peer disconnected')
       })
     }
   },
