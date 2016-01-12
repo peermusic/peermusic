@@ -7,6 +7,5 @@ function values (object) {
   Object.keys(object).forEach((key) => {
     array.push(object[key])
   })
-  console.log(array)
   return array
 }
