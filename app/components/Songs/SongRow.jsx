@@ -1,7 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
-const { PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE } = require('../../actions')
+const { PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING } = require('../../actions')
 const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
@@ -18,9 +18,9 @@ class SongRow extends React.Component {
   }
 
   renderPlay (playback) {
-    const playButton = this.props.playing && this.props.options.activeRow
+    const playButton = this.props.options.activeRow && this.props.selected && this.props.playing
         ? <i className='fa fa-volume-up'/>
-        : <a onClick={() => playback() }><i className='fa fa-play'/></a>
+        : <a onClick={() => playback()}><i className='fa fa-play'/></a>
     return <td className='play-button'>{playButton}</td>
   }
 
@@ -99,14 +99,24 @@ class SongRow extends React.Component {
     return <td className='remove-button'><a><i className='fa fa-trash'/></a></td>
   }
 
+  playbackFunction () {
+    if (this.props.options.activeRow && this.props.selected && !this.props.playing) {
+      return () => this.props.PLAYER_SET_PLAYING(true)
+    }
+
+    if (this.props.options.playbackSingle) {
+      return () => this.props.PLAYBACK_SONG([this.props.song], 0)
+    }
+
+    return () => this.props.PLAYBACK_SONG(this.props.songs, this.props.index)
+  }
+
   render () {
     // Generate a playback function based on the options
-    const playback = (this.props.options.playbackSingle)
-        ? () => this.props.PLAYBACK_SONG([this.props.song], 0)
-        : () => this.props.PLAYBACK_SONG(this.props.songs, this.props.index)
+    const playback = this.playbackFunction()
 
     const classes = classNames({
-      active: this.props.options.activeRow && this.props.playing,
+      active: this.props.options.activeRow && this.props.selected,
       desaturated: this.props.song.desaturated
     })
 
@@ -135,11 +145,13 @@ SongRow.propTypes = {
   songs: React.PropTypes.array,
   index: React.PropTypes.number,
   playing: React.PropTypes.bool,
+  selected: React.PropTypes.bool,
   options: React.PropTypes.object,
   PLAYBACK_SONG: React.PropTypes.func,
   PLAYBACK_USER_QUEUE: React.PropTypes.func,
   REMOVE_SONG: React.PropTypes.func,
-  TOGGLE_SONG_FAVORITE: React.PropTypes.func
+  TOGGLE_SONG_FAVORITE: React.PropTypes.func,
+  PLAYER_SET_PLAYING: React.PropTypes.func
 }
 
-module.exports = connect(null, {PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE})(SongRow)
+module.exports = connect(null, {PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING})(SongRow)
