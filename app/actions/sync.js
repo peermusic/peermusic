@@ -14,6 +14,9 @@ var actions = {
       peers.on('close', function (peer, peerId) {
         actions.DEREGISTER_PEER(peer, peerId)
       })
+      window.setInterval(() => {
+        actions.REQUEST_INVENTORY()
+      }, 1000 * 6)
     }
   },
 
@@ -70,20 +73,21 @@ var actions = {
 
       function mergeSongObject (localList, remoteList, peerId) {
         var remainder = Object.assign({}, localList)
-        var mergedSongs = Object.assign({}, localList)
+        var newSongs = []
         var providedByPeer = []
         Object.keys(remoteList).forEach((songId) => {
           delete remainder[songId]
-          if (!mergedSongs[songId]) {
-            mergedSongs[songId] = remoteList[songId]
-            mergedSongs[songId].addedAt = (new Date()).toString()
-            mergedSongs[songId].favorited = false
-            mergedSongs[songId].local = false
+          if (!localList[songId]) {
+            var song = remoteList[songId]
+            song.addedAt = (new Date()).toString()
+            song.favorited = false
+            song.local = false
+            newSongs.push(song)
           }
           providedByPeer.push(songId)
         })
         var notSharedWithPeer = Object.keys(remainder)
-        return {mergedSongs, providedByPeer, notSharedWithPeer}
+        return {newSongs, providedByPeer, notSharedWithPeer}
       }
 
       function updateProviders (providers, providedByPeer, notSharedWithPeer, peerId) {
@@ -100,15 +104,16 @@ var actions = {
         notSharedWithPeer.forEach((songId) => {
           // Go through all songs that are not shared, see if the other peer
           // provided them in the past. If so remove him as he no longer does.
+          if (!providers[songId]) return
           var index = providers[songId].indexOf(peerId)
-          if (providers[songId] && index !== -1) {
+          if (index !== -1) {
             updatedProviders[songId].splice(index, 1)
           }
         })
         return updatedProviders
       }
 
-      var {mergedSongs, providedByPeer, notSharedWithPeer} = mergeSongObject(
+      var {newSongs, providedByPeer, notSharedWithPeer} = mergeSongObject(
         getState().songs,
         theirSongs,
         peerId
@@ -120,10 +125,18 @@ var actions = {
         peerId
       )
 
-      console.log('got', mergedSongs, updatedProviders)
-      dispatch({
-        type: 'SET_SYNCABLE_SONGS',
-        songs: mergedSongs
+      newSongs.forEach((song) => {
+        dispatch({
+          type: 'ADD_SONG',
+          song
+        })
+      })
+      notSharedWithPeer.forEach((songId) => {
+        return null
+        dispatch({
+          type: 'REMOVE_SONG',
+          id: songId
+        })
       })
       dispatch({
         type: 'SET_PROVIDER_LIST',
