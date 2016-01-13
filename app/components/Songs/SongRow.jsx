@@ -18,6 +18,10 @@ class SongRow extends React.Component {
   }
 
   renderPlay (playback) {
+    if (!this.props.song.local) {
+      return <td className='play-button'/>
+    }
+
     const playButton = this.props.options.activeRow && this.props.selected && this.props.playing
         ? <i className='fa fa-volume-up'/>
         : <a onClick={() => playback()}><i className='fa fa-play'/></a>
@@ -76,6 +80,10 @@ class SongRow extends React.Component {
   }
 
   renderQueue () {
+    if (!this.props.song.local) {
+      return <td className='add-button'/>
+    }
+
     return (
         <td className='add-button'>
           <a onClick={() => this.props.PLAYBACK_USER_QUEUE(this.props.song.id)}> <i className='fa fa-plus'/></a>
@@ -102,6 +110,10 @@ class SongRow extends React.Component {
   }
 
   playbackFunction () {
+    if (!this.props.song.local) {
+      return () => {}
+    }
+
     if (this.props.options.activeRow && this.props.selected && !this.props.playing) {
       return () => this.props.PLAYER_SET_PLAYING(true)
     }
@@ -119,7 +131,7 @@ class SongRow extends React.Component {
 
     const classes = classNames({
       active: this.props.options.activeRow && this.props.selected,
-      desaturated: this.props.song.desaturated
+      desaturated: this.props.song.desaturated || !this.props.song.local
     })
 
     return (

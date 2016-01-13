@@ -138,12 +138,24 @@ var actions = {
     return (dispatch, getState) => {
       const state = getState()
 
+      // Only put songs into the playback queue that we
+      // hold locally, and fix up the index afterwards
+      const song = songs[index]
+      songs = songs.filter(x => typeof x !== 'object' || x.local)
+      index = songs.indexOf(song) !== -1 ? songs.indexOf(song) : 0
       songs = songs.map(x => x.id || x)
+
+      // We tried to play a view where we don't have local songs
+      if (songs.length == 0) {
+        return;
+      }
 
       if (play) {
         // Take the first song and play it
         dispatch(actions.PLAYER_SET_SONG(songs[index]))
-        dispatch({type: 'SAVE_POSSIBLE_SONG_QUEUE', songs})
+        if (songs.length > 1) {
+          dispatch({type: 'SAVE_POSSIBLE_SONG_QUEUE', songs})
+        }
         // Remove the played songs
         songs = [...songs.slice(0, index), ...songs.slice(index + 1)]
       }
