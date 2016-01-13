@@ -1,0 +1,56 @@
+@import '../colors';
+
+.navigation {
+    flex-direction: column;
+    width: 100%;
+    background-color: transparent;
+
+    .close-navigation {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 64px;
+        background: $background-gray;
+        color: $color-gray;
+        font-size: 13px;
+        text-transform: uppercase;
+
+        i {
+            margin-right: 7px;
+            font-size: 18px;
+        }
+    }
+
+    .search {
+        margin-bottom: 10px;
+
+        input {
+            width: 82%;
+        }
+    }
+
+    .navigation-links {
+        .heading {
+            margin-top: 15px;
+        }
+
+        ul li a {
+            padding-top: 7px;
+            padding-bottom: 7px;
+        }
+    }
+
+    .current-song {
+        display: none;
+    }
+}
+
+.player {
+    display: none;
+}
+
+.content {
+    display: none;
+}

@@ -21,7 +21,12 @@ var actions = {
       identifier,
       index
     }
-  }
+  },
+
+  // Toggle the navigation state for mobile
+  TOGGLE_MOBILE_NAVIGATION: () => ({
+    type: 'TOGGLE_MOBILE_NAVIGATION'
+  })
 
 }
 

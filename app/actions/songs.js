@@ -1,6 +1,6 @@
 var rusha = new (require('rusha'))()
 var metadataReader = require('music-metadata')
-var fs = require('file-system')(['audio/mp3', 'audio/wav', 'audio/ogg'])
+var fs = require('file-system')(['', 'audio/mp3', 'audio/wav', 'audio/ogg'])
 var coversActions = require('./covers.js')
 
 var actions = {
@@ -11,7 +11,11 @@ var actions = {
   ADD_SONG: (file) => {
     return (dispatch, getState) => {
       // Extract the file ending
-      var file_ending = file.name.replace(/^.*(\.[A-Za-z0-9]{3})$/, '$1')
+      var file_ending = 'mp3'
+
+      if (file.name.match(/^.*(\.[A-Za-z0-9]{3})$/)) {
+        file_ending = file.name.replace(/^.*(\.[A-Za-z0-9]{3})$/, '$1')
+      }
 
       // Read the file as an data url
       var reader = new window.FileReader()
@@ -34,7 +38,7 @@ var actions = {
               // Create an audio element to check on the duration
               var audio = document.createElement('audio')
               audio.src = url
-              audio.addEventListener('loadedmetadata', () => {
+              audio.addEventListener('durationchange', () => {
                 var duration = audio.duration
 
                 // Dispatch an action to update the view and save
@@ -44,7 +48,7 @@ var actions = {
                   filename: url,
                   ...meta,
                   addedAt: (new Date()).toString(),
-                  length: duration,
+                  duration: duration,
                   favorited: false,
                   coverId: getCoverId(meta),
                   availability: 0,

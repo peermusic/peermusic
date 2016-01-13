@@ -19,7 +19,7 @@ var defaultColumns = {
   availability: true
 }
 
-function SongTable ({ songs, totalSongs, currentSong, options }) {
+function SongTable ({ songs, totalSongs, playing, currentSong, options }) {
   options = Object.assign({}, defaultColumns, options)
 
   return (
@@ -41,9 +41,9 @@ function SongTable ({ songs, totalSongs, currentSong, options }) {
           {options.removeDownload && <th className='remove-button'/>}
         </tr>
         {songs.map((song, i) => {
-          const playing = song.id === currentSong
+          const selected = song.id === currentSong
           const index = totalSongs ? totalSongs.indexOf(song) : i
-          return <SongRow key={i} song={song} songs={totalSongs || songs} index={index} playing={playing} options={options}/>
+          return <SongRow key={i} song={song} songs={totalSongs || songs} index={index} playing={playing} selected={selected} options={options}/>
         })}
         </tbody>
       </table>
@@ -52,6 +52,7 @@ function SongTable ({ songs, totalSongs, currentSong, options }) {
 
 module.exports = connect(
     (state) => ({
-      currentSong: state.player.songId
+      currentSong: state.player.songId,
+      playing: state.player.playing
     })
 )(SongTable)

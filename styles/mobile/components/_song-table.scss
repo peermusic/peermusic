@@ -1,0 +1,53 @@
+@import '../../colors';
+
+.song-table {
+    tr:first-child {
+        display: none;
+    }
+
+    td, th {
+        padding: 10px 0;
+    }
+
+    tr:not(:first-child):hover {
+        background: transparent;
+    }
+
+    .title > div > span {
+        display: block;
+        position: relative;
+        top: -10px;
+        margin-bottom: -20px;
+        padding: 10px 0;
+
+        small {
+            display: block;
+            margin-top: 2px;
+            color: $color-gray;
+        }
+    }
+
+    .number, .play-button, .artist, .album, .creation-date, .song-time {
+        display: none;
+    }
+
+    .add-button, .favorite-button, .availability {
+        padding: 10px 5px;
+    }
+
+    .play-button, .add-button, .favorite-button {
+        a {
+            visibility: visible;
+        }
+    }
+
+    .mobile-column-heading {
+        margin-bottom: 5px;
+        color: $color-gray;
+        font-size: 12px;
+    }
+
+    &.no-borders tr td {
+        border: 0;
+    }
+}

@@ -7,7 +7,7 @@
 
 > *Music player in a browsertab that works with your own mp3 files and can share music with your friends and own devices automatically. Features fully encrypted communication with all endpoints, cover art, radio, favorites, ...*
 
-[![peermusic interface](http://i.imgur.com/zkNgtMO.png)](http://peermusic.github.io/)
+[![peermusic interface](http://i.imgur.com/eaDu8Wl.png)](http://peermusic.github.io/)
 
 ## Run online
 
@@ -38,8 +38,10 @@ signalhub listen -h localhost -p 7000
 
 ```sh
 # Javascript
-standard app/**/*
+npm install -g standard
+standard
 
 # SCSS
-scss-lint styles/* -e styles\_normalize.scss
+npm install -g sass-lint
+sass-lint -v
 ```

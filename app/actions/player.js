@@ -17,7 +17,7 @@ var actions = {
 
       // Set the old volume and reset playing status
       actions.PLAYER_SET_VOLUME(state.player.volume)
-      dispatch(actions.PLAYER_SET_PLAYING(false))
+      actions.PLAYER_SET_PLAYING(false, true)(dispatch, getState)
 
       // Get the filename of the last played song
       const song = getSong(state.player.songId, state)
@@ -50,7 +50,7 @@ var actions = {
 
       // Load and play the file in the engine
       engine.load(filename)
-      engine.play()
+      actions.PLAYER_SET_PLAYING(true)(dispatch, getState)
 
       // Try and load an cover art
       coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
@@ -65,11 +65,45 @@ var actions = {
   },
 
   // Set the playing status to true or false
-  PLAYER_SET_PLAYING: (playing) => {
-    (playing) ? engine.play() : engine.pause()
-    return {
-      type: 'PLAYER_SET_PLAYING',
-      playing
+  PLAYER_SET_PLAYING: (playing, initialization) => {
+    return (dispatch, getState) => {
+      if (!initialization) {
+        actions.FIX_TRACKS_FOR_ANDRIOD()(dispatch, getState)
+      }
+
+      (playing) ? engine.play() : engine.pause()
+      dispatch({type: 'PLAYER_SET_PLAYING', playing})
+    }
+  },
+
+  // Map through all songs that don't have a duration, play them with 0 volume
+  // and remove them again after we grabbed the duration. This works around
+  // andriod restrictions (play() is only ok if the user presses it) by hooking
+  // into the user touching the screen for playback
+  // Reference: https://github.com/peermusic/app/issues/6
+  FIX_TRACKS_FOR_ANDRIOD: () => {
+    return (dispatch, getState) => {
+      const state = getState()
+      const brokenSongs = state.songs.filter(s => s.duration === 0)
+      if (brokenSongs.length === 0) {
+        return
+      }
+
+      brokenSongs.map(song => {
+        (song => {
+          let triggered = false
+          let audio = document.createElement('audio')
+          audio.src = song.filename
+          audio.volume = 0
+          audio.play()
+          audio.addEventListener('timeupdate', () => {
+            if (triggered) { return }
+            triggered = true
+            audio.pause()
+            dispatch({type: 'SET_SONG_DURATION', id: song.id, duration: audio.duration})
+          })
+        })(song)
+      })
     }
   },
 
@@ -212,7 +246,7 @@ var actions = {
 
       // Nothing set, let's pause on the last track
       console.log('Queue empty')
-      dispatch(actions.PLAYER_SET_PLAYING(false))
+      actions.PLAYER_SET_PLAYING(false)(dispatch, getState)
       dispatch(actions.PLAYER_SEEK(0))
     }
   },

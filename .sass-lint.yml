@@ -1,0 +1,27 @@
+files:
+  include: 'styles/**/*.scss'
+  ignore:
+    - 'styles/vendor/**/*.*'
+options:
+  formatter: stylish
+  merge-default-rules: true
+rules:
+  indentation:
+    - 1
+    - size: 4
+  nesting-depth:
+    - 1
+    - max-depth: 6
+  no-color-literals: 0
+  no-qualifying-elements:
+    - 0
+    - allow-element-with-attribute: true
+  no-vendor-prefixes: 0
+  property-sort-order:
+    - 1
+    - order: smacss
+  single-line-per-selector: 0
+  force-element-nesting: 0
+  force-attribute-nesting: 0
+  force-pseudo-nesting: 0
+  no-important: 0
