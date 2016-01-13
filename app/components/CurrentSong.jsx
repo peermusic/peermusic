@@ -3,7 +3,7 @@ const { connect } = require('react-redux')
 const { Link } = require('react-router')
 import { pushPath } from 'redux-simple-router'
 
-function CurrentSong ({ currentSong, currentCover, mobile, pushPath }) {
+function CurrentSong ({ currentSong, currentCover, mobile }) {
   if (currentSong === undefined) {
     return <div className='current-song'></div>
   }

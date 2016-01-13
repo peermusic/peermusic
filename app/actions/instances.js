@@ -1,6 +1,7 @@
 const Connect = require('connect-instances')
 const debug = require('debug')('peermusic:instances:actions')
 const nacl = require('tweetnacl')
+const sync = require('./sync')
 
 var connections
 
@@ -42,7 +43,9 @@ var actions = {
         actions.INVITE_VALIDATED(peerId, sharedSignPubKey)(dispatch, getState)
       })
       connections.metaSwarm.on('connect', function (peer, peerId) {
-        debug('peer connected', peerId)
+        sync.REGISTER_PEER(peer, peerId)
+      })
+      connections.metaSwarm.on('disconnect', function (peer, peerId) {
       })
     }
   },

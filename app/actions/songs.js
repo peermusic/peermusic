@@ -48,6 +48,7 @@ var actions = {
                   filename: url,
                   ...meta,
                   addedAt: (new Date()).toString(),
+                  local: true,
                   duration: duration,
                   favorited: false,
                   coverId: getCoverId(meta),

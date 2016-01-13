@@ -68,9 +68,11 @@ class SongRow extends React.Component {
   }
 
   renderAvailability () {
-    // TODO availability for friends: availability = <td className='availability (good|average|bad)'><i className='flaticon-download'/></td>
-    // TODO when downloading: availability = <td className='availability downloading'><i className='flaticon-downloading'/></td>
-    return <td className='availability'><i className='flaticon-harddrive'/></td>
+    if (this.props.song.local) {
+      return <td className='availability'><i className='flaticon-harddrive'/></td>
+    }
+
+    return <td className='availability'><i className='flaticon-download'/></td>
   }
 
   renderQueue () {

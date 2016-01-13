@@ -47,9 +47,9 @@ const userQueue = (state = [], action) => {
 const history = (state = {currentIndex: 0, songs: []}, action) => {
   switch (action.type) {
     case 'HISTORY_BACK':
-      return {...state, currentIndex: state.currentIndex -= 1}
+      return {...state, currentIndex: state.currentIndex - 1}
     case 'HISTORY_NEXT':
-      return {...state, currentIndex: state.currentIndex += 1}
+      return {...state, currentIndex: state.currentIndex + 1}
     case 'PLAYER_SET_SONG':
       if (action.ignoreHistory) {
         return state
@@ -57,7 +57,7 @@ const history = (state = {currentIndex: 0, songs: []}, action) => {
 
       // Remove the history before the current index
       var songs = [...state.songs.slice(0, state.currentIndex + 1)]
-      var index = songs.length === 0 ? 0 : state.currentIndex += 1
+      var index = songs.length === 0 ? 0 : state.currentIndex + 1
 
       // Make sure that we only save a max of 25 history elements
       if (index > 25) {

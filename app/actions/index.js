@@ -9,7 +9,8 @@ var actions = {
   ...require('./interfaceStatus.js'),
   ...require('./scrapingServers.js'),
   ...require('./covers.js'),
-  ...require('./instances.js')
+  ...require('./instances.js'),
+  ...require('./sync.js')
 }
 
 module.exports = actions

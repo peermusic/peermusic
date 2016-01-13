@@ -1,6 +1,7 @@
 const song = (state = {}, action) => {
   switch (action.type) {
     case 'ADD_SONG':
+    case 'ADD_PROVIDER_SONG':
       return action.song
     case 'TOGGLE_SONG_FAVORITE':
       if (state.id !== action.id) {
@@ -28,6 +29,11 @@ const song = (state = {}, action) => {
 const songs = (state = [], action) => {
   switch (action.type) {
     case 'ADD_SONG':
+      if (state.filter(x => x.local && x.id === action.song.id).length > 0) {
+        return state
+      }
+      return [...state.filter(x => x.id !== action.song.id), song(undefined, action)]
+    case 'ADD_PROVIDER_SONG':
       if (state.filter(x => x.id === action.song.id).length > 0) {
         return state
       }
@@ -38,6 +44,8 @@ const songs = (state = [], action) => {
       return state.map(s => song(s, action))
     case 'REMOVE_SONG':
       return state.filter(x => x.id !== action.id)
+    case 'REMOVE_PROVIDER_SONG':
+      return state.filter(x => x.local || x.id !== action.id)
     case 'CLEAR_DATA':
       return []
     default:
