@@ -1,0 +1,62 @@
+@import '../colors';
+
+.navigation {
+    display: none;
+}
+
+.content {
+    .actual-page-content {
+        padding: 0 5px 20px 15px;
+        overflow-y: scroll;
+
+        h2 {
+            margin-bottom: 0;
+            font-size: 24px;
+        }
+
+        h3 {
+            margin-bottom: 0;
+            font-size: 18px;
+        }
+    }
+
+    .page-heading, .search {
+        display: none;
+    }
+
+    .search-results {
+        margin-top: 15px;
+    }
+
+    .import-form {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    .pretty-form {
+        margin-bottom: 25px;
+
+        > div {
+            flex-direction: column;
+            margin-bottom: 5px;
+            padding-bottom: 0;
+            border: 0;
+
+            label {
+                margin-bottom: 5px;
+                color: $color-gray;
+                font-size: 12px;
+            }
+        }
+
+        textarea {
+            min-height: 50px;
+        }
+    }
+
+    @import 'components/horizontal-navigation';
+    @import 'components/song-table';
+    @import 'components/album-table';
+}
+
+@import 'components/player';

@@ -3,12 +3,14 @@ const { connect } = require('react-redux')
 const SearchForm = require('../Search.jsx')
 const SongTable = require('../Songs/SongTable.jsx')
 const { PLAYBACK_SONG } = require('../../actions')
+const MobilePageHeader = require('../MobilePageHeader.jsx')
 
 function Search ({ query, songs, PLAYBACK_SONG }) {
   var results = songs.length === 0 ? <h3>No songs found.</h3> : <SongTable songs={songs}/>
 
   return (
       <div>
+        <MobilePageHeader title='Search'/>
         <div className='page-heading'>
           <h2>Songs matching '{query}'</h2>
           {songs.length > 0 &&
@@ -18,8 +20,13 @@ function Search ({ query, songs, PLAYBACK_SONG }) {
             </button>
           }
         </div>
-        <SearchForm placeholder='Search again...'/>
-        <div className='search-results'>{results}</div>
+        <div className='actual-page-content'>
+          <h2 className='mobile-only'>
+            Songs matching '{query}'
+          </h2>
+          <SearchForm placeholder='Search again...'/>
+          <div className='search-results'>{results}</div>
+        </div>
       </div>
   )
 }

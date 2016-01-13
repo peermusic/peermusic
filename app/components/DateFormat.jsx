@@ -7,7 +7,12 @@ function DateFormat ({ then }) {
 
 function format (date) {
   const object = new Date(date)
-  return object.getFullYear() + '-' + object.getMonth() + '-' + object.getDate()
+  var month = object.getMonth() + 1
+  var day = object.getDate()
+  month = month < 10 ? '0' + month : month
+  day = day < 10 ? '0' + day : day
+
+  return object.getFullYear() + '-' + month + '-' + day
 }
 
 module.exports = DateFormat

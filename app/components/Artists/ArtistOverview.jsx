@@ -1,16 +1,22 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const ArtistTable = require('./ArtistTable.jsx')
+const MobilePageHeader = require('../MobilePageHeader.jsx')
 const { values } = require('../../helpers')
 
-function AlbumOverview ({ artists }) {
+function ArtistOverview ({ artists }) {
   var artistDisplay = artists.length > 0 ? <ArtistTable artists={artists}/>
       : <h3>You didn't add any artists yet!<br/>Start by dragging and dropping some songs into this window.</h3>
 
   return (
       <div>
-        <h2>Artists</h2>
-        {artistDisplay}
+        <MobilePageHeader title='Artists'/>
+        <div className='page-heading'>
+          <h2>Artists</h2>
+        </div>
+        <div className='actual-page-content'>
+          {artistDisplay}
+        </div>
       </div>
   )
 }
@@ -48,4 +54,4 @@ function _getCover (id, state) {
   return cover ? cover.url : ''
 }
 
-module.exports = connect(mapStateToProps)(AlbumOverview)
+module.exports = connect(mapStateToProps)(ArtistOverview)

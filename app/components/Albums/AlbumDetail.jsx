@@ -3,27 +3,49 @@ const { connect } = require('react-redux')
 const SongTable = require('../Songs/SongTable.jsx')
 const { Link } = require('react-router')
 const { PLAYBACK_SONG } = require('../../actions')
+const MobilePageHeader = require('../MobilePageHeader.jsx')
 const { values } = require('../../helpers')
 
 function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPage, PLAYBACK_SONG }) {
   if (songs.length > 0) {
-    var albumDuration = Math.round(songs.map(x => x.length).reduce((a, b) => a + b) / 60)
+    var albumDuration = Math.round(songs.map(x => x.duration).reduce((a, b) => a + b) / 60)
     var year = songs.map(s => s.year).filter(s => s)[0]
   }
 
-  if (artistPage) {
-    const linkTargetAlbum = '/albums?album=' + album + '&artist=' + artist
-    album = <Link to={linkTargetAlbum}>{album}</Link>
-  }
-
+  const linkTargetAlbum = '/albums?album=' + album + '&artist=' + artist
   const linkTargetArtist = '/artists?artist=' + artist
+  const wrapperClass = artistPage ? '' : 'actual-page-content'
 
   return (
       <div>
-        <div className='album-header'>
+        {!artistPage &&
+          <MobilePageHeader title={album}/>
+        }
+        {artistPage &&
+          <div className='album-table artist-detail mobile-only'>
+            <Link to={linkTargetAlbum} className='album'>
+              <img src={currentCover}/>
+              <div className='text'>
+                <span className='album'>{album}</span>
+                <span className='artist'>
+                  {year &&
+                  <span>
+                      {year}
+                    <span className='padder'>&mdash;</span>
+                    </span>
+                  }
+                  {songs.length} {songs.length > 1 ? 'songs' : 'song'}
+                  <span className='padder'>&mdash;</span>
+                  {albumDuration} minutes
+                </span>
+              </div>
+            </Link>
+          </div>
+        }
+        <div className='page-heading album-header'>
           <img src={currentCover}/>
           <div>
-            <h2>{album}</h2>
+            <h2>{artistPage ? <Link to={linkTargetAlbum}>{album}</Link> : album}</h2>
             <h3>
               {!artistPage &&
                 <span>
@@ -49,7 +71,9 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
             }
           </div>
         </div>
-        <SongTable songs={songs} totalSongs={totalSongs || songs} options={{track: true, artist: false, album: false}}/>
+        <div className={wrapperClass}>
+          <SongTable songs={songs} totalSongs={totalSongs || songs} options={{track: true, artist: false, album: false}}/>
+        </div>
       </div>
   )
 }

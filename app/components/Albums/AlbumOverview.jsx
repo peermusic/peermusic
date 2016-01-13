@@ -1,6 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const AlbumTable = require('./AlbumTable.jsx')
+const MobilePageHeader = require('../MobilePageHeader.jsx')
 const { values } = require('../../helpers')
 
 function AlbumOverview ({ albums }) {
@@ -9,8 +10,13 @@ function AlbumOverview ({ albums }) {
 
   return (
       <div>
-        <h2>Albums</h2>
-        {albumsDisplay}
+        <MobilePageHeader title='Albums'/>
+        <div className='page-heading'>
+          <h2>Albums</h2>
+        </div>
+        <div className='actual-page-content'>
+          {albumsDisplay}
+        </div>
       </div>
   )
 }

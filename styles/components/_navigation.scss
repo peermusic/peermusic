@@ -12,6 +12,10 @@
     color: $color-gray;
     font-size: 14px;
 
+    .mobile-toggle {
+        display: none;
+    }
+
     .search {
         display: block;
         width: 100%;
@@ -19,8 +23,7 @@
         input {
             display: block;
             width: 80%;
-            margin: auto;
-            margin-top: 25px;
+            margin: 25px auto auto;
             padding: 7px 10px;
             border: 1px solid $background-light-gray;
             border-radius: 5px;
@@ -47,7 +50,7 @@
         overflow-x: hidden;
 
         ul {
-            @include reset-list();
+            @include reset-list;
         }
 
         // Headings

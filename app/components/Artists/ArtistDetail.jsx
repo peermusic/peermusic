@@ -2,11 +2,13 @@ const React = require('react')
 const { connect } = require('react-redux')
 const AlbumDetail = require('../Albums/AlbumDetail.jsx')
 const { PLAYBACK_SONG } = require('../../actions')
+const MobilePageHeader = require('../MobilePageHeader.jsx')
 const { values } = require('../../helpers')
 
 function ArtistDetail ({ artist, totalSongs, albums, PLAYBACK_SONG }) {
   return (
       <div>
+        <MobilePageHeader title={artist}/>
         <div className='page-heading'>
           <h2>{artist}</h2>
           <button className='play-all'
@@ -14,7 +16,7 @@ function ArtistDetail ({ artist, totalSongs, albums, PLAYBACK_SONG }) {
             <i className='fa fa-play'/> Play all
           </button>
         </div>
-        <div>
+        <div className='actual-page-content'>
         {albums.map((album, i) => {
           return (
               <div className='artist-album' key={i}>

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "scripts": {
-    "test": "standard"
+    "test": "standard && sh sass-lint.sh"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,7 @@
     "react-dom": "^0.14.3",
     "react-redux": "^4.0.4",
     "react-router": "^1.0.3",
+    "react-tappable": "^0.8.0",
     "redux": "^3.0.5",
     "redux-logger": "^2.3.1",
     "redux-simple-router": "^1.0.2",
@@ -59,6 +60,7 @@
     "gulp-sass": "^2.1.1",
     "http": "0.0.0",
     "node-notifier": "^4.4.0",
+    "sass-lint": "^1.4.0",
     "st": "^1.1.0",
     "standard": "^5.4.1",
     "vinyl-source-stream": "^1.1.0",

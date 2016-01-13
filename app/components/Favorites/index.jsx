@@ -2,6 +2,7 @@ const React = require('react')
 const { connect } = require('react-redux')
 const SongTable = require('../Songs/SongTable.jsx')
 const { PLAYBACK_SONG } = require('../../actions')
+const MobilePageHeader = require('../MobilePageHeader.jsx')
 
 function Favorites ({ songs, PLAYBACK_SONG }) {
   var favoritesDisplay = songs.length === 0
@@ -10,6 +11,7 @@ function Favorites ({ songs, PLAYBACK_SONG }) {
 
   return (
       <div>
+        <MobilePageHeader title='Favorites'/>
         <div className='page-heading'>
           <h2>Favorites</h2>
           {songs.length > 0 &&
@@ -19,7 +21,9 @@ function Favorites ({ songs, PLAYBACK_SONG }) {
             </button>
           }
         </div>
-        {favoritesDisplay}
+        <div className='actual-page-content'>
+          {favoritesDisplay}
+        </div>
       </div>
   )
 }

@@ -2,6 +2,7 @@ const React = require('react')
 const { connect } = require('react-redux')
 const { ADD_SONG, CLEAR_DATA } = require('../../actions')
 const SongTable = require('../Songs/SongTable.jsx')
+const MobilePageHeader = require('../MobilePageHeader.jsx')
 const { values } = require('../../helpers')
 
 class ManageSongs extends React.Component {
@@ -33,24 +34,28 @@ class ManageSongs extends React.Component {
 
     return (
         <div>
-          <h2>Manage songs</h2>
-
-          <div className='import-form'>
-            <label className='fake-file-input margin-right'>
-              Import files
-              <input type='file' multiple onChange={(e) => this.importFiles(e.target.files)}/>
-            </label>
-
-            <label className='fake-file-input margin-right'>
-              Import directory
-              <input type='file' ref='directoryImport' onChange={(e) => this.importFiles(e.target.files)}/>
-            </label>
-
-            <input className='right transparent-button' type='button' value='Reset application'
-                   onClick={() => this.clearData()}/>
+          <MobilePageHeader title='Manage songs'/>
+          <div className='page-heading'>
+            <h2>Manage songs</h2>
           </div>
+          <div className='actual-page-content'>
+            <div className='import-form'>
+              <label className='fake-file-input margin-right'>
+                Import files
+                <input type='file' multiple onChange={(e) => this.importFiles(e.target.files)}/>
+              </label>
 
-          {songDisplay}
+              <label className='fake-file-input margin-right desktop-only'>
+                Import directory
+                <input type='file' ref='directoryImport' onChange={(e) => this.importFiles(e.target.files)}/>
+              </label>
+
+              <input className='right transparent-button' type='button' value='Reset application'
+                     onClick={() => this.clearData()}/>
+            </div>
+
+            {songDisplay}
+          </div>
         </div>
     )
   }

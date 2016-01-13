@@ -47,6 +47,7 @@ const ManageSongs = require('./components/ManageSongs/index.jsx')
 const ManageServers = require('./components/ManageServers/index.jsx')
 const ManageDownloads = require('./components/ManageDownloads/index.jsx')
 const Search = require('./components/Search/index.jsx')
+const CurrentlyPlaying = require('./components/CurrentlyPlaying/index.jsx')
 
 // Render our application
 ReactDOM.render(
@@ -54,6 +55,7 @@ ReactDOM.render(
       <Router history={history}>
         <Route path='/' component={App}>
           <IndexRedirect to='songs'/>
+          <Route path='currently-playing' component={CurrentlyPlaying}/>
           <Route path='songs' component={Songs}/>
           <Route path='albums' component={Albums}/>
           <Route path='artists' component={Artists}/>

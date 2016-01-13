@@ -1,6 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const SongTable = require('../Songs/SongTable.jsx')
+const MobilePageHeader = require('../MobilePageHeader.jsx')
 
 var defaultColumns = {
   index: true,
@@ -19,8 +20,13 @@ function PlayingNext ({ songs, options }) {
 
   return (
       <div>
-        <h2>Playing Next</h2>
-        {historyDisplay}
+        <MobilePageHeader title='Playing next'/>
+        <div className='page-heading'>
+          <h2>Playing Next</h2>
+        </div>
+        <div className='actual-page-content'>
+          {historyDisplay}
+        </div>
       </div>
   )
 }

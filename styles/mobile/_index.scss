@@ -1,0 +1,77 @@
+@import '../colors';
+@import 'components/currently-playing';
+
+@media screen and (max-width: 1024px) {
+    .page-wrapper {
+        .mobile-only {
+            display: block;
+        }
+
+        .desktop-only {
+            display: none !important;
+        }
+
+        .player .buttons button {
+            color: $color-gray !important;
+        }
+
+        .mobile-top-bar {
+            display: block;
+            padding-bottom: 20px;
+
+            .mobile-toggle {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                padding: 20px;
+                background-color: $background-gray;
+                color: $color-gray;
+                box-sizing: border-box;
+
+                .burger, .padder {
+                    align-self: flex-start;
+                    color: $color-gray;
+                    font-size: 20px;
+                }
+
+                .padder {
+                    align-self: flex-end;
+                    color: transparent;
+                }
+
+                .title {
+                    flex: 1;
+                    font-size: 13px;
+                    text-align: center;
+                    text-transform: uppercase;
+                }
+            }
+
+            .mobile-button {
+                display: flex;
+                justify-content: center;
+                margin-top: 15px;
+            }
+        }
+
+        &.mobile-navigation {
+            @import 'navigation';
+        }
+
+        &.mobile-content {
+            @import 'content';
+        }
+    }
+}
+
+@media screen and (max-height: 300px) {
+    .mobile-top-bar, .player, .horizontal-navigation, .actual-page-content > div > *:not(.pretty-form) {
+        display: none !important;
+    }
+
+    .pretty-form {
+        margin-top: 20px;
+    }
+}

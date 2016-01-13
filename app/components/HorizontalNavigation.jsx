@@ -4,7 +4,7 @@ const { TOGGLE_HORIZONTAL_NAVIGATION } = require('../actions')
 
 function HorizontalNavigation ({ views, identifier, activeIndex, content, TOGGLE_HORIZONTAL_NAVIGATION }) {
   return (
-      <div>
+      <div className='horizontal-navigation-wrapper'>
         <div className='horizontal-navigation'>
           {views.map((view, i) => {
             const className = i === activeIndex ? 'active' : ''
@@ -12,7 +12,7 @@ function HorizontalNavigation ({ views, identifier, activeIndex, content, TOGGLE
                       onClick={() => TOGGLE_HORIZONTAL_NAVIGATION(identifier, i)}>{view.name}</a>
           })}
         </div>
-        <div>
+        <div className='actual-page-content'>
           {content}
         </div>
       </div>

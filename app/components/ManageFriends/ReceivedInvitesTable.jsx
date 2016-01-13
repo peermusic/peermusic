@@ -5,7 +5,7 @@ const { DISCARD_RECEIVED_INVITE } = require('../../actions')
 
 function ReceivedInvitesTable ({ receivedInvitesList, DISCARD_RECEIVED_INVITE }) {
   return (
-      <table className='song-table'>
+      <table className='song-table no-borders'>
         <tbody>
         <tr>
           <th className='number'>#</th>
@@ -14,12 +14,14 @@ function ReceivedInvitesTable ({ receivedInvitesList, DISCARD_RECEIVED_INVITE })
           <th className='remove-button'/>
         </tr>
         {receivedInvitesList.map((invite, i) => {
-          var descriptionClass = classNames({inactive: !invite.description})
+          var inviteClass = classNames({inactive: !invite.description})
+          var descriptionClass = classNames('desktop-only', {inactive: !invite.description})
           return (
             <tr key={i}>
               <td className='number'>{i + 1}</td>
-              <td className={descriptionClass}>{invite.description || '—'}</td>
-              <td className={descriptionClass}>
+              <td className={descriptionClass}>{invite.description || 'No description'}</td>
+              <td className={inviteClass}>
+                <span className='mobile-column-heading mobile-only'>{invite.description || 'No description'}</span>
                 <input type='text' value={invite.theirPubKey || '—'} readOnly/>
               </td>
               <td className='remove-button'><a onClick={() => DISCARD_RECEIVED_INVITE(i)}><i className='fa fa-trash'/></a></td>
