@@ -89,7 +89,7 @@ var actions = {
       const knownSongs = songs.map(x => x.id)
       remoteSongs.filter(x => knownSongs.indexOf(x.id) === -1).map(song => {
         dispatch({
-          type: 'ADD_SONG',
+          type: 'ADD_PROVIDER_SONG',
           song
         })
       })
@@ -115,7 +115,7 @@ var actions = {
         if (providerMap[id].length === 0) {
           delete providerMap[id]
           dispatch({
-            type: 'REMOVE_SONG',
+            type: 'REMOVE_PROVIDER_SONG',
             id: id
           })
         }
