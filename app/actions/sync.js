@@ -58,17 +58,10 @@ var actions = {
 
   SEND_INVENTORY: (peerId) => {
     return (dispatch, getState) => {
-      var songs = getState().songs
       var providers = getState().sync.providers
-      var filteredSongs = {}
-      Object.keys(songs).forEach((songId) => {
-        if (!providers[songId] || providers[songId].indexOf(peerId) === -1) {
-          // we only send our song if the other peer is not one of our providers for it
-          // to avoid phantoms ("he thinks we hold that song - we think he holds that song")
-          filteredSongs[songId] = songs[songId]
-        }
-      })
-      console.log('filteredSongs', filteredSongs)
+      // we only send our song if the other peer is not one of our providers for it
+      // to avoid phantoms ("he thinks we hold that song - we think he holds that song")
+      var filteredSongs = getState().songs.filter(song => !providers[song.id] || providers[song.id].indexOf(peerId) === -1)
       peers.send({
         type: 'SEND_INVENTORY',
         songs: filteredSongs
@@ -78,86 +71,59 @@ var actions = {
 
   RECEIVE_INVENTORY: (theirSongs, peerId) => {
     return (dispatch, getState) => {
-      function mergeSongObject (localList, remoteList, peerId) {
-        var remainder = Object.assign({}, localList)
-        var songsMerged = []
-        var songsProvidedByPeer = []
-
-        Object.keys(remoteList).forEach((songId) => {
-          delete remainder[songId]
-          if (!localList[songId]) {
-            var song = remoteList[songId]
-            song.addedAt = (new Date()).toString()
-            song.favorited = false
-            song.local = false
-            songsMerged.push(song)
-          }
-          songsProvidedByPeer.push(songId)
-        })
-        var uniqueToUs = Object.keys(remainder)
-
-        return {songsMerged, songsProvidedByPeer, uniqueToUs}
+      function cleanReceivedSong (song) {
+        song.addedAt = (new Date()).toString()
+        song.favorited = false
+        song.local = false
+        return song
       }
 
-      function updateProviders (providers, songsProvidedByPeer, uniqueToUs, peerId) {
-        var updatedProviders = Object.assign({}, providers)
-        songsProvidedByPeer.forEach((songId) => {
-          if (!providers[songId]) {
-            updatedProviders[songId] = [peerId]
-            return
-          }
-          if (providers[songId].indexOf(peerId) === -1) {
-            updatedProviders[songId].push(peerId)
-          }
-        })
+      const songs = getState().songs
 
-        var noLongerProvided = []
-        uniqueToUs.forEach((songId) => {
-          if (!providers[songId]) {
-            return
-          }
-          var index = providers[songId].indexOf(peerId)
-          if (index !== -1) {
-            updatedProviders[songId].splice(index, 1)
-          }
-          if (updatedProviders[songId].length === 0) {
-            delete updatedProviders[songId]
-            noLongerProvided.push(songId)
-          }
-        })
+      // Ignore all songs that we have already
+      const localSongs = songs.filter(x => x.local).map(x => x.id)
+      var remoteSongs = theirSongs.filter(x => localSongs.indexOf(x.id) === -1).map(cleanReceivedSong)
 
-        return {updatedProviders, noLongerProvided}
-      }
-
-      var {songsMerged, songsProvidedByPeer, uniqueToUs} = mergeSongObject(
-        getState().songs,
-        theirSongs,
-        peerId
-      )
-      var {updatedProviders, noLongerProvided} = updateProviders(
-        getState().sync.providers,
-        songsProvidedByPeer,
-        uniqueToUs,
-        peerId
-      )
-
-      songsMerged.forEach((song) => {
+      // Load their songs in our state object, if we don't know it yet
+      // "knowing" is either holding it locally or knowing of it's remote existence
+      const knownSongs = songs.map(x => x.id)
+      remoteSongs.filter(x => knownSongs.indexOf(x.id) === -1).map(song => {
         dispatch({
           type: 'ADD_SONG',
           song
         })
       })
-      noLongerProvided.forEach((songId) => {
-        if (!getState().songs[songId].local) {
+
+      // Update the providers list
+      remoteSongs = remoteSongs.map(x => x.id)
+      var providerMap = {...getState().sync.providers}
+
+      // Remove the current peer of the song providers
+      for (let id in providerMap) {
+        providerMap[id] = providerMap[id].filter(peer => peer !== peerId)
+      }
+
+      // Add the peer back to ALL the songs he holds
+      for (let i in remoteSongs) {
+        let id = remoteSongs[i]
+        const oldProviderMap = providerMap[id] || []
+        providerMap[id] = [...oldProviderMap, peerId]
+      }
+
+      // Remove songs that we don't have any providers for anymore
+      for (let id in providerMap) {
+        if (providerMap[id].length === 0) {
+          delete providerMap[id]
           dispatch({
             type: 'REMOVE_SONG',
-            id: songId
+            id: id
           })
         }
-      })
+      }
+
       dispatch({
         type: 'SET_PROVIDER_LIST',
-        providers: updatedProviders
+        providers: providerMap
       })
     }
   },
