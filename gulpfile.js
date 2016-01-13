@@ -11,9 +11,6 @@ var livereload = require('gulp-livereload')
 var http = require('http')
 var st = require('st')
 
-// Enable livereload in the browser (http://livereload.com/extensions/)
-livereload({start: true})
-
 // Log errors in the watchers to the console
 var failing = false
 function handleErrors (error) {
@@ -33,8 +30,24 @@ function handleErrors (error) {
   })
 }
 
+// Log successful tasks
+function handleSuccess (start, message) {
+  var ms = Date.now() - start
+  message = message + ' in ' + ms + 'ms'
+  console.log(chalk.green(message))
+
+  if (failing) {
+    failing = false
+    notifier.notify({
+      title: 'Gulp build passed!',
+      message: message,
+      sound: true
+    })
+  }
+}
+
 // Compile the javascript and watch for file changes
-gulp.task('browserify', function () {
+function browserifyTask (deploy) {
   // Give browserify the initial file, it automatically grabs the dependencies
   // We also wanna convert JSX to javascript, transpile es6, and turn on source mapping
   var bundler = browserify({
@@ -45,64 +58,68 @@ gulp.task('browserify', function () {
     packageCache: {},
     fullPaths: true
   })
-  var watcher = watchify(bundler, { poll: true })
+
+  var watcher = deploy === true ? bundler : watchify(bundler, { poll: true })
 
   function compileJS () {
     var start = Date.now()
-    watcher.bundle()
+    var pipe = watcher.bundle()
       .on('error', handleErrors)
       .pipe(source('bundle.js'))
       .pipe(gulp.dest('./public/build/'))
-      .pipe(livereload())
-    var ms = Date.now() - start
-    console.log(chalk.green('Compiled JS in %dms'), ms)
 
-    if (failing) {
-      failing = false
-      notifier.notify({
-        title: 'Gulp build passed!',
-        message: 'Compiled JS',
-        sound: true
-      })
+    if (!deploy) {
+      pipe.pipe(livereload())
     }
+
+    handleSuccess(start, 'Compiled JS')
   }
 
-  // Listen for updates and run one time for the initial task
-  watcher.on('update', compileJS)
+  // Listen for updates
+  if (!deploy) {
+    watcher.on('update', compileJS)
+  }
+
+  // Run once on task execution
   return compileJS()
-})
+}
 
 // Compile SCSS into CSS on file changes
-gulp.task('scss', function () {
+function scssTask (deploy) {
   function compileSCSS () {
     var start = Date.now()
-    gulp.src('./styles/**/*.scss')
+    var pipe = gulp.src('./styles/**/*.scss')
       .pipe(sass().on('error', handleErrors))
       .pipe(concat('bundle.css'))
       .pipe(gulp.dest('./public/build/'))
-      .pipe(livereload())
-    var ms = Date.now() - start
-    console.log(chalk.green('Compiled CSS in %dms'), ms)
 
-    if (failing) {
-      failing = false
-      notifier.notify({
-        title: 'Gulp build passed!',
-        message: 'Compiled CSS',
-        sound: true
-      })
+    if (!deploy) {
+      pipe.pipe(livereload())
     }
+
+    handleSuccess(start, 'Compiled CSS')
   }
 
-  // Listen for updates and run one time for the initial task
-  gulp.watch('./styles/**/*.scss', compileSCSS)
-  compileSCSS()
-})
+  // Listen for updates
+  if (!deploy) {
+    gulp.watch('./styles/**/*.scss', compileSCSS)
+  }
 
-// Create a simple static server serving all the resources
-gulp.task('server', function () {
+  // Run once on task execution
+  compileSCSS()
+}
+
+// Enable livereload in the browser (http://livereload.com/extensions/)
+// and just start all the watchers and the server
+gulp.task('default', function () {
+  livereload({start: true})
+  browserifyTask()
+  scssTask()
   http.createServer(st({path: __dirname + '/public', index: 'index.html', cache: false})).listen(8000)
 })
 
-// Just run all tasks
-gulp.task('default', ['browserify', 'scss', 'server'])
+// Create the assets once, without watchers
+gulp.task('deploy', function () {
+  browserifyTask(true)
+  scssTask(true)
+})
