@@ -14,9 +14,10 @@ var actions = {
       peers.on('close', function (peer, peerId) {
         actions.DEREGISTER_PEER(peer, peerId)
       })
+      actions.REQUEST_INVENTORY()
       window.setInterval(() => {
         actions.REQUEST_INVENTORY()
-      }, 1000 * 6)
+      }, 1000 * 60 * 5)
     }
   },
 
