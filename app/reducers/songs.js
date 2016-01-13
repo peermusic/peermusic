@@ -21,10 +21,10 @@ const song = (state = {}, action) => {
         ...state,
         duration: action.duration
       }
+    */
     default:
       return state
   }
-  */
 }
 
 const songs = (state = {}, action) => {
