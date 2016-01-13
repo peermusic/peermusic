@@ -8,8 +8,7 @@ branches:
     - master
 
 after_success:
-  - echo $TRAVIS_BRANCH
-  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
       sh ./deploy-ghpages.sh;
     fi
 
