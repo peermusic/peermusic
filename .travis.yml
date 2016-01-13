@@ -7,7 +7,11 @@ branches:
   only:
     - master
 
-script: if [ "$TRAVIS_BRANCH" == "master" ]; then sh ./deploy-ghpages.sh; fi
+after_success:
+  - echo $TRAVIS_BRANCH
+  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+      sh ./deploy-ghpages.sh;
+    fi
 
 env:
   global:
