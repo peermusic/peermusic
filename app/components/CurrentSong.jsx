@@ -3,7 +3,7 @@ const { connect } = require('react-redux')
 const { Link } = require('react-router')
 import { pushPath } from 'redux-simple-router'
 
-function CurrentSong ({ currentSong, currentCover, mobile, pushPath }) {
+function CurrentSong ({ currentSong, currentCover, mobile }) {
   if (currentSong === undefined) {
     return <div className='current-song'></div>
   }
@@ -45,7 +45,7 @@ function CurrentSong ({ currentSong, currentCover, mobile, pushPath }) {
 
 function mapStateToProps (state) {
   // Get the currently running song and it's cover
-  const currentSong = state.songs[state.player.songId]
+  const currentSong = state.songs.filter(s => s.id === state.player.songId)[0]
   const currentCover = !currentSong ? null : state.covers.filter(c => c.id === currentSong.coverId)[0]
 
   return {

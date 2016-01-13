@@ -2,7 +2,6 @@ var engine = require('player-engine')()
 var coversActions = require('./covers.js')
 var shuffle = require('shuffle-array')
 var musicSimilarity = require('music-similarity')
-var { values } = require('../helpers')
 
 var actions = {
 
@@ -327,7 +326,7 @@ var actions = {
 
 // Get the song off the state based on a song id
 function getSong (songId, state) {
-  return values(state.songs).filter(x => x.id === songId)[0]
+  return state.songs.filter(x => x.id === songId)[0]
 }
 
 // Get songs off the similarity information

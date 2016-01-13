@@ -11,7 +11,6 @@ const song = (state = {}, action) => {
         ...state,
         favorite: !state.favorite
       }
-    /*
     case 'SET_SONG_DURATION':
       if (state.id !== action.id) {
         return state
@@ -21,25 +20,24 @@ const song = (state = {}, action) => {
         ...state,
         duration: action.duration
       }
-    */
     default:
       return state
   }
 }
 
-const songs = (state = {}, action) => {
+const songs = (state = [], action) => {
   switch (action.type) {
     case 'ADD_SONG':
-      return {...state, [action.song.id]: action.song}
+      if (state.filter(x => x.id === action.song.id).length > 0) {
+        return state
+      }
+      return [...state, song(undefined, action)]
     case 'SET_SONG_DURATION':
-      return {...state, [action.id]: {...state[action.id], duration: action.duration}}
-      // state.map(s => song(s, action))
+      return state.map(s => song(s, action))
     case 'TOGGLE_SONG_FAVORITE':
       return state.map(s => song(s, action))
     case 'REMOVE_SONG':
-      var newState = Object.assign({}, state)
-      delete newState[action.id]
-      return newState
+      return state.filter(x => x.id !== action.id)
     case 'CLEAR_DATA':
       return []
     default:

@@ -2,7 +2,6 @@ const React = require('react')
 const { connect } = require('react-redux')
 const ArtistTable = require('./ArtistTable.jsx')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
-const { values } = require('../../helpers')
 
 function ArtistOverview ({ artists }) {
   var artistDisplay = artists.length > 0 ? <ArtistTable artists={artists}/>
@@ -23,7 +22,7 @@ function ArtistOverview ({ artists }) {
 
 function mapStateToProps (state) {
   // Grab the artists from the songs
-  var artists = _uniqueArray(values(state.songs).map((song) => ({
+  var artists = _uniqueArray(state.songs.map((song) => ({
     artist: song.artist
   })))
 

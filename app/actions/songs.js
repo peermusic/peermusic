@@ -76,7 +76,7 @@ var actions = {
   REMOVE_SONG: (id) => {
     return (dispatch, getState) => {
       var state = getState()
-      const filename = state.songs[id].hashName
+      const filename = state.songs.filter(x => x.id === id)[0].hashName
       fs.delete(filename, (err) => {
         if (err) throw new Error('Error removing song: ' + err)
         dispatch({

@@ -4,7 +4,6 @@ const SongTable = require('./SongTable.jsx')
 const HorizontalNavigation = require('../HorizontalNavigation.jsx')
 const { PLAYBACK_SONG } = require('../../actions')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
-const { values } = require('../../helpers')
 
 function Songs ({ songs, PLAYBACK_SONG }) {
   var songDisplay = <div className='actual-page-content'><h3>You didn't add any songs yet! <br className='desktop-only'/>Start by dragging and dropping some songs into this window.</h3></div>
@@ -38,7 +37,7 @@ function Songs ({ songs, PLAYBACK_SONG }) {
 
 module.exports = connect(
   (state) => ({
-    songs: values(state.songs)
+    songs: state.songs
   }),
   {PLAYBACK_SONG}
 )(Songs)
