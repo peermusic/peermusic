@@ -50,6 +50,7 @@ const ManageServers = require('./components/ManageServers/index.jsx')
 const ManageDownloads = require('./components/ManageDownloads/index.jsx')
 const Search = require('./components/Search/index.jsx')
 const CurrentlyPlaying = require('./components/CurrentlyPlaying/index.jsx')
+const ProtocolHandler = require('./components/ProtocolHandler.js')
 
 // Render our application
 ReactDOM.render(
@@ -69,8 +70,12 @@ ReactDOM.render(
           <Route path='manage-servers' component={ManageServers}/>
           <Route path='manage-downloads' component={ManageDownloads}/>
           <Route path='search' component={Search}/>
+          <Route path='handle-protocol' component={ProtocolHandler}/>
         </Route>
       </Router>
     </Provider>,
   document.getElementById('render')
 )
+
+// Register our custom protocol handler
+window.navigator.registerProtocolHandler('web+peermusic', window.location.origin + '#/handle-protocol?s=%s', 'peermusic')
