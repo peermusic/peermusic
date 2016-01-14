@@ -119,8 +119,8 @@ gulp.task('manifest', function () {
       hash: true,
       preferOnline: true,
       network: [],
-      filename: 'app.manifest',
-      exclude: 'app.manifest'
+      filename: 'page.appcache',
+      exclude: 'page.appcache'
     }))
     .pipe(gulp.dest('public'))
 })

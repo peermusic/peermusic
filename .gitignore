@@ -1,6 +1,6 @@
 # Build data
 public/build/
-public/app.manifest
+public/page.appcache
 
 # Editors
 .idea/
@@ -32,4 +32,3 @@ build/Release
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
-
