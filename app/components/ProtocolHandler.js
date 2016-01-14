@@ -24,6 +24,10 @@ class ProtocolHandler extends React.Component {
     this.props.pushPath('/manage-servers/scraping?default=' + encodeURIComponent(uri))
   }
 
+  handleInvite (uri) {
+    this.props.pushPath('/manage-friends/receive?default=' + encodeURIComponent(uri))
+  }
+
   componentDidMount () {
     const uri = decodeURIComponent(this.props.routing.path.replace(/^.*\?s=(.*)$/, '$1'))
     var payload = uri.replace(/web\+peermusic:(\/\/)?/, '').split('#')
@@ -34,6 +38,9 @@ class ProtocolHandler extends React.Component {
         break
       case 'SCRAPING':
         this.handleScraping(uri)
+        break
+      case 'INVITE':
+        this.handleInvite(uri)
         break
       default:
         throw new Error('No handler for this type of URL registered')
