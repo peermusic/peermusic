@@ -1,4 +1,6 @@
 var gulp = require('gulp')
+var gutil = require('gulp-util')
+var signalhub = require('signalhub/server.js')
 var source = require('vinyl-source-stream')
 var browserify = require('browserify')
 var watchify = require('watchify')
@@ -11,6 +13,25 @@ var livereload = require('gulp-livereload')
 var http = require('http')
 var st = require('st')
 
+// Start signalhub server on port 7000
+function startSignalhub () {
+  var port = 7000
+  var host = ''
+  var server = signalhub()
+
+  server.on('subscribe', function (channel) {
+    gutil.log('subscribe: %s', channel)
+  })
+
+  server.on('publish', function (channel, message) {
+    gutil.log('broadcast: %s (%d)', channel, message.length)
+  })
+
+  server.listen(port, host, function () {
+    gutil.log('signalhub listening on port %d', server.address().port)
+  })
+}
+
 // Log errors in the watchers to the console
 var failing = false
 function handleErrors (error) {
@@ -22,7 +43,7 @@ function handleErrors (error) {
   error = error.toString().replace(regex, '')
 
   // Write in console and notify the user
-  console.log(chalk.bold.red('[Build failed] ' + error))
+  gutil.log(chalk.bold.red('[Build failed] ' + error))
   notifier.notify({
     title: 'Gulp build failed',
     message: error,
@@ -34,7 +55,7 @@ function handleErrors (error) {
 function handleSuccess (start, message) {
   var ms = Date.now() - start
   message = message + ' in ' + ms + 'ms'
-  console.log(chalk.green(message))
+  gutil.log(chalk.green(message))
 
   if (failing) {
     failing = false
@@ -112,6 +133,7 @@ function scssTask (deploy) {
 // Enable livereload in the browser (http://livereload.com/extensions/)
 // and just start all the watchers and the server
 gulp.task('default', function () {
+  startSignalhub()
   livereload({start: true})
   browserifyTask()
   scssTask()
