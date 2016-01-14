@@ -1,5 +1,6 @@
 var gulp = require('gulp')
 var gutil = require('gulp-util')
+var manifest = require('gulp-manifest')
 var signalhub = require('signalhub/server.js')
 var source = require('vinyl-source-stream')
 var browserify = require('browserify')
@@ -111,6 +112,19 @@ function scssTask (deploy) {
   compileSCSS()
 }
 
+// Create a appcache file from our `public/` directory
+gulp.task('manifest', function () {
+  gulp.src(['public/*'], {base: './'})
+    .pipe(manifest({
+      hash: true,
+      preferOnline: true,
+      network: [],
+      filename: 'app.manifest',
+      exclude: 'app.manifest'
+    }))
+    .pipe(gulp.dest('public'))
+})
+
 // Start signalhub server on port 7000
 function startSignalhub () {
   var port = 7000
@@ -150,4 +164,5 @@ gulp.task('default', function () {
 gulp.task('deploy', function () {
   browserifyTask(true)
   scssTask(true)
+  manifest()
 })

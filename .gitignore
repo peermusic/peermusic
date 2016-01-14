@@ -1,5 +1,6 @@
 # Build data
 public/build/
+public/app.manifest
 
 # Editors
 .idea/
