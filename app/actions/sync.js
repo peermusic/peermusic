@@ -1,6 +1,7 @@
 const debug = require('debug')('peermusic:sync:actions')
 const events = require('events')
 const inherits = require('inherits')
+var coversActions = require('./covers.js')
 
 inherits(Peers, events.EventEmitter)
 var peers = new Peers()
@@ -95,6 +96,7 @@ var actions = {
           type: 'ADD_PROVIDER_SONG',
           song
         })
+        coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
       })
 
       // Update the providers list
