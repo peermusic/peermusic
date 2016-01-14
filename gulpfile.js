@@ -131,11 +131,10 @@ function startSignalhub () {
 }
 
 // Start normal server on port 8000
-function startServer() {
+function startServer () {
   http.createServer(st({path: __dirname + '/public', index: 'index.html', cache: false})).listen(8000)
   gutil.log('server listening on port %d', 8000)
 }
-
 
 // Enable livereload in the browser (http://livereload.com/extensions/)
 // and just start all the watchers and the server
