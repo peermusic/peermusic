@@ -4,12 +4,16 @@ const { connect } = require('react-redux')
 const CurrentSong = require('./CurrentSong.jsx')
 const Search = require('./Search.jsx')
 const { TOGGLE_MOBILE_NAVIGATION } = require('../actions')
+const classNames = require('classnames')
 
-function Navigation ({ TOGGLE_MOBILE_NAVIGATION }) {
+function Navigation ({ routing, TOGGLE_MOBILE_NAVIGATION }) {
   var linkProperties = {
     activeClassName: 'selected',
     onClick: () => TOGGLE_MOBILE_NAVIGATION()
   }
+
+  var songLinkClasses = classNames('flaticon-songs', {selected: routing.path.indexOf('/songs') === 0})
+  var friendsLinkClasses = classNames('flaticon-friends', {selected: routing.path.indexOf('/manage-friends') === 0})
 
   return (
       <div className='navigation'>
@@ -21,7 +25,7 @@ function Navigation ({ TOGGLE_MOBILE_NAVIGATION }) {
           <ul>
             <li className='heading'>Your music</li>
             <li className='mobile-only'><Link to='/currently-playing' className='flaticon-songs' {...linkProperties}>Currently playing</Link></li>
-            <li><Link to='/songs' className='flaticon-songs' {...linkProperties}>Songs</Link></li>
+            <li><Link to='/songs/all' className={songLinkClasses} {...linkProperties}>Songs</Link></li>
             <li><Link to='/albums' className='flaticon-albums' {...linkProperties}>Albums</Link></li>
             <li><Link to='/artists' className='flaticon-artist' {...linkProperties}>Artists</Link></li>
             <li className='heading'>Playlists</li>
@@ -29,7 +33,7 @@ function Navigation ({ TOGGLE_MOBILE_NAVIGATION }) {
             <li><Link to='/playing-next' className='flaticon-queue' {...linkProperties}>Playing Next</Link></li>
             <li><Link to='/history' className='flaticon-history' {...linkProperties}>History</Link></li>
             <li className='heading'>Manage</li>
-            <li><Link to='/manage-friends' className='flaticon-friends' {...linkProperties}>Friends</Link></li>
+            <li><Link to='/manage-friends/authenticated' className={friendsLinkClasses} {...linkProperties}>Friends</Link></li>
             <li><Link to='/manage-songs' className='flaticon-songs' {...linkProperties}>Songs</Link></li>
             <li><Link to='/manage-servers' className='flaticon-servers' {...linkProperties}>Servers</Link></li>
             <li><Link to='/manage-downloads' className='flaticon-download' {...linkProperties}>Downloads</Link></li>

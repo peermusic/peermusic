@@ -58,13 +58,13 @@ ReactDOM.render(
         <Route path='/' component={App}>
           <IndexRedirect to='songs'/>
           <Route path='currently-playing' component={CurrentlyPlaying}/>
-          <Route path='songs' component={Songs}/>
+          <Route path='songs/*' component={Songs}/>
           <Route path='albums' component={Albums}/>
           <Route path='artists' component={Artists}/>
           <Route path='favorites' component={Favorites}/>
           <Route path='playing-next' component={PlayingNext}/>
           <Route path='history' component={History}/>
-          <Route path='manage-friends' component={ManageFriends}/>
+          <Route path='manage-friends/*' component={ManageFriends}/>
           <Route path='manage-songs' component={ManageSongs}/>
           <Route path='manage-servers' component={ManageServers}/>
           <Route path='manage-downloads' component={ManageDownloads}/>

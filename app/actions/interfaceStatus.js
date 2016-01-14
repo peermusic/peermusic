@@ -14,15 +14,6 @@ var actions = {
     }
   },
 
-  // Toggle the horizontal navigation for a specified key to the specified index
-  TOGGLE_HORIZONTAL_NAVIGATION: (identifier, index) => {
-    return {
-      type: 'TOGGLE_HORIZONTAL_NAVIGATION',
-      identifier,
-      index
-    }
-  },
-
   // Toggle the navigation state for mobile
   TOGGLE_MOBILE_NAVIGATION: () => ({
     type: 'TOGGLE_MOBILE_NAVIGATION'

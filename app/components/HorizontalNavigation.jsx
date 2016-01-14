@@ -1,15 +1,14 @@
 const React = require('react')
 const { connect } = require('react-redux')
-const { TOGGLE_HORIZONTAL_NAVIGATION } = require('../actions')
+const { Link } = require('react-router')
 
-function HorizontalNavigation ({ views, identifier, activeIndex, content, TOGGLE_HORIZONTAL_NAVIGATION }) {
+function HorizontalNavigation ({ views, currentPath, content }) {
   return (
       <div className='horizontal-navigation-wrapper'>
         <div className='horizontal-navigation'>
-          {views.map((view, i) => {
-            const className = i === activeIndex ? 'active' : ''
-            return <a key={i} className={className}
-                      onClick={() => TOGGLE_HORIZONTAL_NAVIGATION(identifier, i)}>{view.name}</a>
+          {views.map(view => {
+            const className = view.path === currentPath ? 'active' : ''
+            return <Link key={view.path} to={view.path} className={className}>{view.name}</Link>
           })}
         </div>
         <div className='actual-page-content'>
@@ -21,11 +20,10 @@ function HorizontalNavigation ({ views, identifier, activeIndex, content, TOGGLE
 
 module.exports = connect(
     (state, ownProps) => {
-      const activeIndex = state.interfaceStatus.horizontalNavigations[ownProps.identifier] || 0
+      const currentPath = state.routing.path
       return {
-        activeIndex,
-        content: activeIndex === undefined ? '' : ownProps.views[activeIndex].content
+        currentPath,
+        content: ownProps.views.filter(x => x.path === currentPath)[0].content
       }
-    },
-    {TOGGLE_HORIZONTAL_NAVIGATION}
+    }
 )(HorizontalNavigation)

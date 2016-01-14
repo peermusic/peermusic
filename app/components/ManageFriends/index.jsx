@@ -36,9 +36,9 @@ function ManageFriends ({ friends, issuedInvitesList, receivedInvitesList }) {
   )
 
   const views = [
-    {name: 'Authenticated Friends (' + friends.length + ')', content: friendsView},
-    {name: 'Issue Invites (' + issuedInvitesList.length + ')', content: issueView},
-    {name: 'Receive Invites (' + receivedInvitesList.length + ')', content: receiveView}
+    {path: '/manage-friends/authenticated', name: 'Authenticated Friends (' + friends.length + ')', content: friendsView},
+    {path: '/manage-friends/issue', name: 'Issue Invites (' + issuedInvitesList.length + ')', content: issueView},
+    {path: '/manage-friends/receive', name: 'Receive Invites (' + receivedInvitesList.length + ')', content: receiveView}
   ]
 
   return (
@@ -47,7 +47,7 @@ function ManageFriends ({ friends, issuedInvitesList, receivedInvitesList }) {
         <div className='page-heading'>
           <h2>Manage friends</h2>
         </div>
-        <HorizontalNavigation views={views} identifier='friends'/>
+        <HorizontalNavigation views={views}/>
       </div>
   )
 }
