@@ -69,7 +69,7 @@ function render () {
           <Route path='history' component={History}/>
           <Route path='manage-friends/*' component={ManageFriends}/>
           <Route path='manage-songs' component={ManageSongs}/>
-          <Route path='manage-servers' component={ManageServers}/>
+          <Route path='manage-servers/*' component={ManageServers}/>
           <Route path='manage-downloads' component={ManageDownloads}/>
           <Route path='search' component={Search}/>
           <Route path='handle-protocol' component={ProtocolHandler}/>

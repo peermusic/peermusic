@@ -14,6 +14,7 @@ function Navigation ({ routing, TOGGLE_MOBILE_NAVIGATION }) {
 
   var songLinkClasses = classNames('flaticon-songs', {selected: routing.path.indexOf('/songs') === 0})
   var friendsLinkClasses = classNames('flaticon-friends', {selected: routing.path.indexOf('/manage-friends') === 0})
+  var manageServersLinkClasses = classNames('flaticon-servers', {selected: routing.path.indexOf('/manage-servers') === 0})
 
   return (
       <div className='navigation'>
@@ -35,7 +36,7 @@ function Navigation ({ routing, TOGGLE_MOBILE_NAVIGATION }) {
             <li className='heading'>Manage</li>
             <li><Link to='/manage-friends/authenticated' className={friendsLinkClasses} {...linkProperties}>Friends</Link></li>
             <li><Link to='/manage-songs' className='flaticon-songs' {...linkProperties}>Songs</Link></li>
-            <li><Link to='/manage-servers' className='flaticon-servers' {...linkProperties}>Servers</Link></li>
+            <li><Link to='/manage-servers/scraping' className={manageServersLinkClasses} {...linkProperties}>Servers</Link></li>
             <li><Link to='/manage-downloads' className='flaticon-download' {...linkProperties}>Downloads</Link></li>
           </ul>
         </div>
