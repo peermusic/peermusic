@@ -2,17 +2,15 @@ var actions = {
 
   // Add a new scraping server
   ADD_SCRAPING_SERVER: (description, serverUrl) => {
-    // Parse the URL into parts and generate the public key of the private key
-    const regex = /^peermusic:\/\/([^#]*)#([^:]*):(.*)$/
-    const matches = serverUrl.replace(regex, '$1~~~$2~~~$3').split('~~~')
+    const parts = serverUrl.split('#')
 
     return {
       type: 'ADD_SCRAPING_SERVER',
       description,
       serverUrl,
-      url: 'http://' + matches[0],
-      id: matches[1],
-      key: matches[2]
+      url: 'http://' + parts[1] + '/',
+      id: parts[2],
+      key: parts[3]
     }
   },
 

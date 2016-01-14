@@ -36,7 +36,7 @@ class ScrapingServerForm extends React.Component {
             <label>
               Server URL
             </label>
-            <textarea placeholder='peermusic://host:port/#user-id:secret-key' ref='serverUrl'/>
+            <textarea placeholder='web+peermusic://host:port#user-id#secret-key' ref='serverUrl' defaultValue={this.props.defaultValue}/>
           </div>
 
           <div className='no-border'>
@@ -48,7 +48,13 @@ class ScrapingServerForm extends React.Component {
 }
 
 ScrapingServerForm.propTypes = {
+  defaultValue: React.PropTypes.string,
   ADD_SCRAPING_SERVER: React.PropTypes.func
 }
 
-module.exports = connect(null, {ADD_SCRAPING_SERVER})(ScrapingServerForm)
+module.exports = connect((state) => {
+  const defaultValue = /^.*\?default=(.*)$/.exec(state.routing.path)
+  return {
+    defaultValue: defaultValue ? decodeURIComponent(defaultValue[1]) : ''
+  }
+}, {ADD_SCRAPING_SERVER})(ScrapingServerForm)
