@@ -13,25 +13,6 @@ var livereload = require('gulp-livereload')
 var http = require('http')
 var st = require('st')
 
-// Start signalhub server on port 7000
-function startSignalhub () {
-  var port = 7000
-  var host = ''
-  var server = signalhub()
-
-  server.on('subscribe', function (channel) {
-    gutil.log('subscribe: %s', channel)
-  })
-
-  server.on('publish', function (channel, message) {
-    gutil.log('broadcast: %s (%d)', channel, message.length)
-  })
-
-  server.listen(port, host, function () {
-    gutil.log('signalhub listening on port %d', server.address().port)
-  })
-}
-
 // Log errors in the watchers to the console
 var failing = false
 function handleErrors (error) {
@@ -130,14 +111,40 @@ function scssTask (deploy) {
   compileSCSS()
 }
 
+// Start signalhub server on port 7000
+function startSignalhub () {
+  var port = 7000
+  var host = ''
+  var server = signalhub()
+
+  server.on('subscribe', function (channel) {
+    gutil.log('subscribe: %s', channel)
+  })
+
+  server.on('publish', function (channel, message) {
+    gutil.log('broadcast: %s (%d)', channel, message.length)
+  })
+
+  server.listen(port, host, function () {
+    gutil.log('signalhub listening on port %d', server.address().port)
+  })
+}
+
+// Start normal server on port 8000
+function startServer() {
+  http.createServer(st({path: __dirname + '/public', index: 'index.html', cache: false})).listen(8000)
+  gutil.log('server listening on port %d', 8000)
+}
+
+
 // Enable livereload in the browser (http://livereload.com/extensions/)
 // and just start all the watchers and the server
 gulp.task('default', function () {
-  startSignalhub()
   livereload({start: true})
   browserifyTask()
   scssTask()
-  http.createServer(st({path: __dirname + '/public', index: 'index.html', cache: false})).listen(8000)
+  startSignalhub()
+  startServer()
 })
 
 // Create the assets once, without watchers
