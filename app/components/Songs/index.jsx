@@ -11,11 +11,11 @@ function Songs ({ songs, PLAYBACK_SONG }) {
 
   if (songs.length > 0) {
     const views = [
-      {name: 'All songs', content: <SongTable songs={songs}/>},
-      {name: 'Own songs', content: <SongTable songs={songs}/>},
-      {name: 'Songs of friends', content: <SongTable songs={songs}/>}
+      {path: '/songs/all', name: 'All songs', content: <SongTable songs={songs}/>},
+      {path: '/songs/own', name: 'Own songs', content: <SongTable songs={songs.filter(x => x.local)}/>},
+      {path: '/songs/friends', name: 'Songs of friends', content: <SongTable songs={songs.filter(x => !x.local)}/>}
     ]
-    songDisplay = <HorizontalNavigation views={views} identifier='songs'/>
+    songDisplay = <HorizontalNavigation views={views}/>
     playButton = (
         <button className='play-all' onClick={() => PLAYBACK_SONG(songs, 0)}>
           <i className='fa fa-play'/> Play all
