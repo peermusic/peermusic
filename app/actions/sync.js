@@ -14,11 +14,9 @@ var actions = {
       peers.on('close', function (peer, peerId) {
         actions.DEREGISTER_PEER(peer, peerId)
       })
-
       window.setTimeout(() => {
         actions.REQUEST_INVENTORY()
-      }, 10000)
-
+      }, 1000 * 5)
       window.setInterval(() => {
         actions.REQUEST_INVENTORY()
       }, 1000 * 60 * 5)
@@ -173,7 +171,7 @@ function Peers () {
   }
 
   self.broadcast = (data) => {
-    // debug('broadcasting to ' + Object.keys(self.remotes).length + ' peers', data.type)
+    debug('broadcasting to ' + Object.keys(self.remotes).length + ' peers', data.type)
     for (let peerId in self.remotes) {
       self.remotes[peerId].send(data)
     }
