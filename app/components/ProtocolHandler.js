@@ -21,15 +21,13 @@ class ProtocolHandler extends React.Component {
   }
 
   componentDidMount () {
-    window.setTimeout(() => {
-      const uri = decodeURIComponent(this.props.routing.path.replace(/^.*\?s=(.*)$/, '$1'))
-      var payload = uri.replace(/web\+peermusic:(\/\/)?/, '').split('#')
+    const uri = decodeURIComponent(this.props.routing.path.replace(/^.*\?s=(.*)$/, '$1'))
+    var payload = uri.replace(/web\+peermusic:(\/\/)?/, '').split('#')
 
-      switch (payload[0]) {
-        case 'PLAYBACK':
-          this.handlePlayback(...payload.splice(1))
-      }
-    }, 100)
+    switch (payload[0]) {
+      case 'PLAYBACK':
+        this.handlePlayback(...payload.splice(1))
+    }
   }
 
   render () {
