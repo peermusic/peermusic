@@ -11,14 +11,14 @@ function AlbumTable ({ albums }) {
           return (
               <div key={i} className='album'>
                 <div className='desktop-only'>
-                  <Link to={linkTargetAlbum}><img src={album.coverUrl}/></Link>
+                  <Link to={linkTargetAlbum}><img className='cover-art' src={album.coverUrl}/></Link>
                   <div className='text'>
                     <Link to={linkTargetAlbum} className='album'>{album.album}</Link>
                     <Link to={linkTargetArtist} className='artist'>{album.artist}</Link>
                   </div>
                 </div>
                 <Link to={linkTargetAlbum} className='mobile-only'>
-                    <img src={album.coverUrl}/>
+                    <img className='cover-art' src={album.coverUrl}/>
                     <div className='text'>
                       <span className='album'>{album.album}</span>
                       <span className='artist'>{album.artist}</span>

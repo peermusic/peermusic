@@ -35,6 +35,11 @@ html, body {
         display: none;
     }
 
+    .cover-art {
+        background: $background-dark-gray url('../assets/loading-cover.png');
+        background-size: contain;
+    }
+
     @import 'components/popover';
     @import 'components/navigation';
     @import 'components/content';

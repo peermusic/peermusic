@@ -23,7 +23,7 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
         {artistPage &&
           <div className='album-table artist-detail mobile-only'>
             <Link to={linkTargetAlbum} className='album'>
-              <img src={currentCover}/>
+              <img className='cover-art' src={currentCover}/>
               <div className='text'>
                 <span className='album'>{album}</span>
                 <span className='artist'>
@@ -42,7 +42,7 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
           </div>
         }
         <div className='page-heading album-header'>
-          <img src={currentCover}/>
+          <img className='cover-art' src={currentCover}/>
           <div>
             <h2>{artistPage ? <Link to={linkTargetAlbum}>{album}</Link> : album}</h2>
             <h3>
