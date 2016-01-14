@@ -56,7 +56,7 @@ ReactDOM.render(
   <Provider store={store}>
       <Router history={history}>
         <Route path='/' component={App}>
-          <IndexRedirect to='songs'/>
+          <IndexRedirect to='songs/all'/>
           <Route path='currently-playing' component={CurrentlyPlaying}/>
           <Route path='songs/*' component={Songs}/>
           <Route path='albums' component={Albums}/>
