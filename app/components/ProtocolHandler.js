@@ -20,7 +20,7 @@ class ProtocolHandler extends React.Component {
     this.props.pushPath('/songs/all')
   }
 
-  componentDidUpdate () {
+  componentDidMount () {
     window.setTimeout(() => {
       const uri = decodeURIComponent(this.props.routing.path.replace(/^.*\?s=(.*)$/, '$1'))
       var payload = uri.replace(/web\+peermusic:(\/\/)?/, '').split('#')
