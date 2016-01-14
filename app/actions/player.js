@@ -146,8 +146,8 @@ var actions = {
       songs = songs.map(x => x.id || x)
 
       // We tried to play a view where we don't have local songs
-      if (songs.length == 0) {
-        return;
+      if (songs.length === 0) {
+        return
       }
 
       if (play) {

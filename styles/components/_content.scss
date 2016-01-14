@@ -88,3 +88,18 @@
     @import 'pages/manage-servers';
     @import 'pages/search';
 }
+
+.import-notification {
+    display: flex;
+    position: absolute;
+    top: 0;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 64px;
+    border-bottom: 3px solid $color-brand;
+    background: rgba($background-dark-gray, .8);
+    color: $color-light-gray;
+    text-align: center;
+    z-index: 999;
+}
