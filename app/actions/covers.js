@@ -77,6 +77,15 @@ var actions = {
         })
       })
     }
+  },
+
+  // Request covers when the application loads for all songs that we don't have covers yet
+  INITIALLY_LOAD_COVERS: () => {
+    return (dispatch, getState) => {
+      getState().songs.map(song =>
+        actions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
+      )
+    }
   }
 
 }
