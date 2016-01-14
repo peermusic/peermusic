@@ -57,6 +57,12 @@ class DropPageWrapper extends React.Component {
       'mobile-content': !this.props.mobileNavigation
     })
     var dropZoneClasses = classNames('dropzone', {active: this.state.isHovering})
+    var importNotification
+
+    if (this.props.importingSongs > 0) {
+      importNotification = <div className='import-notification'>
+        <span>Currently importing {this.props.importingSongs} songs...</span></div>
+    }
 
     return (
         <div className={pageWrapperClasses}
@@ -65,6 +71,7 @@ class DropPageWrapper extends React.Component {
              onDragLeave={(e) => this.stopDragging(e)}
              onDrop={(e) => this.drop(e)}>
           <div className={dropZoneClasses} ref='dropzone'></div>
+          {importNotification}
           {this.props.children}
         </div>
     )
@@ -75,12 +82,14 @@ DropPageWrapper.propTypes = {
   ADD_SONG: React.PropTypes.func,
   children: React.PropTypes.node,
   mobileNavigation: React.PropTypes.bool,
-  routePath: React.PropTypes.string
+  routePath: React.PropTypes.string,
+  importingSongs: React.PropTypes.number
 }
 
 module.exports = connect(
     (state) => ({
       mobileNavigation: state.interfaceStatus.mobileNavigation,
+      importingSongs: state.interfaceStatus.importingSongs,
       routePath: state.routing.path.replace(/\//g, '')
     }),
     {ADD_SONG}

@@ -10,9 +10,11 @@ var actions = {
   // To add multiple files just dispatch this action multiple times.
   ADD_SONG: (file) => {
     return (dispatch, getState) => {
+      // Update the display state to include the import progress
+      dispatch({type: 'INCREMENT_IMPORTING_SONGS'})
+
       // Extract the file ending
       var file_ending = 'mp3'
-
       if (file.name.match(/^.*(\.[A-Za-z0-9]{3})$/)) {
         file_ending = file.name.replace(/^.*(\.[A-Za-z0-9]{3})$/, '$1')
       }
@@ -20,6 +22,11 @@ var actions = {
       // Read the file as an data url
       var reader = new window.FileReader()
       reader.readAsDataURL(file)
+      reader.onerror = function (err) {
+        dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+        throw new Error('Error reading file: ' + err)
+      }
+
       reader.onloadend = function () {
         // Hash the file contents and set the filename based on that
         var hash = rusha.digestFromString(this.result)
@@ -29,11 +36,17 @@ var actions = {
         metadataReader(file, meta => {
           // Add the song to the file system
           fs.add({filename: hashName, file: file}, (err) => {
-            if (err) throw new Error('Error adding file: ' + err)
+            if (err) {
+              dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+              throw new Error('Error adding file: ' + err)
+            }
 
             // Read the file as an url from the filesystem
             fs.get(hashName, (err, url) => {
-              if (err) throw new Error('Error getting file: ' + err)
+              if (err) {
+                dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+                throw new Error('Error getting file: ' + err)
+              }
 
               // Create an audio element to check on the duration
               var audio = document.createElement('audio')
@@ -60,6 +73,7 @@ var actions = {
                 // Dispatch an action to get the cover from the scraping server
                 coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
 
+                dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
                 dispatch({
                   type: 'ADD_SONG',
                   song: song
@@ -71,6 +85,11 @@ var actions = {
       }
     }
   },
+
+  // Reset the counter for importing songs at application start
+  RESET_IMPORTING_SONGS: () => ({
+    type: 'RESET_IMPORTING_SONGS'
+  }),
 
   // Remove a song
   REMOVE_SONG: (id) => {

@@ -2,7 +2,8 @@ const initialState = {
   initialPopover: true,
   playingNextPanel: false,
   horizontalNavigations: {},
-  mobileNavigation: false
+  mobileNavigation: false,
+  importingSongs: 0
 }
 
 const interfaceStatus = (state = initialState, action) => {
@@ -17,6 +18,12 @@ const interfaceStatus = (state = initialState, action) => {
       let tmp = {...state.horizontalNavigations}
       tmp[action.identifier] = action.index
       return {...state, horizontalNavigations: tmp}
+    case 'INCREMENT_IMPORTING_SONGS':
+      return {...state, importingSongs: state.importingSongs + 1}
+    case 'DECREMENT_IMPORTING_SONGS':
+      return {...state, importingSongs: state.importingSongs - 1}
+    case 'RESET_IMPORTING_SONGS':
+      return {...state, importingSongs: 0}
     default:
       return state
   }
