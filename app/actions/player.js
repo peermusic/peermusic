@@ -349,6 +349,15 @@ var actions = {
         genre: song.genre
       }
 
+      if (!push) {
+        dispatch({
+          type: 'PLAYBACK_AUTOMATIC_QUEUE',
+          songs: []
+        })
+      }
+
+      require('./sync.js').REQUEST_SIMILAR(song)
+
       // Get a similar track by metadata
       musicSimilarity(state.scrapingServers, metadata, function (list) {
         actions.SET_RADIO_SONGS(list, metadata, push)(dispatch, getState)

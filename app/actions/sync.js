@@ -3,6 +3,7 @@ const events = require('events')
 const inherits = require('inherits')
 var coversActions = require('./covers.js')
 var fs = require('file-system')(['image/jpeg', 'image/jpg'])
+var musicSimilarity = require('music-similarity')
 
 inherits(Peers, events.EventEmitter)
 var peers = new Peers()
@@ -42,6 +43,14 @@ var actions = {
 
         SEND_COVER: () => {
           actions.RECEIVE_COVER(data.coverId, data.cover)(dispatch, getState)
+        },
+
+        REQUEST_SIMILAR: () => {
+          actions.SEND_SIMILAR(data.song, peerId)(dispatch, getState)
+        },
+
+        SEND_SIMILAR: () => {
+          actions.RECEIVE_SIMILAR(data.song, data.songs)(dispatch, getState)
         }
       }
 
@@ -182,8 +191,29 @@ var actions = {
     }
   },
 
-  REQUEST_SIMILARITY: (id) => {
-    return null
+  REQUEST_SIMILAR: (song) => {
+    peers.broadcast({
+      type: 'REQUEST_SIMILAR',
+      song
+    })
+  },
+
+  SEND_SIMILAR: (song, peerId) => {
+    return (dispatch, getState) => {
+      musicSimilarity(getState().scrapingServers, song, function (list) {
+        peers.send({
+          type: 'SEND_SIMILAR',
+          song,
+          songs: list
+        }, peerId)
+      })
+    }
+  },
+
+  RECEIVE_SIMILAR: (song, songs) => {
+    return (dispatch, getState) => {
+      require('./player.js').SET_RADIO_SONGS(songs, song, true)(dispatch, getState)
+    }
   }
 }
 
