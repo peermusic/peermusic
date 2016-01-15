@@ -242,7 +242,7 @@ var actions = {
 
       // If we are on radio playback, make sure we have songs in the automatic queue
       if (state.player.radioPlayback && automaticQueue.length <= 15) {
-        actions.GET_RADIO_SONGS(getSong(state.player.songId, state))(dispatch, getState)
+        actions.GET_RADIO_SONGS(getSong(state.player.songId, state), true)(dispatch, getState)
       }
 
       // If we are on infinite playback, make sure that we have songs added to the automatic queue
@@ -339,7 +339,7 @@ var actions = {
   },
 
   // Get radio songs
-  GET_RADIO_SONGS: (song) => {
+  GET_RADIO_SONGS: (song, push = false) => {
     return (dispatch, getState) => {
       const state = getState()
       const metadata = {
@@ -351,12 +351,12 @@ var actions = {
 
       // Get a similar track by metadata
       musicSimilarity(state.scrapingServers, metadata, function (list) {
-        actions.SET_RADIO_SONGS(list, metadata)(dispatch, getState)
+        actions.SET_RADIO_SONGS(list, metadata, push)(dispatch, getState)
       })
     }
   },
 
-  SET_RADIO_SONGS: (list, song) => {
+  SET_RADIO_SONGS: (list, song, push = false) => {
     return (dispatch, getState) => {
       const state = getState()
 
@@ -378,8 +378,16 @@ var actions = {
       }
 
       // Set the playback queue with the radio songs
+      if (!push) {
+        dispatch({
+          type: 'PLAYBACK_AUTOMATIC_QUEUE',
+          songs: list.map(s => s.id)
+        })
+        return
+      }
+
       dispatch({
-        type: 'PLAYBACK_AUTOMATIC_QUEUE',
+        type: 'PLAYBACK_AUTOMATIC_QUEUE_PUSH',
         songs: list.map(s => s.id)
       })
     }
