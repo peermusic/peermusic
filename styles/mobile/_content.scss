@@ -54,6 +54,21 @@
         }
     }
 
+    .initial-import {
+        flex-direction: column;
+
+        img {
+            margin-top: 20px;
+            margin-right: 0;
+            margin-bottom: 40px;
+        }
+
+        div, a {
+            text-align: center;
+            text-decoration: none;
+        }
+    }
+
     @import 'components/horizontal-navigation';
     @import 'components/song-table';
     @import 'components/album-table';

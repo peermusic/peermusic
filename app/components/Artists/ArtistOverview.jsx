@@ -2,10 +2,11 @@ const React = require('react')
 const { connect } = require('react-redux')
 const ArtistTable = require('./ArtistTable.jsx')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
+const InitialImportMessage = require('../InitialImportMessage.jsx')
 
 function ArtistOverview ({ artists }) {
   var artistDisplay = artists.length > 0 ? <ArtistTable artists={artists}/>
-      : <h3>You didn't add any artists yet!<br/>Start by dragging and dropping some songs into this window.</h3>
+      : <InitialImportMessage/>
 
   return (
       <div>

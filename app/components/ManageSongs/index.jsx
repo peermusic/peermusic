@@ -3,6 +3,7 @@ const { connect } = require('react-redux')
 const { ADD_SONG, CLEAR_DATA } = require('../../actions')
 const SongTable = require('../Songs/SongTable.jsx')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
+const InitialImportMessage = require('../InitialImportMessage.jsx')
 
 class ManageSongs extends React.Component {
 
@@ -29,7 +30,7 @@ class ManageSongs extends React.Component {
   render () {
     const songs = this.props.songs.filter(x => x.local)
     const options = {play: false, queue: false, favorite: false, remove: true, availability: false}
-    const songDisplay = songs.length > 0 ? <SongTable songs={songs} options={options}/> : <h3>You didn't add any songs yet!<br/>Start by dragging and dropping some songs into this window.</h3>
+    const songDisplay = songs.length > 0 ? <SongTable songs={songs} options={options}/> : <InitialImportMessage manage/>
 
     return (
         <div>

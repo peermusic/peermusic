@@ -4,9 +4,12 @@ const SongTable = require('./SongTable.jsx')
 const HorizontalNavigation = require('../HorizontalNavigation.jsx')
 const { PLAYBACK_SONG } = require('../../actions')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
+const InitialImportMessage = require('../InitialImportMessage.jsx')
 
 function Songs ({ songs, PLAYBACK_SONG }) {
-  var songDisplay = <div className='actual-page-content'><h3>You didn't add any songs yet! <br className='desktop-only'/>Start by dragging and dropping some songs into this window.</h3></div>
+  var songDisplay = <div className='actual-page-content'>
+    <InitialImportMessage/>
+  </div>
   var playButton
 
   if (songs.length > 0) {

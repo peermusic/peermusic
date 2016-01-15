@@ -59,6 +59,25 @@
         }
     }
 
+    .initial-import {
+        display: flex;
+        align-items: center;
+        max-width: 960px;
+        margin-top: 25px;
+        color: $color-gray;
+        font-size: 25px;
+        font-weight: 300;
+        letter-spacing: 1px;
+
+        img {
+            margin-right: 50px;
+        }
+
+        div {
+            line-height: 40px;
+        }
+    }
+
     @import 'song-table';
     @import 'album-table';
     @import 'input';

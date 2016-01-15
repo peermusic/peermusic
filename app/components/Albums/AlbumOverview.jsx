@@ -2,10 +2,11 @@ const React = require('react')
 const { connect } = require('react-redux')
 const AlbumTable = require('./AlbumTable.jsx')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
+const InitialImportMessage = require('../InitialImportMessage.jsx')
 
 function AlbumOverview ({ albums }) {
   var albumsDisplay = albums.length > 0 ? <AlbumTable albums={albums}/>
-      : <h3>You didn't add any albums yet!<br/>Start by dragging and dropping some songs into this window.</h3>
+      : <InitialImportMessage/>
 
   return (
       <div>
