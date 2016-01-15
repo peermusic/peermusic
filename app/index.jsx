@@ -21,8 +21,11 @@ const storage = reduxStorage.createMiddleware(storageEngine, ['@@router/INIT_PAT
 // Everything is prepared, combine the middleware and the reducer into a store
 const store = applyMiddleware(storage, thunk)(createStore)(reducer)
 
-// Load the state we saved before when the application loads
-// and sync that state into the player engine
+// Setup the history for redux router
+const history = createHistory({queryKey: false})
+
+// Load the state we saved before when the application loads,
+// sync that state into all of our application and render
 const load = reduxStorage.createLoader(storageEngine)
 load(store).then(() => {
   PLAYER_SYNCHRONIZE()(store.dispatch, store.getState)
@@ -30,11 +33,9 @@ load(store).then(() => {
   INSTANCES_CONNECT()(store.dispatch, store.getState)
   INITIATE_SYNC()(store.dispatch, store.getState)
   INITIALLY_LOAD_COVERS()(store.dispatch, store.getState)
+  syncReduxAndRouter(history, store)
+  render()
 })
-
-// Setup redux-router with history and sync the state to the url
-const history = createHistory({queryKey: false})
-syncReduxAndRouter(history, store)
 
 // Require our application components
 const App = require('./components/App.jsx')
@@ -50,10 +51,12 @@ const ManageServers = require('./components/ManageServers/index.jsx')
 const ManageDownloads = require('./components/ManageDownloads/index.jsx')
 const Search = require('./components/Search/index.jsx')
 const CurrentlyPlaying = require('./components/CurrentlyPlaying/index.jsx')
+const ProtocolHandler = require('./components/ProtocolHandler.js')
 
 // Render our application
-ReactDOM.render(
-  <Provider store={store}>
+function render () {
+  ReactDOM.render(
+    <Provider store={store}>
       <Router history={history}>
         <Route path='/' component={App}>
           <IndexRedirect to='songs/all'/>
@@ -69,8 +72,13 @@ ReactDOM.render(
           <Route path='manage-servers/*' component={ManageServers}/>
           <Route path='manage-downloads' component={ManageDownloads}/>
           <Route path='search' component={Search}/>
+          <Route path='handle-protocol' component={ProtocolHandler}/>
         </Route>
       </Router>
     </Provider>,
-  document.getElementById('render')
-)
+    document.getElementById('render')
+  )
+}
+
+// Register our custom protocol handler
+window.navigator.registerProtocolHandler('web+peermusic', window.location.origin + '#/handle-protocol?s=%s', 'peermusic')

@@ -36,7 +36,7 @@ class ReceiveInviteForm extends React.Component {
             <label>
               Friend URL
             </label>
-            <textarea placeholder='peermusic://host:port/#pubKey(A):signPrivKey(AB)' ref='friendUrl'/>
+            <textarea placeholder='web+peermusic://INVITE#host:port#pubKey#signPrivKey' ref='friendUrl' defaultValue={this.props.defaultValue}/>
           </div>
 
           <div className='no-border'>
@@ -48,7 +48,13 @@ class ReceiveInviteForm extends React.Component {
 }
 
 ReceiveInviteForm.propTypes = {
+  defaultValue: React.PropTypes.string,
   RECEIVE_INVITE: React.PropTypes.func
 }
 
-module.exports = connect(null, {RECEIVE_INVITE})(ReceiveInviteForm)
+module.exports = connect((state) => {
+  const defaultValue = /^.*\?default=(.*)$/.exec(state.routing.path)
+  return {
+    defaultValue: defaultValue ? decodeURIComponent(defaultValue[1]) : ''
+  }
+}, {RECEIVE_INVITE})(ReceiveInviteForm)

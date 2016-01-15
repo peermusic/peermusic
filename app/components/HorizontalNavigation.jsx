@@ -20,7 +20,7 @@ function HorizontalNavigation ({ views, currentPath, content }) {
 
 module.exports = connect(
     (state, ownProps) => {
-      const currentPath = state.routing.path
+      const currentPath = state.routing.path.replace(/^(.*)\?.*$/, '$1')
       return {
         currentPath,
         content: ownProps.views.filter(x => x.path === currentPath)[0].content
