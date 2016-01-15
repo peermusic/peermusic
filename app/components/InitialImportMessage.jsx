@@ -11,7 +11,7 @@ function InitialImportMessage ({ manage }) {
       }
       <div className='desktop-only'>
         You didn't add any songs yet!<br/>
-        Start by dragging and dropping some songs into this window.
+        To add just drag and drop them here.
       </div>
     </div>
   )
