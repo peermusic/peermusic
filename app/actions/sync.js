@@ -2,6 +2,7 @@ const debug = require('debug')('peermusic:sync:actions')
 const events = require('events')
 const inherits = require('inherits')
 var coversActions = require('./covers.js')
+var fs = require('file-system')(['image/jpeg', 'image/jpg'])
 
 inherits(Peers, events.EventEmitter)
 var peers = new Peers()
@@ -33,6 +34,14 @@ var actions = {
 
         SEND_INVENTORY: () => {
           actions.RECEIVE_INVENTORY(data.songs, peerId)(dispatch, getState)
+        },
+
+        REQUEST_COVER: () => {
+          actions.SEND_COVER(data.id, peerId)(dispatch, getState)
+        },
+
+        SEND_COVER: () => {
+          actions.RECEIVE_COVER(data.coverId, data.cover)(dispatch, getState)
         }
       }
 
@@ -142,7 +151,35 @@ var actions = {
   },
 
   REQUEST_COVER: (id) => {
-    return null
+    peers.broadcast({
+      type: 'REQUEST_COVER',
+      id
+    })
+  },
+
+  SEND_COVER: (coverId, peerId) => {
+    return (dispatch, getState) => {
+      const cover = getState().covers.filter(s => s.id === coverId)[0]
+
+      if (!cover) {
+        return
+      }
+
+      fs.getData(cover.filename, (err, data) => {
+        if (err) throw new Error('Error getting file: ' + err)
+        peers.send({
+          type: 'SEND_COVER',
+          cover: data,
+          coverId
+        }, peerId)
+      })
+    }
+  },
+
+  RECEIVE_COVER: (coverId, payload) => {
+    return (dispatch, getState) => {
+      require('./covers.js').SAVE_COVER(coverId, coverId + '.jpeg', payload)(dispatch, getState)
+    }
   },
 
   REQUEST_SIMILARITY: (id) => {

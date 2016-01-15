@@ -3,7 +3,8 @@ const cover = (state = {}, action) => {
     case 'GET_COVER':
       return {
         id: action.id,
-        url: action.url
+        url: action.url,
+        filename: action.filename
       }
     default:
       return state
