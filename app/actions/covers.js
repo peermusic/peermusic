@@ -48,6 +48,7 @@ var actions = {
         headers: {'Content-Type': 'application/json'}
       }, function (error, response, body) {
         if (error || response.statusCode !== 200) {
+          inflightCoverRequests.splice(inflightCoverRequests.indexOf(coverId), 1)
           console.error('Failed getting cover art from first scraping server')
           return
         }
@@ -55,6 +56,7 @@ var actions = {
         const payload = messaging.decrypt(JSON.parse(body), scrapingServer.key)
 
         if (!payload) {
+          inflightCoverRequests.splice(inflightCoverRequests.indexOf(coverId), 1)
           console.error('Failed decrypting response from scraping server')
           return
         }
