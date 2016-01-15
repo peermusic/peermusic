@@ -137,6 +137,7 @@ var actions = {
   PLAYBACK_SONG: (songs, index, play = true, replace = true) => {
     return (dispatch, getState) => {
       const state = getState()
+      var playingSong
 
       // Only put songs into the playback queue that we
       // hold locally, and fix up the index afterwards
@@ -152,7 +153,8 @@ var actions = {
 
       if (play) {
         // Take the first song and play it
-        dispatch(actions.PLAYER_SET_SONG(songs[index]))
+        playingSong = songs[index]
+        dispatch(actions.PLAYER_SET_SONG(playingSong))
         if (songs.length > 1) {
           dispatch({type: 'SAVE_POSSIBLE_SONG_QUEUE', songs})
         }
@@ -170,8 +172,8 @@ var actions = {
 
       // Radio playback, grab similar songs to this and
       // completely ignore queueing songs since the radio will do that
-      if (state.player.radioPlayback) {
-        actions.GET_RADIO_SONGS(getSong(state.player.songId, state))(dispatch, getState)
+      if (state.player.radioPlayback && play) {
+        actions.GET_RADIO_SONGS(getSong(playingSong, state))(dispatch, getState)
         return
       }
 
