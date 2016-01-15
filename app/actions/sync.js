@@ -28,6 +28,8 @@ var actions = {
 
   PROCESS_INCOMING_DATA: (data, peerId) => {
     return (dispatch, getState) => {
+      debug('processing incoming data', data)
+
       var networkActions = {
         REQUEST_INVENTORY: () => {
           actions.SEND_INVENTORY(peerId)(dispatch, getState)
@@ -38,7 +40,7 @@ var actions = {
         },
 
         REQUEST_COVER: () => {
-          actions.SEND_COVER(data.id, peerId)(dispatch, getState)
+          actions.SEND_COVER(data.id, data.song, peerId)(dispatch, getState)
         },
 
         SEND_COVER: () => {
@@ -159,21 +161,31 @@ var actions = {
     return null
   },
 
-  REQUEST_COVER: (id) => {
+  REQUEST_COVER: (id, song) => {
     peers.broadcast({
       type: 'REQUEST_COVER',
-      id
+      id,
+      song
     })
   },
 
-  SEND_COVER: (coverId, peerId) => {
+  SEND_COVER: (coverId, song, peerId) => {
     return (dispatch, getState) => {
       const cover = getState().covers.filter(s => s.id === coverId)[0]
 
+      // We don't have the cover locally, let's grab it from connected servers
       if (!cover) {
+        require('./covers.js').GET_COVER(song.album, song.artist, coverId, (payload) => {
+          peers.send({
+            type: 'SEND_COVER',
+            cover: payload,
+            coverId
+          }, peerId)
+        })(dispatch, getState)
         return
       }
 
+      // Get cover from filesystem
       fs.getData(cover.filename, (err, data) => {
         if (err) throw new Error('Error getting file: ' + err)
         peers.send({

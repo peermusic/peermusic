@@ -8,7 +8,7 @@ var inflightCoverRequests = []
 var actions = {
 
   // Get the cover to an artist and an album
-  GET_COVER: (album, artist, coverId) => {
+  GET_COVER: (album, artist, coverId, peer_callback = false) => {
     return (dispatch, getState) => {
       // Get the current state
       const state = getState()
@@ -25,7 +25,9 @@ var actions = {
 
       inflightCoverRequests.push(coverId)
 
-      require('./sync.js').REQUEST_COVER(coverId)
+      if (!peer_callback) {
+        require('./sync.js').REQUEST_COVER(coverId, {album, artist})
+      }
 
       // Check if we have scraping servers connected
       if (state.scrapingServers.length === 0) {
@@ -54,6 +56,10 @@ var actions = {
         }
 
         const payload = messaging.decrypt(JSON.parse(body), scrapingServer.key)
+
+        if (peer_callback) {
+          peer_callback(payload)
+        }
 
         if (!payload) {
           inflightCoverRequests.splice(inflightCoverRequests.indexOf(coverId), 1)
