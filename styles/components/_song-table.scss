@@ -27,7 +27,7 @@
         &:not(:first-child):hover {
             background: $background-light-gray;
 
-            .play-button a, .add-button a, .favorite-button a {
+            .play-button a, .add-button a, .favorite-button a, .download-button a {
                 visibility: visible;
             }
         }
@@ -120,7 +120,7 @@
             width: 75px;
         }
 
-        .play-button, .add-button, .favorite-button, .remove-button {
+        .play-button, .add-button, .favorite-button, .remove-button, .download-button {
             width: 25px;
             text-align: center;
         }
@@ -129,7 +129,7 @@
             width: 20px;
         }
 
-        .play-button, .add-button, .favorite-button {
+        .play-button, .add-button, .favorite-button, .download-button {
             a {
                 color: $color-gray;
                 text-decoration: none;

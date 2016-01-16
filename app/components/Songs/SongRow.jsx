@@ -17,9 +17,12 @@ class SongRow extends React.Component {
     return <th className='number'>{this.props.song.track}</th>
   }
 
-  renderPlay (playback) {
+  renderPlayAndDownload (playback, download) {
     if (!this.props.song.local) {
-      return <td className='play-button'/>
+      const downloadButton = this.props.downloading
+        ? <i className='fa fa-refresh'/>
+        : <a onClick={() => download()}><i className='fa fa-arrow-down'/></a>
+      return <td className='play-button'>{downloadButton}</td>
     }
 
     const playButton = this.props.options.activeRow && this.props.selected && this.props.playing
@@ -125,9 +128,18 @@ class SongRow extends React.Component {
     return () => this.props.PLAYBACK_SONG(this.props.songs, this.props.index)
   }
 
+  downloadFunction () {
+    if (this.props.song.local) {
+      return () => {}
+    }
+
+    return () => console.log('should start downloading:', this.props.song)
+  }
+
   render () {
     // Generate a playback function based on the options
     const playback = this.playbackFunction()
+    const download = this.downloadFunction()
 
     const classes = classNames({
       active: this.props.options.activeRow && this.props.selected,
@@ -138,7 +150,7 @@ class SongRow extends React.Component {
         <tr className={classes} onDoubleClick={() => playback()}>
           {this.props.options.index ? this.renderIndex() : undefined}
           {this.props.options.track ? this.renderTrack() : undefined}
-          {this.props.options.play ? this.renderPlay(playback) : undefined}
+          {this.props.options.play ? this.renderPlayAndDownload(playback, download) : undefined}
           {this.props.options.title ? this.renderTitle(playback) : undefined}
           {this.props.options.artist ? this.renderArtist() : undefined}
           {this.props.options.album ? this.renderAlbum() : undefined}
@@ -159,6 +171,7 @@ SongRow.propTypes = {
   songs: React.PropTypes.array,
   index: React.PropTypes.number,
   playing: React.PropTypes.bool,
+  downloading: React.PropTypes.bool,
   selected: React.PropTypes.bool,
   options: React.PropTypes.object,
   PLAYBACK_SONG: React.PropTypes.func,
