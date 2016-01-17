@@ -1,7 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
-const { PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING } = require('../../actions')
+const { PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG } = require('../../actions')
 const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
@@ -133,7 +133,7 @@ class SongRow extends React.Component {
       return () => {}
     }
 
-    return () => console.log('should start downloading:', this.props.song)
+    return () => this.props.REQUEST_SONG(this.props.song.id)
   }
 
   render () {
@@ -178,7 +178,8 @@ SongRow.propTypes = {
   PLAYBACK_USER_QUEUE: React.PropTypes.func,
   REMOVE_SONG: React.PropTypes.func,
   TOGGLE_SONG_FAVORITE: React.PropTypes.func,
-  PLAYER_SET_PLAYING: React.PropTypes.func
+  PLAYER_SET_PLAYING: React.PropTypes.func,
+  REQUEST_SONG: React.PropTypes.func
 }
 
-module.exports = connect(null, {PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING})(SongRow)
+module.exports = connect(null, {PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG})(SongRow)

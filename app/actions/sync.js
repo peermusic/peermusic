@@ -1,5 +1,7 @@
+const base64 = require('base64-arraybuffer')
 const debug = require('debug')('peermusic:sync:actions')
 const events = require('events')
+const fs = require('file-system')(['', 'audio/mp3', 'audio/wav', 'audio/ogg'])
 const inherits = require('inherits')
 var coversActions = require('./covers.js')
 
@@ -33,11 +35,19 @@ var actions = {
 
         SEND_INVENTORY: () => {
           actions.RECEIVE_INVENTORY(data.songs, peerId)(dispatch, getState)
+        },
+
+        REQUEST_SONG: () => {
+          actions.SEND_SONG(data.id, peerId)(dispatch, getState)
+        },
+
+        SEND_SONG: () => {
+          actions.RECEIVE_SONG(data.id, data.arrayBuffer, peerId)(dispatch, getState)
         }
       }
 
       if (!networkActions[data.type]) {
-        debug('received invalid request type')
+        debug('received invalid request type', data.type)
       }
 
       networkActions[data.type]()
@@ -138,7 +148,68 @@ var actions = {
   },
 
   REQUEST_SONG: (id) => {
-    return null
+    return (dispatch, getState) => {
+      var providers = getState().sync.providers[id]
+      providers.forEach((provider) => {
+        peers.send({
+          type: 'REQUEST_SONG',
+          id: id
+        }, provider)
+      })
+    }
+  },
+
+  SEND_SONG: (id, peerId, arrayBuffer) => {
+    return (dispatch, getState) => {
+      if (!arrayBuffer) {
+        var hashName = getState().songs.find((song) => song.id === id).hashName
+        return fs.getArrayBuffer(hashName, (err, arrayBuffer) => {
+          if (err) {
+            throw new Error('Error getting file: ' + err)
+          }
+          return actions.SEND_SONG(id, peerId, arrayBuffer)(dispatch, getState)
+        })
+      }
+      arrayBuffer = base64.encode(arrayBuffer)
+      peers.send({
+        type: 'SEND_SONG',
+        id,
+        arrayBuffer
+      }, peerId)
+    }
+  },
+
+  RECEIVE_SONG: (id, arrayBuffer, peerId) => {
+    return (dispatch, getState) => {
+      if (!arrayBuffer) return debug('received empty arrayBuffer')
+
+      var song = getState().songs.find((song) => song.id === id)
+      if (song.local) {
+        debug('discarding already received song')
+        return
+      }
+      var filename = song.hashName
+
+      arrayBuffer = base64.decode(arrayBuffer)
+      fs.addArrayBuffer({
+        filename,
+        arrayBuffer
+      }, (err) => { if (err) throw err })
+
+      dispatch({
+        type: 'TOGGLE_SONG_LOCAL',
+        id
+      })
+      fs.get(filename, (err, url) => {
+        if (err) throw err
+
+        dispatch({
+          type: 'FIX_SONG_FILENAME',
+          id,
+          filename: url
+        })
+      })
+    }
   },
 
   REQUEST_COVER: (id) => {
@@ -165,6 +236,7 @@ function Peers () {
   }
 
   self.send = (data, peerId) => {
+    debug('sending to peer', peerId, data.type)
     if (!self.remotes[peerId]) {
       debug('cannot send to offline peer', peerId)
       return
