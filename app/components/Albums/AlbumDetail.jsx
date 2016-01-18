@@ -62,7 +62,7 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
               <span className='padder'>&mdash;</span>
               {albumDuration} minutes
             </h3>
-            {!artistPage &&
+            {!artistPage && songs.filter(x => !x.local).length > 0 &&
               <button className='download-all'
                       onClick={() => DOWNLOAD_ALBUM(songs)}>
                 <i className='fa fa-arrow-down'/> Download all
