@@ -42,7 +42,7 @@ var actions = {
         },
 
         SEND_SONG: () => {
-          actions.RECEIVE_SONG(data, peerId)(dispatch, getState)
+          actions.RECEIVE_SONG(data.id, data.arrayBuffer, peerId)(dispatch, getState)
         }
       }
 
@@ -162,79 +162,79 @@ var actions = {
     return (dispatch, getState) => {
       if (!arrayBuffer) {
         var hashName = getState().songs.find((song) => song.id === id).hashName
+
         return fs.getArrayBuffer(hashName, (err, arrayBuffer) => {
-          if (err) {
-            throw new Error('Error getting file: ' + err)
-          }
+          if (err) throw new Error('Error getting file: ' + err)
+
           return actions.SEND_SONG(id, peerId, arrayBuffer)(dispatch, getState)
         })
       }
 
-      // arrayBuffer = new Uint8Array(arrayBuffer)
+      var base64String = base64.encode(arrayBuffer)
 
-      var index = 0
       var send = true
+      var index = 1
+      var size = base64String.length
+      var chunkSize = 16000 // trial and error
+      var chunks = Math.ceil(size / chunkSize)
       var offset = 0
-      var chunkSize = 10000
-      var length = arrayBuffer.byteLength
-      var totalChunks = Math.ceil(length / chunkSize)
 
-      sendInChunks()
-      function sendInChunks () {
+      peers.remotes[peerId].write('HEADER' + JSON.stringify({
+        type: 'SEND_SONG',
+        id,
+        chunks
+      }), 'utf8')
+
+      sendChunked()
+      function sendChunked () {
         do {
-          var chunk = base64.encode(arrayBuffer.slice(offset, offset + chunkSize))
+          var chunk = base64String.slice(offset, offset + chunkSize)
           var msg = JSON.stringify({
             type: 'SEND_SONG',
-            id,
-            chunkId: index++,
-            totalChunks,
+            index: index++,
             chunk
           })
           send = peers.remotes[peerId].write(msg, 'utf8')
           offset += chunkSize
-        } while (send && offset < length)
-        if (offset < length) peers.remotes[peerId].once('drain', sendInChunks)
+        } while (send && offset < size)
+        if (offset < size) peers.remotes[peerId].once('drain', sendChunked)
       }
-      // peers.remotes[peerId].write('/end', 'utf8')
     }
   },
 
-  RECEIVE_SONG: (data, peerId) => {
+  RECEIVE_SONG: (id, arrayBuffer, peerId) => {
     return (dispatch, getState) => {
-      if (!data.chunk) return debug('received empty arrayBuffer')
+      if (!arrayBuffer) return debug('received empty arrayBuffer')
 
-      var song = getState().songs.find((song) => song.id === data.id)
+      var song = getState().songs.find((song) => song.id === id)
       if (song.local) {
         debug('discarding already received song')
         return
       }
 
-      console.log(data)
-      // console.log(new Uint8Array(arrayBuffer))
-
-      /*
       var filename = song.hashName
 
-      arrayBuffer = base64.decode(arrayBuffer)
       fs.addArrayBuffer({
         filename,
         arrayBuffer
-      }, (err) => { if (err) throw err })
+      }, postprocess)
 
-      dispatch({
-        type: 'TOGGLE_SONG_LOCAL',
-        id
-      })
-      fs.get(filename, (err, url) => {
-        if (err) throw err
+      function postprocess () {
+        fs.get(filename, (err, url) => {
+          if (err) throw err
 
-        dispatch({
-          type: 'FIX_SONG_FILENAME',
-          id,
-          filename: url
+          dispatch({
+            type: 'FIX_SONG_FILENAME',
+            id,
+            filename: url
+          })
+
+          dispatch({
+            type: 'TOGGLE_SONG_LOCAL',
+            id
+          })
         })
-      })
-      */
+      }
     }
   },
 
@@ -253,14 +253,45 @@ function Peers () {
 
   self.add = (peer, peerId) => {
     self.remotes[peerId] = peer
+    var type, id, chunks, combined
+
+    peer.on('close', (data) => self.emit('close', peer, peerId))
+
     peer.on('data', (data) => {
       if (!Buffer.isBuffer(data)) {
         self.emit('data', data, peerId)
         return
       }
-      self.emit('data', JSON.parse(data.toString()), peerId)
+
+      data = data.toString()
+
+      if (data.startsWith('HEADER')) {
+        data = JSON.parse(data.replace('HEADER', ''))
+        debug('receiving new chunked and base64 encoded ArrayBuffer', data)
+
+        type = data.type
+        id = data.id
+        chunks = data.chunks
+
+        combined = ''
+        return
+      }
+
+      data = JSON.parse(data)
+      if (data.index < chunks) {
+        combined += data.chunk
+        return
+      }
+
+      combined += data.chunk
+      var arrayBuffer = base64.decode(combined)
+
+      self.emit('data', {
+        type,
+        id,
+        arrayBuffer
+      }, peerId)
     })
-    peer.on('close', (data) => self.emit('close', peer, peerId))
   }
 
   self.remove = (peerId) => {
