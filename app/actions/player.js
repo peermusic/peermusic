@@ -29,7 +29,6 @@ var actions = {
         // Old file is still here, let's load it! :)
         engine.load(filename)
         engine.seek(state.player.currentDuration)
-        coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
       }
     }
   },
