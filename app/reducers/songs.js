@@ -21,6 +21,16 @@ const song = (state = {}, action) => {
         ...state,
         local: !state.local
       }
+    case 'TOGGLE_SONG_DOWNLOADING':
+      if (state.id !== action.id) {
+        return state
+      }
+      console.log('toggling')
+
+      return {
+        ...state,
+        downloading: !state.downloading
+      }
     case 'SET_SONG_DURATION':
       if (state.id !== action.id) {
         return state
@@ -61,6 +71,8 @@ const songs = (state = [], action) => {
     case 'TOGGLE_SONG_FAVORITE':
       return state.map(s => song(s, action))
     case 'TOGGLE_SONG_LOCAL':
+      return state.map(s => song(s, action))
+    case 'TOGGLE_SONG_DOWNLOADING':
       return state.map(s => song(s, action))
     case 'REMOVE_SONG':
       return state.filter(x => x.id !== action.id)

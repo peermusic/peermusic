@@ -148,6 +148,11 @@ var actions = {
 
   REQUEST_SONG: (id) => {
     return (dispatch, getState) => {
+      dispatch({
+        type: 'TOGGLE_SONG_DOWNLOADING',
+        id
+      })
+
       var providers = getState().sync.providers[id]
       providers.forEach((provider) => {
         peers.send({
