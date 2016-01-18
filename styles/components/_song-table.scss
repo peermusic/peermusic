@@ -36,7 +36,7 @@
             color: $color-dark-gray;
         }
 
-        &.desaturated {
+        &.desaturated, &.remote {
             opacity: .3;
         }
 
@@ -74,42 +74,6 @@
             color: $color-light-gray;
             text-align: center;
             opacity: .4;
-
-            &.good {
-                color: $availability-green;
-            }
-
-            &.average {
-                color: $availability-yellow;
-            }
-
-            &.bad {
-                color: $availability-red;
-            }
-
-            &.downloading {
-                @keyframes pulsate {
-                    0% {
-                        opacity: .3;
-                    }
-
-                    50% {
-                        opacity: 1;
-                    }
-
-                    100% {
-                        opacity: .3;
-                    }
-                }
-
-                animation: pulsate 4s;
-                animation-iteration-count: infinite;
-
-                i {
-                    position: relative;
-                    top: -1px;
-                }
-            }
         }
 
         .song-time {
@@ -144,6 +108,16 @@
                 position: relative;
                 top: -1px;
             }
+        }
+
+        i.fa-refresh {
+            @keyframes spin {
+                from {-webkit-transform: rotate(0deg);}
+                to {-webkit-transform: rotate(360deg);}
+            }
+
+            animation: spin 3s;
+            animation-iteration-count: infinite;
         }
 
         .favorite-button.active a, .favorite-button.active a:hover {

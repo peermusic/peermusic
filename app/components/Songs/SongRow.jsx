@@ -22,7 +22,7 @@ class SongRow extends React.Component {
       const downloadButton = this.props.downloading
         ? <i className='fa fa-refresh'/>
         : <a onClick={() => download()}><i className='fa fa-arrow-down'/></a>
-      return <td className='play-button'>{downloadButton}</td>
+      return <td className='download-button'>{downloadButton}</td>
     }
 
     const playButton = this.props.options.activeRow && this.props.selected && this.props.playing
@@ -31,14 +31,14 @@ class SongRow extends React.Component {
     return <td className='play-button'>{playButton}</td>
   }
 
-  renderTitle (playback) {
+  renderTitle (playback, download) {
     return (
         <td className='title'>
           <div className='desktop-only'>
             {this.props.song.title}
           </div>
           <div className='mobile-only'>
-            <Tappable onTap={() => playback()}>
+            <Tappable onTap={() => this.props.song.local ? playback() : download()}>
               {this.props.song.title}
               <small>
                 {this.props.song.artist}
@@ -79,12 +79,17 @@ class SongRow extends React.Component {
       return <td className='availability'><i className='flaticon-harddrive'/></td>
     }
 
-    return <td className='availability'><i className='flaticon-download'/></td>
+    return (
+      <td className='availability'>
+        <span className='desktop-only'><i className='flaticon-download'/></span>
+        <span className='mobile-only'>{this.props.downloading ? <i className='fa fa-refresh'/> : <i className='flaticon-download'/>}</span>
+      </td>
+    )
   }
 
   renderQueue () {
     if (!this.props.song.local) {
-      return <td className='add-button'/>
+      return <td className='add-button'><a><i className='fa fa-plus'/></a></td>
     }
 
     return (
@@ -151,7 +156,7 @@ class SongRow extends React.Component {
           {this.props.options.index ? this.renderIndex() : undefined}
           {this.props.options.track ? this.renderTrack() : undefined}
           {this.props.options.play ? this.renderPlayAndDownload(playback, download) : undefined}
-          {this.props.options.title ? this.renderTitle(playback) : undefined}
+          {this.props.options.title ? this.renderTitle(playback, download) : undefined}
           {this.props.options.artist ? this.renderArtist() : undefined}
           {this.props.options.album ? this.renderAlbum() : undefined}
           {this.props.options.added ? this.renderAdded() : undefined}
