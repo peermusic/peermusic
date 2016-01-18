@@ -42,14 +42,13 @@ var actions = {
         },
 
         SEND_SONG: () => {
-          actions.RECEIVE_SONG(data.id, data.arrayBuffer, peerId)(dispatch, getState)
+          actions.RECEIVE_SONG(data, peerId)(dispatch, getState)
         }
       }
 
       if (!networkActions[data.type]) {
-        debug('received invalid request type', data.type)
+        return debug('received invalid request type', data.type)
       }
-
       networkActions[data.type]()
     }
   },
@@ -170,24 +169,50 @@ var actions = {
           return actions.SEND_SONG(id, peerId, arrayBuffer)(dispatch, getState)
         })
       }
-      arrayBuffer = base64.encode(arrayBuffer)
-      peers.send({
-        type: 'SEND_SONG',
-        id,
-        arrayBuffer
-      }, peerId)
+
+      // arrayBuffer = new Uint8Array(arrayBuffer)
+
+      var index = 0
+      var send = true
+      var offset = 0
+      var chunkSize = 10000
+      var length = arrayBuffer.byteLength
+      var totalChunks = Math.ceil(length / chunkSize)
+
+      sendInChunks()
+      function sendInChunks () {
+        do {
+          var chunk = base64.encode(arrayBuffer.slice(offset, offset + chunkSize))
+          var msg = JSON.stringify({
+            type: 'SEND_SONG',
+            id,
+            chunkId: index++,
+            totalChunks,
+            chunk
+          })
+          send = peers.remotes[peerId].write(msg, 'utf8')
+          offset += chunkSize
+        } while (send && offset < length)
+        if (offset < length) peers.remotes[peerId].once('drain', sendInChunks)
+      }
+      // peers.remotes[peerId].write('/end', 'utf8')
     }
   },
 
-  RECEIVE_SONG: (id, arrayBuffer, peerId) => {
+  RECEIVE_SONG: (data, peerId) => {
     return (dispatch, getState) => {
-      if (!arrayBuffer) return debug('received empty arrayBuffer')
+      if (!data.chunk) return debug('received empty arrayBuffer')
 
-      var song = getState().songs.find((song) => song.id === id)
+      var song = getState().songs.find((song) => song.id === data.id)
       if (song.local) {
         debug('discarding already received song')
         return
       }
+
+      console.log(data)
+      // console.log(new Uint8Array(arrayBuffer))
+
+      /*
       var filename = song.hashName
 
       arrayBuffer = base64.decode(arrayBuffer)
@@ -209,6 +234,7 @@ var actions = {
           filename: url
         })
       })
+      */
     }
   },
 
@@ -227,7 +253,13 @@ function Peers () {
 
   self.add = (peer, peerId) => {
     self.remotes[peerId] = peer
-    peer.on('data', (data) => self.emit('data', data, peerId))
+    peer.on('data', (data) => {
+      if (!Buffer.isBuffer(data)) {
+        self.emit('data', data, peerId)
+        return
+      }
+      self.emit('data', JSON.parse(data.toString()), peerId)
+    })
     peer.on('close', (data) => self.emit('close', peer, peerId))
   }
 
