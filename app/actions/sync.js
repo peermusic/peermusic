@@ -148,7 +148,8 @@ var actions = {
 
   REQUEST_SONG: (id) => {
     return (dispatch, getState) => {
-      if (getState().songs.find((song) => song.id === id).local) {
+      var song = getState().songs.find((song) => song.id === id)
+      if (song.local) {
         console.log('not requesting local song', id)
         return
       }
@@ -158,6 +159,19 @@ var actions = {
         id,
         value: true
       })
+
+      // remove download symbol from probably failed downloads
+      window.setTimeout(() => {
+        var song = getState().songs.find((song) => song.id === id)
+        if (song.local) return
+
+        debug('downloading song took too long, probably failed', song.title, song)
+        dispatch({
+          type: 'TOGGLE_SONG_DOWNLOADING',
+          id,
+          value: false
+        })
+      }, 1000 * 60 * 5)
 
       var providers = getState().sync.providers[id]
       providers.forEach((provider) => {
