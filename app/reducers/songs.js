@@ -29,7 +29,7 @@ const song = (state = {}, action) => {
 
       return {
         ...state,
-        downloading: !state.downloading
+        downloading: action.value || !state.downloading
       }
     case 'SET_SONG_DURATION':
       if (state.id !== action.id) {

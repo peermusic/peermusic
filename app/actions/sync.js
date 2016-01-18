@@ -148,9 +148,15 @@ var actions = {
 
   REQUEST_SONG: (id) => {
     return (dispatch, getState) => {
+      if (getState().songs.find((song) => song.id === id).local) {
+        console.log('not requesting local song', id)
+        return
+      }
+
       dispatch({
         type: 'TOGGLE_SONG_DOWNLOADING',
-        id
+        id,
+        value: true
       })
 
       var providers = getState().sync.providers[id]
@@ -240,6 +246,14 @@ var actions = {
           })
         })
       }
+    }
+  },
+
+  DOWNLOAD_ALBUM: (songs) => {
+    return (dispatch, getState) => {
+      songs.forEach((song) => {
+        actions.REQUEST_SONG(song.id)(dispatch, getState)
+      })
     }
   },
 
