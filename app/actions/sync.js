@@ -223,27 +223,25 @@ var actions = {
         return
       }
 
-      var filename = song.hashName
+      var hashName = song.hashName
 
       fs.addArrayBuffer({
-        filename,
+        filename: hashName,
         arrayBuffer
       }, postprocess)
 
       function postprocess () {
-        fs.get(filename, (err, url) => {
-          if (err) throw err
+        var url = `filesystem:http://${window.location.host}/persistent/${hashName}`
 
-          dispatch({
-            type: 'FIX_SONG_FILENAME',
-            id,
-            filename: url
-          })
+        dispatch({
+          type: 'FIX_SONG_FILENAME',
+          id,
+          filename: url
+        })
 
-          dispatch({
-            type: 'TOGGLE_SONG_LOCAL',
-            id
-          })
+        dispatch({
+          type: 'TOGGLE_SONG_LOCAL',
+          id
         })
       }
     }
