@@ -35,6 +35,16 @@ load(store).then(() => {
   INITIALLY_LOAD_COVERS()(store.dispatch, store.getState)
   syncReduxAndRouter(history, store)
   render()
+
+  // remove download symbol for still open and thus failed downloads
+  var downloadRemainder = store.getState().songs.filter((songs) => songs.downloading)
+  downloadRemainder.forEach((song) => {
+    store.dispatch({
+      type: 'TOGGLE_SONG_DOWNLOADING',
+      value: false,
+      id: song.id
+    })
+  })
 })
 
 // Require our application components
