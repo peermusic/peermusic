@@ -25,7 +25,6 @@ const song = (state = {}, action) => {
       if (state.id !== action.id) {
         return state
       }
-      console.log('toggling')
 
       return {
         ...state,
