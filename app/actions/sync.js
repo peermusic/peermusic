@@ -186,7 +186,7 @@ var actions = {
       }
 
       // Get cover from filesystem
-      fs.getData(cover.filename, (err, data) => {
+      fs.getDataUrl(cover.filename, (err, data) => {
         if (err) throw new Error('Error getting file: ' + err)
         peers.send({
           type: 'SEND_COVER',
