@@ -46,6 +46,7 @@ const Favorites = require('./components/Favorites/index.jsx')
 const PlayingNext = require('./components/PlayingNext/index.jsx')
 const History = require('./components/History/index.jsx')
 const ManageFriends = require('./components/ManageFriends/index.jsx')
+const ManageDevices = require('./components/ManageDevices/index.jsx')
 const ManageSongs = require('./components/ManageSongs/index.jsx')
 const ManageServers = require('./components/ManageServers/index.jsx')
 const ManageDownloads = require('./components/ManageDownloads/index.jsx')
@@ -68,6 +69,7 @@ function render () {
           <Route path='playing-next' component={PlayingNext}/>
           <Route path='history' component={History}/>
           <Route path='manage-friends/*' component={ManageFriends}/>
+          <Route path='manage-devices/*' component={ManageDevices}/>
           <Route path='manage-songs' component={ManageSongs}/>
           <Route path='manage-servers/*' component={ManageServers}/>
           <Route path='manage-downloads' component={ManageDownloads}/>
