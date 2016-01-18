@@ -216,6 +216,7 @@ var actions = {
           var chunk = base64String.slice(offset, offset + chunkSize)
           var msg = JSON.stringify({
             type: 'SEND_SONG',
+            id: id,
             index: index++,
             chunk
           })
@@ -284,9 +285,12 @@ function Peers () {
 
   self.add = (peer, peerId) => {
     self.remotes[peerId] = peer
-    var type, id, chunks, combined
+    var buffer = {}
 
-    peer.on('close', (data) => self.emit('close', peer, peerId))
+    peer.on('close', (data) => {
+      if (buffer[peerId]) delete buffer[peerId]
+      self.emit('close', peer, peerId)
+    })
 
     peer.on('data', (data) => {
       if (!Buffer.isBuffer(data)) {
@@ -300,26 +304,31 @@ function Peers () {
         data = JSON.parse(data.replace('HEADER', ''))
         debug('receiving new chunked and base64 encoded ArrayBuffer', data)
 
-        type = data.type
-        id = data.id
-        chunks = data.chunks
-
-        combined = ''
+        buffer[peerId] = {
+          [data.id]: {
+            // type: data.type,
+            chunks: data.chunks,
+            data: ''
+          }
+        }
         return
       }
 
       data = JSON.parse(data)
-      if (data.index < chunks) {
-        combined += data.chunk
+      if (data.index < buffer[peerId][data.id].chunks) {
+        buffer[peerId][data.id].data += data.chunk
         return
       }
 
-      combined += data.chunk
-      var arrayBuffer = base64.decode(combined)
+      buffer[peerId][data.id].data += data.chunk
+      var arrayBuffer = base64.decode(buffer[peerId][data.id].data)
+
+      delete buffer[peerId][data.id]
+      if (buffer[peerId] === {}) delete buffer[peerId]
 
       self.emit('data', {
-        type,
-        id,
+        type: 'SEND_SONG',
+        id: data.id,
         arrayBuffer
       }, peerId)
     })
