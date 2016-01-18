@@ -200,7 +200,7 @@ var actions = {
       var send = true
       var index = 1
       var size = base64String.length
-      var chunkSize = 16000 // trial and error
+      var chunkSize = 15000 // trial and error
       var chunks = Math.ceil(size / chunkSize)
       var offset = 0
 
@@ -302,14 +302,14 @@ function Peers () {
 
       if (data.startsWith('HEADER')) {
         data = JSON.parse(data.replace('HEADER', ''))
-        debug('receiving new chunked and base64 encoded ArrayBuffer', data)
+        debug('received HEADER for incoming ArrayBuffer', data)
 
-        buffer[peerId] = {
-          [data.id]: {
-            // type: data.type,
-            chunks: data.chunks,
-            data: ''
-          }
+        if (!buffer[peerId]) buffer[peerId] = {}
+
+        buffer[peerId][data.id] = {
+          // type: data.type,
+          chunks: data.chunks,
+          data: ''
         }
         return
       }
@@ -324,7 +324,7 @@ function Peers () {
       var arrayBuffer = base64.decode(buffer[peerId][data.id].data)
 
       delete buffer[peerId][data.id]
-      if (buffer[peerId] === {}) delete buffer[peerId]
+      if (!buffer[peerId]) delete buffer[peerId]
 
       self.emit('data', {
         type: 'SEND_SONG',
