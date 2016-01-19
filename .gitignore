@@ -1,6 +1,5 @@
 # Build data
 public/build/
-public/page.appcache
 
 # Editors
 .idea/
