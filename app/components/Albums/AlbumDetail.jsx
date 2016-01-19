@@ -62,16 +62,16 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
               <span className='padder'>&mdash;</span>
               {albumDuration} minutes
             </h3>
-            {!artistPage && songs.filter(x => !x.local).length > 0 &&
-              <button className='download-all'
-                      onClick={() => DOWNLOAD_ALBUM(songs)}>
-                <i className='fa fa-arrow-down'/> Download all
-              </button>
-            }
             {!artistPage &&
               <button className='play-all'
                       onClick={() => PLAYBACK_SONG(songs, 0)}>
                 <i className='fa fa-play'/> Play all
+              </button>
+            }
+            {!artistPage && songs.filter(x => !x.local).length > 0 &&
+              <button className='download-all'
+                      onClick={() => DOWNLOAD_ALBUM(songs)}>
+                <i className='fa fa-arrow-down'/> Download all
               </button>
             }
           </div>
