@@ -1,9 +1,10 @@
 const base64 = require('base64-arraybuffer')
 const debug = require('debug')('peermusic:sync:actions')
 const events = require('events')
-const fs = require('file-system')(['', 'audio/mp3', 'audio/wav', 'audio/ogg'])
 const inherits = require('inherits')
 var coversActions = require('./covers.js')
+var fs = require('file-system')(['image/jpeg', 'image/jpg', '', 'audio/mp3', 'audio/wav', 'audio/ogg'])
+var musicSimilarity = require('music-similarity')
 
 inherits(Peers, events.EventEmitter)
 var peers = new Peers()
@@ -28,6 +29,8 @@ var actions = {
 
   PROCESS_INCOMING_DATA: (data, peerId) => {
     return (dispatch, getState) => {
+      debug('processing incoming data', data)
+
       var networkActions = {
         REQUEST_INVENTORY: () => {
           actions.SEND_INVENTORY(peerId)(dispatch, getState)
@@ -43,6 +46,22 @@ var actions = {
 
         SEND_SONG: () => {
           actions.RECEIVE_SONG(data.id, data.arrayBuffer, peerId)(dispatch, getState)
+        },
+
+        REQUEST_COVER: () => {
+          actions.SEND_COVER(data.id, data.song, peerId)(dispatch, getState)
+        },
+
+        SEND_COVER: () => {
+          actions.RECEIVE_COVER(data.coverId, data.cover)(dispatch, getState)
+        },
+
+        REQUEST_SIMILAR: () => {
+          actions.SEND_SIMILAR(data.song, peerId)(dispatch, getState)
+        },
+
+        SEND_SIMILAR: () => {
+          actions.RECEIVE_SIMILAR(data.song, data.songs)(dispatch, getState)
         }
       }
 
@@ -270,12 +289,71 @@ var actions = {
     }
   },
 
-  REQUEST_COVER: (id) => {
-    return null
+  REQUEST_COVER: (id, song) => {
+    peers.broadcast({
+      type: 'REQUEST_COVER',
+      id,
+      song
+    })
   },
 
-  REQUEST_SIMILARITY: (id) => {
-    return null
+  SEND_COVER: (coverId, song, peerId) => {
+    return (dispatch, getState) => {
+      const cover = getState().covers.filter(s => s.id === coverId)[0]
+
+      // We don't have the cover locally, let's grab it from connected servers
+      if (!cover) {
+        require('./covers.js').GET_COVER(song.album, song.artist, coverId, (payload) => {
+          peers.send({
+            type: 'SEND_COVER',
+            cover: payload,
+            coverId
+          }, peerId)
+        })(dispatch, getState)
+        return
+      }
+
+      // Get cover from filesystem
+      fs.getDataUrl(cover.filename, (err, data) => {
+        if (err) throw new Error('Error getting file: ' + err)
+        peers.send({
+          type: 'SEND_COVER',
+          cover: data,
+          coverId
+        }, peerId)
+      })
+    }
+  },
+
+  RECEIVE_COVER: (coverId, payload) => {
+    return (dispatch, getState) => {
+      require('./covers.js').SAVE_COVER(coverId, coverId + '.jpeg', payload)(dispatch, getState)
+    }
+  },
+
+  REQUEST_SIMILAR: (song) => {
+    peers.broadcast({
+      type: 'REQUEST_SIMILAR',
+      song
+    })
+  },
+
+  SEND_SIMILAR: (song, peerId) => {
+    return (dispatch, getState) => {
+      musicSimilarity(getState().scrapingServers, song, function (list) {
+        peers.send({
+          type: 'SEND_SIMILAR',
+          song,
+          songs: list
+        }, peerId)
+      })
+    }
+  },
+
+  RECEIVE_SIMILAR: (song, songs) => {
+    return (dispatch, getState) => {
+      require('./player.js').SET_RADIO_SONGS(songs, song, true)(dispatch, getState)
+    }
   }
 }
 

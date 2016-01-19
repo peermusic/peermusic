@@ -32,7 +32,9 @@ load(store).then(() => {
   store.dispatch(RESET_IMPORTING_SONGS())
   INSTANCES_CONNECT()(store.dispatch, store.getState)
   INITIATE_SYNC()(store.dispatch, store.getState)
-  INITIALLY_LOAD_COVERS()(store.dispatch, store.getState)
+  window.setTimeout(() => {
+    INITIALLY_LOAD_COVERS()(store.dispatch, store.getState)
+  }, 1000 * 5)
   syncReduxAndRouter(history, store)
   render()
 
