@@ -1,6 +1,6 @@
 # peermusic - [user stories](https://github.com/peermusic/user-stories/issues)
 
-[![GitHub release](https://img.shields.io/badge/release-v0.1.0-blue.svg?style=flat-square)](https://github.com/peermusic/app/releases)
+[![GitHub release](https://img.shields.io/badge/release-v1.0.0-blue.svg?style=flat-square)](https://github.com/peermusic/app/releases)
 [![Travis](https://img.shields.io/travis/peermusic/app/master.svg?style=flat-square)](https://travis-ci.org/peermusic/app)
 [![David](https://img.shields.io/david/peermusic/app.svg?style=flat-square)](https://david-dm.org/peermusic/app)
 [![GitHub license](https://img.shields.io/badge/licence-AGPL_v3.0-blue.svg?style=flat-square)](https://github.com/peermusic/app/blob/master/LICENSE)
