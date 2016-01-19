@@ -8,15 +8,10 @@ var inflightCoverRequests = []
 var actions = {
 
   // Get the cover to an artist and an album
-  GET_COVER: (album, artist, coverId) => {
+  GET_COVER: (album, artist, coverId, peer_callback = false) => {
     return (dispatch, getState) => {
       // Get the current state
       const state = getState()
-
-      // Check if we have scraping servers connected
-      if (state.scrapingServers.length === 0) {
-        return
-      }
 
       // Check if we have the cover already saved
       if (state.covers.filter(s => s.id === coverId)[0]) {
@@ -29,6 +24,15 @@ var actions = {
       }
 
       inflightCoverRequests.push(coverId)
+
+      if (!peer_callback) {
+        require('./sync.js').REQUEST_COVER(coverId, {album, artist})
+      }
+
+      // Check if we have scraping servers connected
+      if (state.scrapingServers.length === 0) {
+        return
+      }
 
       // Call the scraping server and in the end dispatch the action
       // that saves the url to the file and the id into states.covers
@@ -45,34 +49,47 @@ var actions = {
         body: JSON.stringify(encryptedRequest),
         headers: {'Content-Type': 'application/json'}
       }, function (error, response, body) {
-        inflightCoverRequests.splice(inflightCoverRequests.indexOf(coverId), 1)
-
         if (error || response.statusCode !== 200) {
+          inflightCoverRequests.splice(inflightCoverRequests.indexOf(coverId), 1)
           console.error('Failed getting cover art from first scraping server')
           return
         }
 
         const payload = messaging.decrypt(JSON.parse(body), scrapingServer.key)
 
+        if (peer_callback) {
+          peer_callback(payload)
+        }
+
         if (!payload) {
+          inflightCoverRequests.splice(inflightCoverRequests.indexOf(coverId), 1)
           console.error('Failed decrypting response from scraping server')
           return
         }
 
-        var blob = dataURLToBlob(payload)
+        actions.SAVE_COVER(coverId, filename, payload)(dispatch, getState)
+      })
+    }
+  },
 
-        // Add the song to the file system
-        fs.add({filename: filename, file: blob}, (err) => {
-          if (err) throw new Error('Error adding file: ' + err)
+  // Save a cover encoded in base64 to disk
+  SAVE_COVER: (coverId, filename, payload) => {
+    return (dispatch) => {
+      inflightCoverRequests.splice(inflightCoverRequests.indexOf(coverId), 1)
+      var blob = dataURLToBlob(payload)
 
-          // Read the file as an url from the filesystem
-          fs.get(filename, (err, url) => {
-            if (err) throw new Error('Error getting file: ' + err)
-            dispatch({
-              type: 'GET_COVER',
-              id: coverId,
-              url
-            })
+      // Add the song to the file system
+      fs.add({filename: filename, file: blob}, (err) => {
+        if (err) throw new Error('Error adding file: ' + err)
+
+        // Read the file as an url from the filesystem
+        fs.get(filename, (err, url) => {
+          if (err) throw new Error('Error getting file: ' + err)
+          dispatch({
+            type: 'GET_COVER',
+            id: coverId,
+            url,
+            filename
           })
         })
       })

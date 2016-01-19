@@ -29,7 +29,6 @@ var actions = {
         // Old file is still here, let's load it! :)
         engine.load(filename)
         engine.seek(state.player.currentDuration)
-        coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
       }
     }
   },
@@ -137,6 +136,7 @@ var actions = {
   PLAYBACK_SONG: (songs, index, play = true, replace = true) => {
     return (dispatch, getState) => {
       const state = getState()
+      var playingSong
 
       // Only put songs into the playback queue that we
       // hold locally, and fix up the index afterwards
@@ -152,7 +152,8 @@ var actions = {
 
       if (play) {
         // Take the first song and play it
-        dispatch(actions.PLAYER_SET_SONG(songs[index]))
+        playingSong = songs[index]
+        dispatch(actions.PLAYER_SET_SONG(playingSong))
         if (songs.length > 1) {
           dispatch({type: 'SAVE_POSSIBLE_SONG_QUEUE', songs})
         }
@@ -166,6 +167,13 @@ var actions = {
       } else {
         // Normal playback, take the songs *after* the clicked song
         songs = [...songs.slice(index)]
+      }
+
+      // Radio playback, grab similar songs to this and
+      // completely ignore queueing songs since the radio will do that
+      if (state.player.radioPlayback && play) {
+        actions.GET_RADIO_SONGS(getSong(playingSong, state))(dispatch, getState)
+        return
       }
 
       // Queue the rest, but *not* for single songs
@@ -235,9 +243,7 @@ var actions = {
 
       // If we are on radio playback, make sure we have songs in the automatic queue
       if (state.player.radioPlayback && automaticQueue.length <= 15) {
-        getRadioSongs(getSong(state.player.songId, state), state, songs => {
-          actions.PLAYBACK_SONG(songs, 0, false, false)(dispatch, getState)
-        })
+        actions.GET_RADIO_SONGS(getSong(state.player.songId, state), true)(dispatch, getState)
       }
 
       // If we are on infinite playback, make sure that we have songs added to the automatic queue
@@ -328,8 +334,71 @@ var actions = {
       if (!currentSong) {
         return
       }
-      getRadioSongs(currentSong, state, songs => {
-        actions.PLAYBACK_SONG(songs, 0, false, true)(dispatch, getState)
+
+      actions.GET_RADIO_SONGS(currentSong)(dispatch, getState)
+    }
+  },
+
+  // Get radio songs
+  GET_RADIO_SONGS: (song, push = false) => {
+    return (dispatch, getState) => {
+      const state = getState()
+      const metadata = {
+        title: song.title,
+        album: song.album,
+        artist: song.artist,
+        genre: song.genre
+      }
+
+      if (!push) {
+        dispatch({
+          type: 'PLAYBACK_AUTOMATIC_QUEUE',
+          songs: []
+        })
+      }
+
+      require('./sync.js').REQUEST_SIMILAR(song)
+
+      // Get a similar track by metadata
+      musicSimilarity(state.scrapingServers, metadata, function (list) {
+        actions.SET_RADIO_SONGS(list, metadata, push)(dispatch, getState)
+      })
+    }
+  },
+
+  SET_RADIO_SONGS: (list, song, push = false) => {
+    return (dispatch, getState) => {
+      const state = getState()
+
+      // Only get the songs that are currently available in the local library
+      list = state.songs.filter(song => {
+        return list.filter(s => s.artist === song.artist &&
+            s.album === song.album &&
+            s.title === song.title
+          ).length > 0
+      })
+
+      // Remove songs that the user listened to recently
+      list = filterSimilarSongs(list, state)
+
+      // If we got no songs, fill it with songs out of the library
+      // first by matching album, then by matching artist and then randomly
+      if (list.length === 0) {
+        list = getSimilarLibrarySongs(song, state)
+      }
+
+      // Set the playback queue with the radio songs
+      if (!push) {
+        dispatch({
+          type: 'PLAYBACK_AUTOMATIC_QUEUE',
+          songs: list.map(s => s.id)
+        })
+        return
+      }
+
+      dispatch({
+        type: 'PLAYBACK_AUTOMATIC_QUEUE_PUSH',
+        songs: list.map(s => s.id)
       })
     }
   }
@@ -341,35 +410,18 @@ function getSong (songId, state) {
   return state.songs.filter(x => x.id === songId)[0]
 }
 
-// Get songs off the similarity information
-function getRadioSongs (song, state, callback) {
-  var metadata = {
-    title: song.title,
-    album: song.album,
-    artist: song.artist,
-    genre: song.genre
-  }
+// Remove all songs that are in the history or queue
+function filterSimilarSongs (results, state) {
+  // Remove the current track
+  results = results.filter(r => state.player.songId !== r.id)
 
-  // Get a similar track by metadata
-  musicSimilarity(state.scrapingServers, metadata, function (list) {
-    // Only get the songs that are currently available in the local library
-    list = state.songs.filter(song => {
-      return list.filter(listSong => listSong.artist === song.artist &&
-        listSong.album === song.album &&
-        listSong.title === song.title
-      ).length > 0
-    })
-    list = filterSimilarSongs(list, state)
+  // Remove tracks that we just listened to
+  results = results.filter(r => state.player.history.songs.slice(0, 10).indexOf(r.id) === -1)
 
-    // If we got no songs, fill it with songs out of the library
-    // first by matching album, then by matching artist and then randomly
-    if (list.length === 0) {
-      list = getSimilarLibrarySongs(song, state)
-    }
+  // Remove tracks already in the queue
+  results = results.filter(r => state.player.automaticQueue.indexOf(r.id) === -1)
 
-    // We only want the ids back, callback to caller!
-    callback(list.map(s => s.id))
-  })
+  return results
 }
 
 // Get similar songs out of the library
@@ -390,22 +442,8 @@ function getSimilarLibrarySongs (song, state) {
 
   results = filterSimilarSongs(results, state)
 
-  // Only return 5 tracks
-  return results.slice(0, 5)
-}
-
-// Remove all songs that are in the history or queue
-function filterSimilarSongs (results, state) {
-  // Remove the current track
-  results = results.filter(r => state.player.songId !== r.id)
-
-  // Remove tracks that we just listened to
-  results = results.filter(r => state.player.history.songs.indexOf(r.id) === -1)
-
-  // Remove tracks already in the queue
-  results = results.filter(r => state.player.automaticQueue.indexOf(r.id) === -1)
-
-  return results
+  // Only return 3 tracks, so we try getting similar radio songs sooner
+  return results.slice(0, 3)
 }
 
 module.exports = actions
