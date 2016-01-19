@@ -54,11 +54,16 @@
             margin-bottom: 0;
         }
 
+
+        .refresh-all {
+            margin-right: 15px;
+        }
+
         .download-all i {
             margin-right: 5px;
         }
 
-        .play-all i {
+        .play-all i, .refresh-all i {
             margin-right: 5px;
         }
     }

@@ -86,6 +86,7 @@ var actions = {
     peers.broadcast({
       type: 'REQUEST_INVENTORY'
     })
+    return {type: 'IGNORE'}
   },
 
   SEND_INVENTORY: (peerId) => {
