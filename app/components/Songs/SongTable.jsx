@@ -41,9 +41,10 @@ function SongTable ({ songs, totalSongs, playing, currentSong, options }) {
           {options.removeDownload && <th className='remove-button'/>}
         </tr>
         {songs.map((song, i) => {
+          const downloading = song.downloading || false
           const selected = song.id === currentSong
           const index = totalSongs ? totalSongs.indexOf(song) : i
-          return <SongRow key={i} song={song} songs={totalSongs || songs} index={index} playing={playing} selected={selected} options={options}/>
+          return <SongRow key={i} song={song} songs={totalSongs || songs} index={index} playing={playing} downloading={downloading} selected={selected} options={options}/>
         })}
         </tbody>
       </table>

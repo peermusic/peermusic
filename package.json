@@ -21,6 +21,7 @@
   "homepage": "https://github.com/peermusic/desktop#readme",
   "dependencies": {
     "async": "1.5.*",
+    "base64-arraybuffer": "^0.1.5",
     "classnames": "^2.2.1",
     "connect-instances": "git+https://github.com/peermusic/connect-instances.git",
     "debug": "^2.2.0",

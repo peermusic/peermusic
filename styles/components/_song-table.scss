@@ -27,7 +27,7 @@
         &:not(:first-child):hover {
             background: $background-light-gray;
 
-            .play-button a, .add-button a, .favorite-button a {
+            .play-button a, .add-button a, .favorite-button a, .download-button a {
                 visibility: visible;
             }
         }
@@ -36,7 +36,7 @@
             color: $color-dark-gray;
         }
 
-        &.desaturated {
+        &.desaturated, &.remote {
             opacity: .3;
         }
 
@@ -74,42 +74,6 @@
             color: $color-light-gray;
             text-align: center;
             opacity: .4;
-
-            &.good {
-                color: $availability-green;
-            }
-
-            &.average {
-                color: $availability-yellow;
-            }
-
-            &.bad {
-                color: $availability-red;
-            }
-
-            &.downloading {
-                @keyframes pulsate {
-                    0% {
-                        opacity: .3;
-                    }
-
-                    50% {
-                        opacity: 1;
-                    }
-
-                    100% {
-                        opacity: .3;
-                    }
-                }
-
-                animation: pulsate 4s;
-                animation-iteration-count: infinite;
-
-                i {
-                    position: relative;
-                    top: -1px;
-                }
-            }
         }
 
         .song-time {
@@ -120,7 +84,7 @@
             width: 75px;
         }
 
-        .play-button, .add-button, .favorite-button, .remove-button {
+        .play-button, .add-button, .favorite-button, .remove-button, .download-button {
             width: 25px;
             text-align: center;
         }
@@ -129,7 +93,7 @@
             width: 20px;
         }
 
-        .play-button, .add-button, .favorite-button {
+        .play-button, .add-button, .favorite-button, .download-button {
             a {
                 color: $color-gray;
                 text-decoration: none;
@@ -144,6 +108,16 @@
                 position: relative;
                 top: -1px;
             }
+        }
+
+        i.fa-refresh {
+            @keyframes spin {
+                from {-webkit-transform: rotate(0deg);}
+                to {-webkit-transform: rotate(360deg);}
+            }
+
+            animation: spin 3s;
+            animation-iteration-count: infinite;
         }
 
         .favorite-button.active a, .favorite-button.active a:hover {

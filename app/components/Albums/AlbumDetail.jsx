@@ -2,10 +2,10 @@ const React = require('react')
 const { connect } = require('react-redux')
 const SongTable = require('../Songs/SongTable.jsx')
 const { Link } = require('react-router')
-const { PLAYBACK_SONG } = require('../../actions')
+const { PLAYBACK_SONG, DOWNLOAD_ALBUM } = require('../../actions')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
 
-function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPage, PLAYBACK_SONG }) {
+function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPage, PLAYBACK_SONG, DOWNLOAD_ALBUM }) {
   if (songs.length > 0) {
     var albumDuration = Math.round(songs.map(x => x.duration).reduce((a, b) => a + b) / 60)
     var year = songs.map(s => s.year).filter(s => s)[0]
@@ -62,6 +62,12 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
               <span className='padder'>&mdash;</span>
               {albumDuration} minutes
             </h3>
+            {!artistPage && songs.filter(x => !x.local).length > 0 &&
+              <button className='download-all'
+                      onClick={() => DOWNLOAD_ALBUM(songs)}>
+                <i className='fa fa-arrow-down'/> Download all
+              </button>
+            }
             {!artistPage &&
               <button className='play-all'
                       onClick={() => PLAYBACK_SONG(songs, 0)}>
@@ -92,4 +98,4 @@ function mapStateToProps (state, ownProps) {
   }
 }
 
-module.exports = connect(mapStateToProps, {PLAYBACK_SONG})(AlbumDetail)
+module.exports = connect(mapStateToProps, {PLAYBACK_SONG, DOWNLOAD_ALBUM})(AlbumDetail)

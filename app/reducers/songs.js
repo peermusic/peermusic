@@ -12,6 +12,24 @@ const song = (state = {}, action) => {
         ...state,
         favorite: !state.favorite
       }
+    case 'TOGGLE_SONG_LOCAL':
+      if (state.id !== action.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        local: !state.local
+      }
+    case 'TOGGLE_SONG_DOWNLOADING':
+      if (state.id !== action.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        downloading: action.value || !state.downloading
+      }
     case 'SET_SONG_DURATION':
       if (state.id !== action.id) {
         return state
@@ -20,6 +38,15 @@ const song = (state = {}, action) => {
       return {
         ...state,
         duration: action.duration
+      }
+    case 'FIX_SONG_FILENAME':
+      if (state.id !== action.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        filename: action.filename
       }
     default:
       return state
@@ -42,10 +69,16 @@ const songs = (state = [], action) => {
       return state.map(s => song(s, action))
     case 'TOGGLE_SONG_FAVORITE':
       return state.map(s => song(s, action))
+    case 'TOGGLE_SONG_LOCAL':
+      return state.map(s => song(s, action))
+    case 'TOGGLE_SONG_DOWNLOADING':
+      return state.map(s => song(s, action))
     case 'REMOVE_SONG':
       return state.filter(x => x.id !== action.id)
     case 'REMOVE_PROVIDER_SONG':
       return state.filter(x => x.local || x.id !== action.id)
+    case 'FIX_SONG_FILENAME':
+      return state.map(s => song(s, action))
     case 'CLEAR_DATA':
       return []
     default:

@@ -1,7 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
-const { PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING } = require('../../actions')
+const { PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG } = require('../../actions')
 const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
@@ -17,9 +17,12 @@ class SongRow extends React.Component {
     return <th className='number'>{this.props.song.track}</th>
   }
 
-  renderPlay (playback) {
+  renderPlayAndDownload (playback, download) {
     if (!this.props.song.local) {
-      return <td className='play-button'/>
+      const downloadButton = this.props.downloading
+        ? <i className='fa fa-refresh'/>
+        : <a onClick={() => download()}><i className='fa fa-arrow-down'/></a>
+      return <td className='download-button'>{downloadButton}</td>
     }
 
     const playButton = this.props.options.activeRow && this.props.selected && this.props.playing
@@ -28,14 +31,14 @@ class SongRow extends React.Component {
     return <td className='play-button'>{playButton}</td>
   }
 
-  renderTitle (playback) {
+  renderTitle (playback, download) {
     return (
         <td className='title'>
           <div className='desktop-only'>
             {this.props.song.title}
           </div>
           <div className='mobile-only'>
-            <Tappable onTap={() => playback()}>
+            <Tappable onTap={() => this.props.song.local ? playback() : download()}>
               {this.props.song.title}
               <small>
                 {this.props.song.artist}
@@ -76,12 +79,17 @@ class SongRow extends React.Component {
       return <td className='availability'><i className='flaticon-harddrive'/></td>
     }
 
-    return <td className='availability'><i className='flaticon-download'/></td>
+    return (
+      <td className='availability'>
+        <span className='desktop-only'><i className='flaticon-download'/></span>
+        <span className='mobile-only'>{this.props.downloading ? <i className='fa fa-refresh'/> : <i className='flaticon-download'/>}</span>
+      </td>
+    )
   }
 
   renderQueue () {
     if (!this.props.song.local) {
-      return <td className='add-button'/>
+      return <td className='add-button'><a><i className='fa fa-plus'/></a></td>
     }
 
     return (
@@ -125,9 +133,18 @@ class SongRow extends React.Component {
     return () => this.props.PLAYBACK_SONG(this.props.songs, this.props.index)
   }
 
+  downloadFunction () {
+    if (this.props.song.local) {
+      return () => {}
+    }
+
+    return () => this.props.REQUEST_SONG(this.props.song.id)
+  }
+
   render () {
     // Generate a playback function based on the options
     const playback = this.playbackFunction()
+    const download = this.downloadFunction()
 
     const classes = classNames({
       active: this.props.options.activeRow && this.props.selected,
@@ -138,8 +155,8 @@ class SongRow extends React.Component {
         <tr className={classes} onDoubleClick={() => playback()}>
           {this.props.options.index ? this.renderIndex() : undefined}
           {this.props.options.track ? this.renderTrack() : undefined}
-          {this.props.options.play ? this.renderPlay(playback) : undefined}
-          {this.props.options.title ? this.renderTitle(playback) : undefined}
+          {this.props.options.play ? this.renderPlayAndDownload(playback, download) : undefined}
+          {this.props.options.title ? this.renderTitle(playback, download) : undefined}
           {this.props.options.artist ? this.renderArtist() : undefined}
           {this.props.options.album ? this.renderAlbum() : undefined}
           {this.props.options.added ? this.renderAdded() : undefined}
@@ -159,13 +176,15 @@ SongRow.propTypes = {
   songs: React.PropTypes.array,
   index: React.PropTypes.number,
   playing: React.PropTypes.bool,
+  downloading: React.PropTypes.bool,
   selected: React.PropTypes.bool,
   options: React.PropTypes.object,
   PLAYBACK_SONG: React.PropTypes.func,
   PLAYBACK_USER_QUEUE: React.PropTypes.func,
   REMOVE_SONG: React.PropTypes.func,
   TOGGLE_SONG_FAVORITE: React.PropTypes.func,
-  PLAYER_SET_PLAYING: React.PropTypes.func
+  PLAYER_SET_PLAYING: React.PropTypes.func,
+  REQUEST_SONG: React.PropTypes.func
 }
 
-module.exports = connect(null, {PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING})(SongRow)
+module.exports = connect(null, {PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG})(SongRow)

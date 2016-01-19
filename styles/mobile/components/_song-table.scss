@@ -27,7 +27,7 @@
         }
     }
 
-    .number, .play-button, .artist, .album, .creation-date, .song-time {
+    .number, .play-button, .artist, .album, .creation-date, .song-time, .download-button {
         display: none;
     }
 
@@ -35,7 +35,7 @@
         padding: 10px 5px;
     }
 
-    .play-button, .add-button, .favorite-button {
+    .play-button, .add-button, .favorite-button, .download-button {
         a {
             visibility: visible;
         }

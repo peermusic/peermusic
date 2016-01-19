@@ -1,8 +1,9 @@
+const base64 = require('base64-arraybuffer')
 const debug = require('debug')('peermusic:sync:actions')
 const events = require('events')
 const inherits = require('inherits')
 var coversActions = require('./covers.js')
-var fs = require('file-system')(['image/jpeg', 'image/jpg'])
+var fs = require('file-system')(['image/jpeg', 'image/jpg', '', 'audio/mp3', 'audio/wav', 'audio/ogg'])
 var musicSimilarity = require('music-similarity')
 
 inherits(Peers, events.EventEmitter)
@@ -39,6 +40,14 @@ var actions = {
           actions.RECEIVE_INVENTORY(data.songs, peerId)(dispatch, getState)
         },
 
+        REQUEST_SONG: () => {
+          actions.SEND_SONG(data.id, peerId)(dispatch, getState)
+        },
+
+        SEND_SONG: () => {
+          actions.RECEIVE_SONG(data.id, data.arrayBuffer, peerId)(dispatch, getState)
+        },
+
         REQUEST_COVER: () => {
           actions.SEND_COVER(data.id, data.song, peerId)(dispatch, getState)
         },
@@ -57,9 +66,8 @@ var actions = {
       }
 
       if (!networkActions[data.type]) {
-        debug('received invalid request type')
+        return debug('received invalid request type', data.type)
       }
-
       networkActions[data.type]()
     }
   },
@@ -158,7 +166,127 @@ var actions = {
   },
 
   REQUEST_SONG: (id) => {
-    return null
+    return (dispatch, getState) => {
+      var song = getState().songs.find((song) => song.id === id)
+      if (song.local) {
+        console.log('not requesting local song', id)
+        return
+      }
+
+      dispatch({
+        type: 'TOGGLE_SONG_DOWNLOADING',
+        id,
+        value: true
+      })
+
+      // remove download symbol from probably failed downloads
+      window.setTimeout(() => {
+        var song = getState().songs.find((song) => song.id === id)
+        if (song.local) return
+
+        debug('downloading song took too long, probably failed', song.title, song)
+        dispatch({
+          type: 'TOGGLE_SONG_DOWNLOADING',
+          id,
+          value: false
+        })
+      }, 1000 * 60 * 5)
+
+      var providers = getState().sync.providers[id]
+      providers.forEach((provider) => {
+        peers.send({
+          type: 'REQUEST_SONG',
+          id: id
+        }, provider)
+      })
+    }
+  },
+
+  SEND_SONG: (id, peerId, arrayBuffer) => {
+    return (dispatch, getState) => {
+      if (!arrayBuffer) {
+        var hashName = getState().songs.find((song) => song.id === id).hashName
+
+        return fs.getArrayBuffer(hashName, (err, arrayBuffer) => {
+          if (err) throw new Error('Error getting file: ' + err)
+
+          return actions.SEND_SONG(id, peerId, arrayBuffer)(dispatch, getState)
+        })
+      }
+
+      var base64String = base64.encode(arrayBuffer)
+
+      var send = true
+      var index = 1
+      var size = base64String.length
+      var chunkSize = 15000 // trial and error
+      var chunks = Math.ceil(size / chunkSize)
+      var offset = 0
+
+      peers.remotes[peerId].write('HEADER' + JSON.stringify({
+        type: 'SEND_SONG',
+        id,
+        chunks
+      }), 'utf8')
+
+      sendChunked()
+      function sendChunked () {
+        do {
+          var chunk = base64String.slice(offset, offset + chunkSize)
+          var msg = JSON.stringify({
+            type: 'SEND_SONG',
+            id: id,
+            index: index++,
+            chunk
+          })
+          send = peers.remotes[peerId].write(msg, 'utf8')
+          offset += chunkSize
+        } while (send && offset < size)
+        if (offset < size) peers.remotes[peerId].once('drain', sendChunked)
+      }
+    }
+  },
+
+  RECEIVE_SONG: (id, arrayBuffer, peerId) => {
+    return (dispatch, getState) => {
+      if (!arrayBuffer) return debug('received empty arrayBuffer')
+
+      var song = getState().songs.find((song) => song.id === id)
+      if (song.local) {
+        debug('discarding already received song')
+        return
+      }
+
+      var hashName = song.hashName
+
+      fs.addArrayBuffer({
+        filename: hashName,
+        arrayBuffer
+      }, postprocess)
+
+      function postprocess () {
+        var url = `filesystem:http://${window.location.host}/persistent/${hashName}`
+
+        dispatch({
+          type: 'FIX_SONG_FILENAME',
+          id,
+          filename: url
+        })
+
+        dispatch({
+          type: 'TOGGLE_SONG_LOCAL',
+          id
+        })
+      }
+    }
+  },
+
+  DOWNLOAD_ALBUM: (songs) => {
+    return (dispatch, getState) => {
+      songs.forEach((song) => {
+        actions.REQUEST_SONG(song.id)(dispatch, getState)
+      })
+    }
   },
 
   REQUEST_COVER: (id, song) => {
@@ -235,8 +363,53 @@ function Peers () {
 
   self.add = (peer, peerId) => {
     self.remotes[peerId] = peer
-    peer.on('data', (data) => self.emit('data', data, peerId))
-    peer.on('close', (data) => self.emit('close', peer, peerId))
+    var buffer = {}
+
+    peer.on('close', (data) => {
+      if (buffer[peerId]) delete buffer[peerId]
+      self.emit('close', peer, peerId)
+    })
+
+    peer.on('data', (data) => {
+      if (!Buffer.isBuffer(data)) {
+        self.emit('data', data, peerId)
+        return
+      }
+
+      data = data.toString()
+
+      if (data.startsWith('HEADER')) {
+        data = JSON.parse(data.replace('HEADER', ''))
+        debug('received HEADER for incoming ArrayBuffer', data)
+
+        if (!buffer[peerId]) buffer[peerId] = {}
+
+        buffer[peerId][data.id] = {
+          // type: data.type,
+          chunks: data.chunks,
+          data: ''
+        }
+        return
+      }
+
+      data = JSON.parse(data)
+      if (data.index < buffer[peerId][data.id].chunks) {
+        buffer[peerId][data.id].data += data.chunk
+        return
+      }
+
+      buffer[peerId][data.id].data += data.chunk
+      var arrayBuffer = base64.decode(buffer[peerId][data.id].data)
+
+      delete buffer[peerId][data.id]
+      if (!buffer[peerId]) delete buffer[peerId]
+
+      self.emit('data', {
+        type: 'SEND_SONG',
+        id: data.id,
+        arrayBuffer
+      }, peerId)
+    })
   }
 
   self.remove = (peerId) => {
@@ -244,6 +417,7 @@ function Peers () {
   }
 
   self.send = (data, peerId) => {
+    debug('sending to peer', peerId, data.type)
     if (!self.remotes[peerId]) {
       debug('cannot send to offline peer', peerId)
       return
