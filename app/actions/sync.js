@@ -169,7 +169,6 @@ var actions = {
     return (dispatch, getState) => {
       var song = getState().songs.find((song) => song.id === id)
       if (song.local) {
-        console.log('not requesting local song', id)
         return
       }
 
