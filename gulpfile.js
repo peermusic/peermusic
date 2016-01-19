@@ -113,8 +113,8 @@ function scssTask (deploy) {
 }
 
 // Create a appcache file from our `public/` directory
-gulp.task('manifest', function () {
-  gulp.src(['public/*'], {base: './'})
+function generateAppcache () {
+  gulp.src(['public/**/*'], {base: 'public/'})
     .pipe(manifest({
       hash: true,
       preferOnline: true,
@@ -123,7 +123,7 @@ gulp.task('manifest', function () {
       exclude: 'page.appcache'
     }))
     .pipe(gulp.dest('public'))
-})
+}
 
 // Start signalhub server on port 7000
 function startSignalhub () {
@@ -164,5 +164,5 @@ gulp.task('default', function () {
 gulp.task('deploy', function () {
   browserifyTask(true)
   scssTask(true)
-  manifest()
+  generateAppcache()
 })
