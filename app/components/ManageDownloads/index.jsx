@@ -28,9 +28,7 @@ ManageDownloads.propTypes = {
 }
 
 function mapStateToProps (state) {
-  var songs = [...state.songs.filter((song) => {
-    return state.sync.downloads.indexOf(song.id) !== -1
-  })]
+  var songs = [...state.songs.filter((song) => song.downloading)]
 
   /*
   TODO: desaturate pending - highlight running downloads

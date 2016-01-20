@@ -45,6 +45,11 @@ var actions = {
         },
 
         SEND_SONG: () => {
+          var song = getState().songs.find((song) => song.id === data.id)
+          if (!song.downloading || song.local) {
+            debug('received a song that we are no longer interested in', song)
+            return
+          }
           actions.RECEIVE_SONG(data.id, data.arrayBuffer, peerId)(dispatch, getState)
         },
 
@@ -171,9 +176,9 @@ var actions = {
       window.setTimeout(continueDownloads, timeout)
       window.setInterval(continueDownloads, interval)
       function continueDownloads () {
-        var downloads = getState().sync.downloads
-        downloads.forEach((song) => {
-          actions.REQUEST_SONG(song)(dispatch, getState)
+        var downloading = getState().songs.filter((song) => song.downloading)
+        downloading.forEach((song) => {
+          actions.REQUEST_SONG(song.id)(dispatch, getState)
         })
       }
     }
@@ -186,19 +191,15 @@ var actions = {
         return
       }
 
-      dispatch({
-        type: 'TOGGLE_SONG_DOWNLOADING',
-        id,
-        value: true
-      })
+      if (!song.downloading) {
+        dispatch({
+          type: 'TOGGLE_SONG_DOWNLOADING',
+          id
+        })
+      }
 
       var providers = getState().sync.providers[id]
       providers.forEach((provider) => {
-        dispatch({
-          type: 'PERSIST_DOWNLOAD',
-          id
-        })
-
         peers.send({
           type: 'REQUEST_SONG',
           id: id
@@ -284,7 +285,7 @@ var actions = {
         })
 
         dispatch({
-          type: 'CLEAR_DOWNLOAD',
+          type: 'TOGGLE_SONG_DOWNLOADING',
           id
         })
       }
@@ -295,12 +296,6 @@ var actions = {
     return (dispatch, getState) => {
       dispatch({
         type: 'TOGGLE_SONG_DOWNLOADING',
-        id,
-        value: false
-      })
-
-      dispatch({
-        type: 'CLEAR_DOWNLOAD',
         id
       })
     }
