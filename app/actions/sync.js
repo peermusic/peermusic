@@ -291,6 +291,21 @@ var actions = {
     }
   },
 
+  REMOVE_DOWNLOAD: (id) => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: 'TOGGLE_SONG_DOWNLOADING',
+        id,
+        value: false
+      })
+
+      dispatch({
+        type: 'CLEAR_DOWNLOAD',
+        id
+      })
+    }
+  },
+
   DOWNLOAD_ALBUM: (songs) => {
     return (dispatch, getState) => {
       songs.forEach((song) => {
