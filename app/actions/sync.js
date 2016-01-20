@@ -241,35 +241,29 @@ var actions = {
       if (stash.length >= allowedPendingDownloadsForFriends) {
         debug('list of pending downloads for friends too long - dropping oldest')
 
-        let id = stash[0]
+        var oldId = stash[0]
+        var oldSong = getState().songs.find((song) => song.id === oldId)
 
-        if (song.forFriend && !song.favorite) {
-          debug('we probably only kept that song around for a friend - deleting', song.title)
+        dispatch({
+          type: 'TOGGLE_SONG_DOWNLOADING',
+          oldId,
+          value: false
+        })
 
-          require('./songs').REMOVE_SONG(id)(dispatch, getState)
-        } else {
-          dispatch({
-            type: 'TOGGLE_SONG_FOR_FRIEND',
-            id
-          })
-          dispatch({
-            type: 'TOGGLE_SONG_DOWNLOADING',
-            id
-          })
+        if (oldSong.local && oldSong.favorite !== true) {
+          debug('we probably only kept that song around for a friend - deleting', oldSong.title)
+
+          require('./songs').REMOVE_SONG(oldId)(dispatch, getState)
         }
 
         dispatch({
           type: 'REMOVE_FROM_SONG_PROVIDING_CHRONOLOGY',
-          id
+          oldId
         })
       }
 
       dispatch({
         type: 'PUSH_TO_SONG_PROVIDING_CHRONOLOGY',
-        id
-      })
-      dispatch({
-        type: 'TOGGLE_SONG_FOR_FRIEND',
         id
       })
 

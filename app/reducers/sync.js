@@ -24,6 +24,10 @@ module.exports = (state = initialState, action) => {
       var index = state.forFriends.indexOf(action.id)
       return {...state, forFriends: [...state.forFriends.slice(0, index),
         ...state.forFriends.slice(index + 1)]}
+    },
+
+    'RESET_SONG_PROVIDING_CHRONOLOGY': () => {
+      return {...state, forFriends: []}
     }
   }
 
