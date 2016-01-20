@@ -41,6 +41,11 @@ var actions = {
         },
 
         REQUEST_SONG: () => {
+          var song = getState().songs.find((song) => song.id === data.id)
+          if (!song.local) {
+            actions.REQUEST_SONG_FOR_FRIEND(data.id)(dispatch, getState)
+            return
+          }
           actions.SEND_SONG(data.id, peerId)(dispatch, getState)
         },
 
@@ -205,6 +210,44 @@ var actions = {
           id: id
         }, provider)
       })
+    }
+  },
+
+  REQUEST_SONG_FOR_FRIEND: (id) => {
+    return (dispatch, getState) => {
+      var stash = getState().sync.forFriends
+
+      // we are already trying to download it
+      if (stash.indexOf(id) !== -1) return
+
+      // to many requests, dropping the oldest one
+      if (stash.length > 5) {
+        var oldestRequest = stash[0]
+
+        dispatch({
+          type: 'REMOVE_DOWNLOAD',
+          id: oldestRequest
+        })
+        dispatch({
+          type: 'TOGGLE_SONG_FOR_FRIEND',
+          id: oldestRequest
+        })
+
+        dispatch({
+          type: 'SHIFT_SYNC_FOR_FRIENDS'
+        })
+      }
+
+      dispatch({
+        type: 'PUSH_SYNC_FOR_FRIENDS',
+        id
+      })
+      dispatch({
+        type: 'TOGGLE_SONG_FOR_FRIEND',
+        id
+      })
+
+      actions.REQUEST_SONG(id)(dispatch, getState)
     }
   },
 
