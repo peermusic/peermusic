@@ -43,6 +43,8 @@ var actions = {
         REQUEST_SONG: () => {
           var song = getState().songs.find((song) => song.id === data.id)
           if (!song.local) {
+            debug('received request for a song we dont hold')
+
             actions.REQUEST_SONG_FOR_FRIEND(data.id)(dispatch, getState)
             return
           }
@@ -191,6 +193,8 @@ var actions = {
 
   REQUEST_SONG: (id) => {
     return (dispatch, getState) => {
+      debug('trying to download', id)
+
       var song = getState().songs.find((song) => song.id === id)
       if (song.local) {
         return
@@ -216,30 +220,51 @@ var actions = {
   REQUEST_SONG_FOR_FRIEND: (id) => {
     return (dispatch, getState) => {
       var stash = getState().sync.forFriends
+      var song = getState().songs.some((song) => song.id === id)
 
-      // we are already trying to download it
-      if (stash.indexOf(id) !== -1) return
+      if (!song) {
+        debug('peer tries to download a song we dont know yet - skipping', id)
+        return
+      }
 
-      // to many requests, dropping the oldest one
-      if (stash.length > 5) {
-        var oldestRequest = stash[0]
+      if (stash.indexOf(id) !== -1) {
+        debug('we are already trying to download the song for a friend - skipping')
+        return
+      }
+
+      if (song.downloading) {
+        debug('we are already downloading the requested song for ourselves - skipping')
+        return
+      }
+
+      if (stash.length > 0) {
+        debug('list of pending downloads for friends too long - dropping oldest')
+
+        let id = stash[0]
+
+        if (song.forFriend && !song.favorite) {
+          debug('we probably only kept that song around for a friend - deleting', song.title)
+
+          require('./songs').REMOVE_SONG(id)(dispatch, getState)
+        } else {
+          dispatch({
+            type: 'TOGGLE_SONG_FOR_FRIEND',
+            id
+          })
+          dispatch({
+            type: 'TOGGLE_SONG_DOWNLOADING',
+            id
+          })
+        }
 
         dispatch({
-          type: 'REMOVE_DOWNLOAD',
-          id: oldestRequest
-        })
-        dispatch({
-          type: 'TOGGLE_SONG_FOR_FRIEND',
-          id: oldestRequest
-        })
-
-        dispatch({
-          type: 'SHIFT_SYNC_FOR_FRIENDS'
+          type: 'REMOVE_FROM_SONG_PROVIDING_CHRONOLOGY',
+          id
         })
       }
 
       dispatch({
-        type: 'PUSH_SYNC_FOR_FRIENDS',
+        type: 'PUSH_TO_SONG_PROVIDING_CHRONOLOGY',
         id
       })
       dispatch({
@@ -339,6 +364,10 @@ var actions = {
     return (dispatch, getState) => {
       dispatch({
         type: 'TOGGLE_SONG_DOWNLOADING',
+        id
+      })
+      dispatch({
+        type: 'REMOVE_FROM_SONG_PROVIDING_CHRONOLOGY',
         id
       })
     }

@@ -11,12 +11,18 @@ module.exports = (state = initialState, action) => {
       return {...state, providers: action.providers}
     },
 
-    'SHIFT_SYNC_FOR_FRIENDS': () => {
+    'SHIFT_SONG_PROVIDING_CHRONOLOGY': () => {
       return {...state, forFriends: state.forFriends.slice(1)}
     },
 
-    'PUSH_SYNC_FOR_FRIENDS': () => {
+    'PUSH_TO_SONG_PROVIDING_CHRONOLOGY': () => {
       return {...state, forFriends: [...state.forFriends, action.id]}
+    },
+
+    'REMOVE_FROM_SONG_PROVIDING_CHRONOLOGY': () => {
+      var index = state.forFriends.indexOf(action.id)
+      return {...state, forFriends: [...state.forFriends.slice(0, index),
+        ...state.forFriends.slice(index + 1)]}
     }
   }
 
