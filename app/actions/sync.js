@@ -237,7 +237,8 @@ var actions = {
         return
       }
 
-      if (stash.length > 0) {
+      var allowedPendingDownloadsForFriends = getState().sync.allowedPendingDownloadsForFriends
+      if (stash.length >= allowedPendingDownloadsForFriends) {
         debug('list of pending downloads for friends too long - dropping oldest')
 
         let id = stash[0]

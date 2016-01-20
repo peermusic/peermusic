@@ -2,7 +2,8 @@
 
 const initialState = {
   providers: {},
-  forFriends: []
+  forFriends: [],
+  allowedPendingDownloadsForFriends: 1
 }
 
 module.exports = (state = initialState, action) => {
