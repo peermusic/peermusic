@@ -166,6 +166,19 @@ var actions = {
     return null
   },
 
+  START_DOWNLOAD_LOOP: (timeout, interval) => {
+    return (dispatch, getState) => {
+      window.setTimeout(continueDownloads, timeout)
+      window.setInterval(continueDownloads, interval)
+      function continueDownloads () {
+        var downloads = getState().sync.downloads
+        downloads.forEach((song) => {
+          actions.REQUEST_SONG(song)(dispatch, getState)
+        })
+      }
+    }
+  },
+
   REQUEST_SONG: (id) => {
     return (dispatch, getState) => {
       var song = getState().songs.find((song) => song.id === id)
@@ -179,21 +192,13 @@ var actions = {
         value: true
       })
 
-      // remove download symbol from probably failed downloads
-      window.setTimeout(() => {
-        var song = getState().songs.find((song) => song.id === id)
-        if (song.local) return
-
-        debug('downloading song took too long, probably failed', song.title, song)
-        dispatch({
-          type: 'TOGGLE_SONG_DOWNLOADING',
-          id,
-          value: false
-        })
-      }, 1000 * 60 * 5)
-
       var providers = getState().sync.providers[id]
       providers.forEach((provider) => {
+        dispatch({
+          type: 'PERSIST_DOWNLOAD',
+          id
+        })
+
         peers.send({
           type: 'REQUEST_SONG',
           id: id
@@ -275,6 +280,11 @@ var actions = {
 
         dispatch({
           type: 'TOGGLE_SONG_LOCAL',
+          id
+        })
+
+        dispatch({
+          type: 'CLEAR_DOWNLOAD',
           id
         })
       }
