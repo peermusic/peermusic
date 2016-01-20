@@ -21,9 +21,9 @@ module.exports = (state = initialState, action) => {
     },
 
     'REMOVE_FROM_SONG_PROVIDING_CHRONOLOGY': () => {
-      var index = state.forFriends.indexOf(action.id)
-      return {...state, forFriends: [...state.forFriends.slice(0, index),
-        ...state.forFriends.slice(index + 1)]}
+      var index = state.forFriends.indexOf(action.id) + 1
+      return {...state, forFriends: [...state.forFriends.slice(0, index - 1),
+        ...state.forFriends.slice(index)]}
     },
 
     'RESET_SONG_PROVIDING_CHRONOLOGY': () => {

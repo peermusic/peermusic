@@ -42,7 +42,7 @@ var actions = {
 
         REQUEST_SONG: () => {
           var song = getState().songs.find((song) => song.id === data.id)
-          if (!song.local) {
+          if (!song || !song.local) {
             debug('received request for a song we dont hold')
 
             actions.REQUEST_SONG_FOR_FRIEND(data.id)(dispatch, getState)
@@ -246,7 +246,7 @@ var actions = {
 
         dispatch({
           type: 'TOGGLE_SONG_DOWNLOADING',
-          oldId,
+          id: oldId,
           value: false
         })
 
@@ -258,7 +258,7 @@ var actions = {
 
         dispatch({
           type: 'REMOVE_FROM_SONG_PROVIDING_CHRONOLOGY',
-          oldId
+          id: oldId
         })
       }
 
@@ -361,10 +361,12 @@ var actions = {
         type: 'TOGGLE_SONG_DOWNLOADING',
         id
       })
-      dispatch({
-        type: 'REMOVE_FROM_SONG_PROVIDING_CHRONOLOGY',
-        id
-      })
+      if (getState().sync.forFriends.indexOf(id) !== -1) {
+        dispatch({
+          type: 'REMOVE_FROM_SONG_PROVIDING_CHRONOLOGY',
+          id
+        })
+      }
     }
   },
 
