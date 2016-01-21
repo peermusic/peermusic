@@ -26,7 +26,7 @@ textarea {
 
 select {
     padding: 6px 25px 6px 10px;
-    background: url('../assets/dropdown.png') no-repeat 90% 0;
+    background: $background-dark-gray url('../assets/dropdown.png') no-repeat 90% 0;
     -webkit-appearance: none;
 }
 
