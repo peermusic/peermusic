@@ -66,6 +66,31 @@ select {
             top: -1px;
         }
     }
+
+    .notification {
+        position: absolute;
+        top: 4px;
+        right: 47px;
+        padding: 3px 10px 4px;
+        border: 1px solid $background-gray;
+        border-radius: 2px;
+        background: $background-gray;
+        color: $color-gray;
+        font-size: 13px;
+        text-align: center;
+
+        &::after {
+            position: absolute;
+            top: 5px;
+            right: -10px;
+            width: 0;
+            height: 0;
+            border-width: 6px 0 6px 10.4px;
+            border-style: solid;
+            border-color: transparent transparent transparent $background-gray;
+            content: '';
+        }
+    }
 }
 
 input[type='submit'], input[type='button'], button, .fake-file-input {

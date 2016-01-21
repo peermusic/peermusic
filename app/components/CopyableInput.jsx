@@ -1,6 +1,13 @@
 const React = require('react')
 
 class CopyableInput extends React.Component {
+  constructor () {
+    super()
+    this.state = {
+      notification: false
+    }
+  }
+
   copy () {
     let element = document.createElement('textarea')
 
@@ -21,6 +28,11 @@ class CopyableInput extends React.Component {
     element.select()
     document.execCommand('copy')
     document.body.removeChild(element)
+    this.setState({notification: true})
+
+    window.setTimeout(() => {
+      this.setState({notification: false})
+    }, 3000)
   }
 
   render () {
@@ -28,6 +40,7 @@ class CopyableInput extends React.Component {
       <div className='copyable-input'>
         <input type='text' value={this.props.value} readOnly onFocus={e => e.target.select()}/>
         <a className='copy-button' onClick={() => this.copy()}><i className='fa fa-copy'/></a>
+        {this.state.notification && <div className='notification'>Copied to clipboard!</div>}
       </div>
     )
   }
