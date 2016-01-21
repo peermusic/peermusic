@@ -1,7 +1,6 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const SongTable = require('../Songs/SongTable.jsx')
-var shuffle = require('shuffle-array')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
 
 class ManageDownloads extends React.Component {
@@ -29,15 +28,15 @@ ManageDownloads.propTypes = {
 }
 
 function mapStateToProps (state) {
-  // TODO map the currently downloading songs to the property instead of this demo stuff :)
-  var songs = [...state.songs]
-  shuffle(songs)
+  var songs = [...state.songs.filter((song) => song.downloading)]
 
-  songs = songs.slice(0, 15)
+  /*
+  TODO: desaturate pending - highlight running downloads
   songs = songs.map((s, i) => ({
     ...s,
     desaturated: i > songs.length * 0.33
   }))
+  */
   return {songs: songs}
 }
 
