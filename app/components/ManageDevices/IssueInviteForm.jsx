@@ -31,15 +31,15 @@ class IssueInviteForm extends React.Component {
           </label>
           <input type='text' placeholder='Alice from Work' ref='description'/>
         </div>
-        <div className='no-border'>
+        <div>
           <label>
-            HUB URL
+            Hub url
           </label>
           <input type='text' placeholder='http://localhost:7000' ref='hubUrl'/>
         </div>
         <div className='no-border'>
           <label>
-            SHARING LEVEL
+            Sharing level
           </label>
           <select defaultValue='FRIENDS' ref='sharingLevel'>
             <option value='LEECH'>leech</option>

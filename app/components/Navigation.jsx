@@ -14,7 +14,7 @@ function Navigation ({ routing, TOGGLE_MOBILE_NAVIGATION }) {
 
   var songLinkClasses = classNames('flaticon-songs', {selected: routing.path.indexOf('/songs') === 0})
   var friendsLinkClasses = classNames('flaticon-friends', {selected: routing.path.indexOf('/manage-friends') === 0})
-  var devicesLinkClasses = classNames('flaticon-friends', {selected: routing.path.indexOf('/manage-devices') === 0})
+  var devicesLinkClasses = classNames('flaticon-devices', {selected: routing.path.indexOf('/manage-devices') === 0})
   var manageServersLinkClasses = classNames('flaticon-servers', {selected: routing.path.indexOf('/manage-servers') === 0})
 
   return (
