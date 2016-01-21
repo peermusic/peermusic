@@ -33,12 +33,6 @@ class IssueInviteForm extends React.Component {
         </div>
         <div>
           <label>
-            Hub url
-          </label>
-          <input type='text' placeholder='http://localhost:7000' ref='hubUrl'/>
-        </div>
-        <div className='no-border'>
-          <label>
             Sharing level
           </label>
           <select defaultValue='FRIENDS' ref='sharingLevel'>
@@ -47,6 +41,12 @@ class IssueInviteForm extends React.Component {
             <option value='FRIENDS'>friends</option>
             <option value='PUBLIC'>public</option>
           </select>
+        </div>
+        <div className='no-border'>
+          <label>
+            Hub url
+          </label>
+          <input type='text' placeholder='http://localhost:7000' ref='hubUrl'/>
         </div>
 
         <div className='no-border'>
