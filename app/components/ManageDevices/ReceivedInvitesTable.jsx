@@ -1,6 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
+const CopyableInput = require('../CopyableInput.jsx')
 const { DISCARD_RECEIVED_INVITE } = require('../../actions')
 
 function ReceivedInvitesTable ({ receivedInvitesList, DISCARD_RECEIVED_INVITE }) {
@@ -22,7 +23,7 @@ function ReceivedInvitesTable ({ receivedInvitesList, DISCARD_RECEIVED_INVITE })
               <td className={descriptionClass}>{invite.description || 'No description'}</td>
               <td className={inviteClass}>
                 <span className='mobile-column-heading mobile-only'>{invite.description || 'No description'}</span>
-                <input type='text' value={invite.theirPubKey || '—'} readOnly/>
+                <CopyableInput value={invite.theirPubKey || '—'}/>
               </td>
               <td className='remove-button'><a onClick={() => DISCARD_RECEIVED_INVITE(i)}><i className='fa fa-trash'/></a></td>
             </tr>

@@ -30,6 +30,44 @@ select {
     -webkit-appearance: none;
 }
 
+.copyable-input {
+    position: relative;
+    max-width: 500px;
+
+    input {
+        width: 100% !important;
+        padding-right: 45px;
+        box-sizing: border-box;
+    }
+
+    input:focus + a {
+        border-color: $color-brand;
+    }
+
+    a {
+        display: flex;
+        position: absolute;
+        top: 0;
+        right: 0;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 100%;
+        border: 1px solid $background-light-gray;
+        border-left: 0;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+        background: $background-gray;
+        color: $color-light-gray;
+        box-sizing: border-box;
+
+        i {
+            position: relative;
+            top: -1px;
+        }
+    }
+}
+
 input[type='submit'], input[type='button'], button, .fake-file-input {
     display: inline-block;
     padding: 6px 15px;
