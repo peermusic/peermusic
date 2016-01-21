@@ -25,3 +25,4 @@ rules:
   force-attribute-nesting: 0
   force-pseudo-nesting: 0
   no-important: 0
+  placeholder-in-extend: 0

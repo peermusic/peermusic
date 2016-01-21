@@ -125,6 +125,19 @@
             visibility: visible;
         }
 
+        .hover-pause:hover i {
+            @extend .fa-pause;
+        }
+
+        .title > div.desktop-only,
+        .title > div.mobile-only > span {
+            display: block;
+            position: relative;
+            top: -10px;
+            margin-bottom: -20px;
+            padding: 10px 0;
+        }
+
         // Specific styles for cells when active
         &.active {
             .title, .artist, .album, .play-button {

@@ -27,15 +27,17 @@ class SongRow extends React.Component {
     }
 
     const playButton = this.props.options.activeRow && this.props.selected && this.props.playing
-        ? <i className='fa fa-volume-up'/>
+        ? <a onClick={() => this.props.PLAYER_SET_PLAYING(false)} className='hover-pause'><i className='fa fa-volume-up'/></a>
         : <a onClick={() => playback()}><i className='fa fa-play'/></a>
     return <td className='play-button'>{playButton}</td>
   }
 
   renderTitle (playback, download) {
+    let localAction = this.props.options.activeRow && this.props.selected && this.props.playing ? () => this.props.PLAYER_SET_PLAYING(false) : () => playback()
+    let action = !this.props.song.local ? () => download() : localAction
     return (
         <td className='title'>
-          <div className='desktop-only'>
+          <div className='desktop-only' onClick={() => action()}>
             {this.props.song.title}
           </div>
           <div className='mobile-only'>
