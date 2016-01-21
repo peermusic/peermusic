@@ -15,7 +15,7 @@ class ReceiveInviteForm extends React.Component {
       return
     }
 
-    this.props.RECEIVE_INVITE(description.value, friendUrl.value)
+    this.props.RECEIVE_INVITE(description.value, friendUrl.value, true)
 
     description.value = ''
     friendUrl.value = ''

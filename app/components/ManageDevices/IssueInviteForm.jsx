@@ -13,7 +13,7 @@ class IssueInviteForm extends React.Component {
 
     this.props.ISSUE_INVITE(description.value,
       hubUrl.value ? hubUrl.value : 'localhost:7000',
-      'ownDevice', sharingLevel.value
+      true, sharingLevel.value
     )
 
     description.value = ''

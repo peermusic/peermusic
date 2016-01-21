@@ -56,7 +56,7 @@ module.exports = connect(
     (state) => ({
       devices: state.devices,
       issuedInvitesList: state.instances.issuedInvitesList.filter((invite) => {
-        return invite.ownDevice
+        return invite.ownInstance
       }),
       receivedInvitesList: state.instances.receivedInvitesList
     })

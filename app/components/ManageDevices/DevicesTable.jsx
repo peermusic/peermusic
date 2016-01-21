@@ -3,7 +3,7 @@ const { connect } = require('react-redux')
 const classNames = require('classnames')
 const { REMOVE_PEER } = require('../../actions')
 
-function FriendsTable ({ friends, REMOVE_PEER }) {
+function DevicesTable ({ devices, REMOVE_PEER }) {
   return (
       <table className='song-table no-borders'>
         <tbody>
@@ -13,17 +13,17 @@ function FriendsTable ({ friends, REMOVE_PEER }) {
           <th>Device ID</th>
           <th className='remove-button'/>
         </tr>
-        {friends.map((friend, i) => {
-          var descriptionClass = classNames('desktop-only', {inactive: !friend.description})
+        {devices.map((device, i) => {
+          var descriptionClass = classNames('desktop-only', {inactive: !device.description})
           return (
               <tr key={i}>
                 <td className='number'>{i + 1}</td>
-                <td className={descriptionClass}>{friend.description || '—'}</td>
+                <td className={descriptionClass}>{device.description || '—'}</td>
                 <td className='break-cell'>
-                  <span className='mobile-column-heading mobile-only'>{friend.description || 'No description'}</span>
-                  {friend.peerId}
+                  <span className='mobile-column-heading mobile-only'>{device.description || 'No description'}</span>
+                  {device.peerId}
                 </td>
-                <td className='remove-button'><a onClick={() => REMOVE_PEER(friend.peerId)}><i className='fa fa-trash'/></a></td>
+                <td className='remove-button'><a onClick={() => REMOVE_PEER(device.peerId)}><i className='fa fa-trash'/></a></td>
               </tr>
           )
         })}
@@ -32,4 +32,4 @@ function FriendsTable ({ friends, REMOVE_PEER }) {
   )
 }
 
-module.exports = connect(null, {REMOVE_PEER})(FriendsTable)
+module.exports = connect(null, {REMOVE_PEER})(DevicesTable)

@@ -23,7 +23,7 @@ const instances = (state = initialState, action) => {
         description: action.description,
         sharedSignPubKey: action.sharedSignPubKey,
         uri: action.uri,
-        ownDevice: action.ownDevice,
+        ownInstance: action.ownInstance,
         sharingLevel: action.sharingLevel
       }]
       const issuedInvites = [...state.issuedInvites, action.sharedSignPubKey]
@@ -33,7 +33,8 @@ const instances = (state = initialState, action) => {
     RECEIVE_INVITE: () => {
       const receivedInvitesList = [...state.receivedInvitesList, {
         description: action.description,
-        theirPubKey: action.theirPubKey
+        theirPubKey: action.theirPubKey,
+        ownInstance: action.ownInstance
       }]
       const receivedInvites = {...state.receivedInvites, ...action.invite}
       return {...state, receivedInvitesList, receivedInvites}

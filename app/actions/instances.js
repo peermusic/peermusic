@@ -51,15 +51,15 @@ var actions = {
     }
   },
 
-  ISSUE_INVITE: (description, hubUrl, ownDevice, sharingLevel) => {
+  ISSUE_INVITE: (description, hubUrl, ownInstance = false, sharingLevel) => {
     var invite = connections.issueInvite(hubUrl)
     return (dispatch) => {
       dispatch({
         type: 'ISSUE_INVITE',
         description,
         sharedSignPubKey: invite[0],
-        uri: invite[1],
-        ownDevice: (ownDevice === 'ownDevice'),
+        uri: invite[1].replace('INVITE', ownInstance ? 'DEVICE' : 'FRIEND'),
+        ownInstance: ownInstance,
         sharingLevel
       })
       dispatch({
@@ -69,15 +69,27 @@ var actions = {
     }
   },
 
-  RECEIVE_INVITE: (description, uri) => {
-    var invite = connections.receiveInvite(uri)
+  RECEIVE_INVITE: (description, uri, ownInstance = false) => {
     return (dispatch) => {
+      if (ownInstance && uri.indexOf('DEVICE') === -1) {
+        debug('probably tried to add a FRIEND invite URL under devices - skipping')
+        return
+      }
+      if (!ownInstance && uri.indexOf('FRIEND') === -1) {
+        debug('probably tried to add a DEVICE invite URL under friends - skipping')
+        return
+      }
+
+      var invite = connections.receiveInvite(uri)
+
       dispatch({
         type: 'RECEIVE_INVITE',
         description,
         theirPubKey: invite[1],
-        invite: invite[2]
+        invite: invite[2],
+        ownInstance
       })
+
       dispatch({
         type: 'ADD_HUB_URL',
         hubUrl: invite[0]
@@ -124,12 +136,11 @@ var actions = {
         sharedSignPubKey
       })
 
-      if (invite.ownDevice) {
+      if (invite.ownInstance) {
         dispatch({
           type: 'ADD_DEVICE',
           description: invite.description,
-          peerId,
-          sharingLevel: invite.sharingLevel
+          peerId
         })
         return
       }
