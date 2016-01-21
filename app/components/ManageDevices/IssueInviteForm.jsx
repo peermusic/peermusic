@@ -25,19 +25,13 @@ class IssueInviteForm extends React.Component {
   render () {
     return (
       <form className='pretty-form' onSubmit={(e) => this.onSubmit(e)}>
-        <div>
+        <div className='no-border'>
           <label>
             Description
           </label>
           <input type='text' placeholder='Alice from Work' ref='description'/>
         </div>
-        <div className='no-border'>
-          <label>
-            HUB URL
-          </label>
-          <input type='text' placeholder='http://localhost:7000' ref='hubUrl'/>
-        </div>
-        <div className='no-border'>
+        <div>
           <label>
             SHARING LEVEL
           </label>
@@ -47,6 +41,12 @@ class IssueInviteForm extends React.Component {
             <option value='FRIENDS'>friends</option>
             <option value='PUBLIC'>public</option>
           </select>
+        </div>
+        <div className='no-border'>
+          <label>
+            HUB URL
+          </label>
+          <input type='text' placeholder='http://localhost:7000' ref='hubUrl'/>
         </div>
 
         <div className='no-border'>
