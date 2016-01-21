@@ -24,7 +24,7 @@ function IssuedInvitesTable ({ issuedInvitesList, DISCARD_ISSUED_INVITE }) {
                 <span className='mobile-column-heading mobile-only'>{invite.description || 'No description'}</span>
                 <input type='text' value={invite.uri || '—'} readOnly onFocus={e => e.target.select()}/>
               </td>
-              <td className='remove-button'><a onClick={() => DISCARD_ISSUED_INVITE(i)}><i className='fa fa-trash'/></a></td>
+              <td className='remove-button'><a onClick={() => DISCARD_ISSUED_INVITE(invite.sharedSignPubKey)}><i className='fa fa-trash'/></a></td>
             </tr>
           )
         })}

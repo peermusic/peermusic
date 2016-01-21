@@ -51,7 +51,7 @@ var actions = {
     }
   },
 
-  ISSUE_INVITE: (description, hubUrl, ownDevice = false, sharingLevel) => {
+  ISSUE_INVITE: (description, hubUrl, ownDevice, sharingLevel) => {
     var invite = connections.issueInvite(hubUrl)
     return (dispatch) => {
       dispatch({
@@ -59,7 +59,7 @@ var actions = {
         description,
         sharedSignPubKey: invite[0],
         uri: invite[1],
-        ownDevice,
+        ownDevice: (ownDevice === 'ownDevice'),
         sharingLevel
       })
       dispatch({
@@ -94,11 +94,11 @@ var actions = {
     }
   },
 
-  DISCARD_ISSUED_INVITE: (index) => {
+  DISCARD_ISSUED_INVITE: (sharedSignPubKey) => {
     return (dispatch) => {
       dispatch({
         type: 'DISCARD_ISSUED_INVITE',
-        index
+        sharedSignPubKey
       })
     }
   },
@@ -142,14 +142,20 @@ var actions = {
     }
   },
 
-  REMOVE_PEER: (peerId, index) => {
+  REMOVE_PEER: (peerId) => {
     return (dispatch) => {
       dispatch({
-        type: 'REMOVE_FRIEND',
-        index
-      })
-      dispatch({
         type: 'REMOVE_PEER',
+        peerId
+      })
+
+      dispatch({
+        type: 'REMOVE_DEVICE',
+        peerId
+      })
+
+      dispatch({
+        type: 'REMOVE_FRIEND',
         peerId
       })
     }

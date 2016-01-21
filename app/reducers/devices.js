@@ -19,7 +19,9 @@ const devices = (state = [], action) => {
       debug('adding device')
       return [...state, device(undefined, action)]
     case 'REMOVE_DEVICE':
-      return [...state.slice(0, action.index), ...state.slice(action.index + 1)]
+      var index = state.findIndex((device) => device.peerId = action.peerId)
+      if (index === -1) return state
+      return [...state.slice(0, index), ...state.slice(index + 1)]
     default:
       return state
   }

@@ -55,7 +55,9 @@ function ManageDevices ({ devices, issuedInvitesList, receivedInvitesList }) {
 module.exports = connect(
     (state) => ({
       devices: state.devices,
-      issuedInvitesList: state.instances.issuedInvitesList,
+      issuedInvitesList: state.instances.issuedInvitesList.filter((invite) => {
+        return invite.ownDevice
+      }),
       receivedInvitesList: state.instances.receivedInvitesList
     })
 )(ManageDevices)

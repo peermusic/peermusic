@@ -18,7 +18,9 @@ const friends = (state = [], action) => {
       debug('adding friend')
       return [...state, friend(undefined, action)]
     case 'REMOVE_FRIEND':
-      return [...state.slice(0, action.index), ...state.slice(action.index + 1)]
+      var index = state.findIndex((friend) => friend.peerId = action.peerId)
+      if (index === -1) return state
+      return [...state.slice(0, index), ...state.slice(index + 1)]
     default:
       return state
   }
