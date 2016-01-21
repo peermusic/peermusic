@@ -20,7 +20,7 @@ class SongRow extends React.Component {
 
   renderPlayAndDownload (playback, download) {
     if (!this.props.song.local) {
-      const downloadButton = this.props.downloading
+      const downloadButton = this.props.song.downloading
         ? <i className='fa fa-refresh'/>
         : <a onClick={() => download()}><i className='fa fa-arrow-down'/></a>
       return <td className='download-button'>{downloadButton}</td>
@@ -83,7 +83,7 @@ class SongRow extends React.Component {
     return (
       <td className='availability'>
         <span className='desktop-only'><i className='flaticon-download'/></span>
-        <span className='mobile-only'>{this.props.downloading ? <i className='fa fa-refresh'/> : <i className='flaticon-download'/>}</span>
+        <span className='mobile-only'>{this.props.song.downloading ? <i className='fa fa-refresh'/> : <i className='flaticon-download'/>}</span>
       </td>
     )
   }
@@ -149,7 +149,7 @@ class SongRow extends React.Component {
 
     const classes = classNames({
       active: this.props.options.activeRow && this.props.selected,
-      desaturated: this.props.song.desaturated || !this.props.song.local
+      desaturated: this.props.song.desaturated || this.props.options.desaturateRemote && !this.props.song.local
     })
 
     return (
@@ -177,7 +177,6 @@ SongRow.propTypes = {
   songs: React.PropTypes.array,
   index: React.PropTypes.number,
   playing: React.PropTypes.bool,
-  downloading: React.PropTypes.bool,
   selected: React.PropTypes.bool,
   options: React.PropTypes.object,
   PLAYBACK_SONG: React.PropTypes.func,

@@ -6,7 +6,7 @@ const MobilePageHeader = require('../MobilePageHeader.jsx')
 class ManageDownloads extends React.Component {
   render () {
     const { songs } = this.props
-    const options = {activeRow: false, play: false, queue: false, favorite: false, removeDownload: true}
+    const options = {activeRow: false, play: false, queue: false, favorite: false, desaturateRemote: false, removeDownload: true}
     const songDisplay = songs.length > 0 ? <SongTable songs={songs} options={options}/> : <h3>You are currently not downloading anything.</h3>
 
     return (
@@ -29,14 +29,6 @@ ManageDownloads.propTypes = {
 
 function mapStateToProps (state) {
   var songs = [...state.songs.filter((song) => song.downloading)]
-
-  /*
-  TODO: desaturate pending - highlight running downloads
-  songs = songs.map((s, i) => ({
-    ...s,
-    desaturated: i > songs.length * 0.33
-  }))
-  */
   return {songs: songs}
 }
 
