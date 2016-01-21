@@ -51,14 +51,16 @@ var actions = {
     }
   },
 
-  ISSUE_INVITE: (description, hubUrl) => {
+  ISSUE_INVITE: (description, hubUrl, ownDevice = false, sharingLevel) => {
     var invite = connections.issueInvite(hubUrl)
     return (dispatch) => {
       dispatch({
         type: 'ISSUE_INVITE',
         description,
         sharedSignPubKey: invite[0],
-        uri: invite[1]
+        uri: invite[1],
+        ownDevice,
+        sharingLevel
       })
       dispatch({
         type: 'ADD_HUB_URL',
@@ -117,14 +119,25 @@ var actions = {
       }
 
       dispatch({
-        type: 'ADD_FRIEND',
-        description: invite.description,
-        peerId
-      })
-      dispatch({
         type: 'INVITE_VALIDATED',
         peerId,
         sharedSignPubKey
+      })
+
+      if (invite.ownDevice) {
+        dispatch({
+          type: 'ADD_DEVICE',
+          description: invite.description,
+          peerId,
+          sharingLevel: invite.sharingLevel
+        })
+        return
+      }
+
+      dispatch({
+        type: 'ADD_FRIEND',
+        description: invite.description,
+        peerId
       })
     }
   },

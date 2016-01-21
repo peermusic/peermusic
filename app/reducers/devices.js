@@ -5,7 +5,8 @@ const device = (state = {}, action) => {
     case 'ADD_DEVICE':
       return {
         description: !action.description || action.description === '' ? null : action.description,
-        peerId: action.peerId
+        peerId: action.peerId,
+        sharingLevel: action.sharingLevel
       }
     default:
       return state

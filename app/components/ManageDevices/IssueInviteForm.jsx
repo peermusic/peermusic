@@ -1,7 +1,7 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
 const { connect } = require('react-redux')
-const { ADD_FRIEND, ISSUE_INVITE } = require('../../actions')
+const { ISSUE_INVITE } = require('../../actions')
 
 class IssueInviteForm extends React.Component {
   onSubmit (e) {
@@ -35,6 +35,17 @@ class IssueInviteForm extends React.Component {
           </label>
           <input type='text' placeholder='http://localhost:7000' ref='hubUrl'/>
         </div>
+        <div className='no-border'>
+          <label>
+            SHARING LEVEL
+          </label>
+          <select defaultValue='FRIENDS' ref='sharingLevel'>
+            <option value='LEECH'>leech</option>
+            <option value='PRIVATE'>private</option>
+            <option value='FRIENDS'>friends</option>
+            <option value='PUBLIC'>public</option>
+          </select>
+        </div>
 
         <div className='no-border'>
           <input type='submit' value='Generate an Invite'/>
@@ -45,8 +56,7 @@ class IssueInviteForm extends React.Component {
 }
 
 IssueInviteForm.propTypes = {
-  ADD_FRIEND: React.PropTypes.func,
   ISSUE_INVITE: React.PropTypes.func
 }
 
-module.exports = connect(null, {ADD_FRIEND, ISSUE_INVITE})(IssueInviteForm)
+module.exports = connect(null, {ISSUE_INVITE})(IssueInviteForm)
