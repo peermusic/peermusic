@@ -24,7 +24,11 @@ class ProtocolHandler extends React.Component {
     this.props.pushPath('/manage-servers/scraping?default=' + encodeURIComponent(uri))
   }
 
-  handleInvite (uri) {
+  handleInvite (uri, ownInstance = false) {
+    if (ownInstance) {
+      this.props.pushPath('/manage-devices/receive?default=' + encodeURIComponent(uri))
+      return
+    }
     this.props.pushPath('/manage-friends/receive?default=' + encodeURIComponent(uri))
   }
 
@@ -39,7 +43,10 @@ class ProtocolHandler extends React.Component {
       case 'SCRAPING':
         this.handleScraping(uri)
         break
-      case 'INVITE':
+      case 'DEVICE':
+        this.handleInvite(uri, true)
+        break
+      case 'FRIEND':
         this.handleInvite(uri)
         break
       default:
