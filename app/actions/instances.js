@@ -51,14 +51,16 @@ var actions = {
     }
   },
 
-  ISSUE_INVITE: (description, hubUrl) => {
+  ISSUE_INVITE: (description, hubUrl, ownInstance = false, sharingLevel) => {
     var invite = connections.issueInvite(hubUrl)
     return (dispatch) => {
       dispatch({
         type: 'ISSUE_INVITE',
         description,
         sharedSignPubKey: invite[0],
-        uri: invite[1]
+        uri: invite[1].replace('INVITE', ownInstance ? 'DEVICE' : 'FRIEND'),
+        ownInstance: ownInstance,
+        sharingLevel
       })
       dispatch({
         type: 'ADD_HUB_URL',
@@ -67,15 +69,27 @@ var actions = {
     }
   },
 
-  RECEIVE_INVITE: (description, uri) => {
-    var invite = connections.receiveInvite(uri)
+  RECEIVE_INVITE: (description, uri, ownInstance = false) => {
     return (dispatch) => {
+      if (ownInstance && uri.indexOf('DEVICE') === -1) {
+        debug('probably tried to add a FRIEND invite URL under devices - skipping')
+        return
+      }
+      if (!ownInstance && uri.indexOf('FRIEND') === -1) {
+        debug('probably tried to add a DEVICE invite URL under friends - skipping')
+        return
+      }
+
+      var invite = connections.receiveInvite(uri)
+
       dispatch({
         type: 'RECEIVE_INVITE',
         description,
         theirPubKey: invite[1],
-        invite: invite[2]
+        invite: invite[2],
+        ownInstance
       })
+
       dispatch({
         type: 'ADD_HUB_URL',
         hubUrl: invite[0]
@@ -92,11 +106,11 @@ var actions = {
     }
   },
 
-  DISCARD_ISSUED_INVITE: (index) => {
+  DISCARD_ISSUED_INVITE: (sharedSignPubKey) => {
     return (dispatch) => {
       dispatch({
         type: 'DISCARD_ISSUED_INVITE',
-        index
+        sharedSignPubKey
       })
     }
   },
@@ -117,26 +131,42 @@ var actions = {
       }
 
       dispatch({
-        type: 'ADD_FRIEND',
-        description: invite.description,
-        peerId
-      })
-      dispatch({
         type: 'INVITE_VALIDATED',
         peerId,
         sharedSignPubKey
       })
+
+      if (invite.ownInstance) {
+        dispatch({
+          type: 'ADD_DEVICE',
+          description: invite.description,
+          peerId
+        })
+        return
+      }
+
+      dispatch({
+        type: 'ADD_FRIEND',
+        description: invite.description,
+        peerId
+      })
     }
   },
 
-  REMOVE_PEER: (peerId, index) => {
+  REMOVE_PEER: (peerId) => {
     return (dispatch) => {
       dispatch({
-        type: 'REMOVE_FRIEND',
-        index
-      })
-      dispatch({
         type: 'REMOVE_PEER',
+        peerId
+      })
+
+      dispatch({
+        type: 'REMOVE_DEVICE',
+        peerId
+      })
+
+      dispatch({
+        type: 'REMOVE_FRIEND',
         peerId
       })
     }

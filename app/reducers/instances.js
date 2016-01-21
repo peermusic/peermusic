@@ -22,7 +22,9 @@ const instances = (state = initialState, action) => {
       const issuedInvitesList = [...state.issuedInvitesList, {
         description: action.description,
         sharedSignPubKey: action.sharedSignPubKey,
-        uri: action.uri
+        uri: action.uri,
+        ownInstance: action.ownInstance,
+        sharingLevel: action.sharingLevel
       }]
       const issuedInvites = [...state.issuedInvites, action.sharedSignPubKey]
       return {...state, issuedInvitesList, issuedInvites}
@@ -31,7 +33,8 @@ const instances = (state = initialState, action) => {
     RECEIVE_INVITE: () => {
       const receivedInvitesList = [...state.receivedInvitesList, {
         description: action.description,
-        theirPubKey: action.theirPubKey
+        theirPubKey: action.theirPubKey,
+        ownInstance: action.ownInstance
       }]
       const receivedInvites = {...state.receivedInvites, ...action.invite}
       return {...state, receivedInvitesList, receivedInvites}
@@ -63,9 +66,12 @@ const instances = (state = initialState, action) => {
     },
 
     DISCARD_ISSUED_INVITE: () => {
+      const index = state.issuedInvitesList.findIndex((invite) => {
+        return invite.sharedSignPubKey === action.sharedSignPubKey
+      })
       const issuedInvitesList = [
-        ...state.issuedInvitesList.slice(0, action.index),
-        ...state.issuedInvitesList.slice(action.index + 1)
+        ...state.issuedInvitesList.slice(0, index),
+        ...state.issuedInvitesList.slice(index + 1)
       ]
       return {...state, issuedInvitesList}
     },

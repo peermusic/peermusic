@@ -8,6 +8,7 @@ var reducers = {
   scrapingServers: require('./scrapingServers.js'),
   covers: require('./covers.js'),
   friends: require('./friends.js'),
+  devices: require('./devices.js'),
   instances: require('./instances.js'),
   sync: require('./sync.js')
 }

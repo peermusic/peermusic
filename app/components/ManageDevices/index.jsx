@@ -4,17 +4,17 @@ const ReceiveInviteForm = require('./ReceiveInviteForm.jsx')
 const ReceivedInvitesTable = require('./ReceivedInvitesTable.jsx')
 const IssueInviteForm = require('./IssueInviteForm.jsx')
 const IssuedInvitesTable = require('./IssuedInvitesTable.jsx')
-const FriendsTable = require('./FriendsTable.jsx')
+const DevicesTable = require('./DevicesTable.jsx')
 const HorizontalNavigation = require('../HorizontalNavigation.jsx')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
 
-function ManageFriends ({ friends, issuedInvitesList, receivedInvitesList }) {
-  const friendsView = (
+function ManageDevices ({ devices, issuedInvitesList, receivedInvitesList }) {
+  const devicesView = (
       <div>
-        {friends.length > 0 ? <FriendsTable friends={friends}/>
+        {devices.length > 0 ? <DevicesTable devices={devices}/>
             : <div>
-                <h3>No friends authenticated yet.</h3>
-                <p>To authenticate friends, create a new invite on the "issue invites" page, send the resulting URL to a friend and let him paste the URL into the "recieve invites" page.</p>
+                <h3>No devices authenticated yet.</h3>
+                <p>To authenticate devices, create a new invite on the "issue invites" page and paste the resulting URL into the "recieve invites" page on your other device.</p>
               </div>}
       </div>
   )
@@ -36,16 +36,16 @@ function ManageFriends ({ friends, issuedInvitesList, receivedInvitesList }) {
   )
 
   const views = [
-    {path: '/manage-friends/authenticated', name: 'Authenticated Friends (' + friends.length + ')', content: friendsView},
-    {path: '/manage-friends/issue', name: 'Issue Invites (' + issuedInvitesList.length + ')', content: issueView},
-    {path: '/manage-friends/receive', name: 'Receive Invites (' + receivedInvitesList.length + ')', content: receiveView}
+    {path: '/manage-devices/authenticated', name: 'Authenticated Devices (' + devices.length + ')', content: devicesView},
+    {path: '/manage-devices/issue', name: 'Issue Invites (' + issuedInvitesList.length + ')', content: issueView},
+    {path: '/manage-devices/receive', name: 'Receive Invites (' + receivedInvitesList.length + ')', content: receiveView}
   ]
 
   return (
       <div>
-        <MobilePageHeader title='Manage friends'/>
+        <MobilePageHeader title='Manage devices'/>
         <div className='page-heading'>
-          <h2>Manage friends</h2>
+          <h2>Manage devices</h2>
         </div>
         <HorizontalNavigation views={views}/>
       </div>
@@ -54,10 +54,10 @@ function ManageFriends ({ friends, issuedInvitesList, receivedInvitesList }) {
 
 module.exports = connect(
     (state) => ({
-      friends: state.friends,
+      devices: state.devices,
       issuedInvitesList: state.instances.issuedInvitesList.filter((invite) => {
-        return !invite.ownInstance
+        return invite.ownInstance
       }),
       receivedInvitesList: state.instances.receivedInvitesList
     })
-)(ManageFriends)
+)(ManageDevices)

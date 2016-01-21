@@ -23,7 +23,7 @@ function FriendsTable ({ friends, REMOVE_PEER }) {
                   <span className='mobile-column-heading mobile-only'>{friend.description || 'No description'}</span>
                   {friend.peerId}
                 </td>
-                <td className='remove-button'><a onClick={() => REMOVE_PEER(friend.peerId, i)}><i className='fa fa-trash'/></a></td>
+                <td className='remove-button'><a onClick={() => REMOVE_PEER(friend.peerId)}><i className='fa fa-trash'/></a></td>
               </tr>
           )
         })}
