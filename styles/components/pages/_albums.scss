@@ -1,62 +1,62 @@
 @import '../../colors';
 
 .album-header {
-    display: flex;
-    flex-direction: row;
-    max-width: 960px;
-    margin-bottom: 40px;
+  display: flex;
+  flex-direction: row;
+  max-width: 960px;
+  margin-bottom: 40px;
 
-    .artist {
-        color: $color-gray;
-        text-decoration: none;
+  .artist {
+    color: $color-gray;
+    text-decoration: none;
 
-        &:hover {
-            text-decoration: underline;
-        }
+    &:hover {
+      text-decoration: underline;
     }
+  }
 
-    img {
-        width: 175px;
-        height: 175px;
+  img {
+    width: 175px;
+    height: 175px;
+  }
+
+  h2 {
+    margin-bottom: 15px;
+
+    a {
+      color: $color-light-gray;
+      text-decoration: none;
     }
+  }
 
-    h2 {
-        margin-bottom: 15px;
+  h3 {
+    font-size: 18px;
+  }
 
-        a {
-            color: $color-light-gray;
-            text-decoration: none;
-        }
+  > div {
+    flex: 1;
+    margin-top: 10px;
+    margin-left: 25px;
+  }
+
+  .download-all {
+    margin-top: 15px;
+    margin-left: 15px;
+
+    i {
+      margin-right: 5px;
     }
+  }
 
-    h3 {
-        font-size: 18px;
+  .play-all {
+    margin-top: 15px;
+
+    i {
+      margin-right: 5px;
     }
+  }
 
-    > div {
-        flex: 1;
-        margin-top: 10px;
-        margin-left: 25px;
-    }
-
-    .download-all {
-        margin-top: 15px;
-        margin-left: 15px;
-
-        i {
-            margin-right: 5px;
-        }
-    }
-
-    .play-all {
-        margin-top: 15px;
-
-        i {
-            margin-right: 5px;
-        }
-    }
-
-    .padder {
-        margin: 0 5px;
-    }
+  .padder {
+    margin: 0 5px;
+  }
 }

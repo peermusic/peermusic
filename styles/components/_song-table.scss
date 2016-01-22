@@ -1,155 +1,182 @@
 @import '../colors';
 
 .song-table {
-    width: 100%;
-    max-width: 960px;
-    font-size: 14px;
-    table-layout: fixed;
+  width: 100%;
+  max-width: 960px;
+  font-size: 14px;
+  table-layout: fixed;
 
-    tr {
+  tr {
 
-        // General styles
-        td, th {
-            padding: 10px;
-            border-bottom: 1px solid $background-light-gray;
-        }
+    // General styles
+    td, th {
+      padding: 10px;
+      border-bottom: 1px solid $background-light-gray;
+    }
 
-        th {
-            padding: 5px 10px;
-            color: $color-gray;
-            font-size: 12px;
-            font-weight: normal;
-            letter-spacing: 2px;
-            text-align: left;
-            text-transform: uppercase;
-        }
+    th {
+      padding: 5px 10px;
+      color: $color-gray;
+      font-size: 12px;
+      font-weight: normal;
+      letter-spacing: 2px;
+      text-align: left;
+      text-transform: uppercase;
+    }
 
-        &:not(:first-child):hover {
-            background: $background-light-gray;
+    &:not(:first-child):hover {
+      background: $background-light-gray;
 
-            .play-button a, .add-button a, .favorite-button a, .download-button a {
-                visibility: visible;
-            }
-        }
+      .play-button a, .add-button a, .favorite-button a, .download-button a {
+        visibility: visible;
+      }
+    }
 
-        .inactive {
-            color: $color-dark-gray;
-        }
+    .inactive {
+      color: $color-dark-gray;
+    }
 
-        &.desaturated, &.remote {
-            opacity: .3;
-        }
+    &.desaturated, &.remote {
+      opacity: .3;
+    }
 
-        .break-cell {
-            word-break: break-all;
-        }
+    .break-cell {
+      word-break: break-all;
+    }
 
-        input {
-            width: 90%;
-        }
+    input {
+      width: 90%;
+    }
 
-        // Specific styles for cells
-        .artist a, .album a {
-            color: $color-light-gray;
-            text-decoration: none;
+    // Specific styles for cells
+    .artist a, .album a {
+      color: $color-light-gray;
+      text-decoration: none;
 
-            &:hover {
-                text-decoration: underline;
-            }
-
-        }
-
-        .creation-date, .song-time, .number {
-            color: $color-gray;
-            font-size: 80%;
-            text-align: center;
-        }
-
-        .number {
-            width: 25px;
-        }
-
-        .availability {
-            width: 25px;
-            color: $color-light-gray;
-            text-align: center;
-            opacity: .4;
-        }
-
-        .song-time {
-            width: 50px;
-        }
-
-        .creation-date {
-            width: 75px;
-        }
-
-        .play-button, .add-button, .favorite-button, .remove-button, .download-button {
-            width: 25px;
-            text-align: center;
-        }
-
-        .add-button {
-            width: 20px;
-        }
-
-        .play-button, .add-button, .favorite-button, .download-button {
-            a {
-                color: $color-gray;
-                text-decoration: none;
-                visibility: hidden;
-
-                &:hover {
-                    color: $color-light-gray;
-                }
-            }
-
-            i {
-                position: relative;
-                top: -1px;
-            }
-        }
-
-        i.fa-refresh {
-            @keyframes spin {
-                from {-webkit-transform: rotate(0deg);}
-                to {-webkit-transform: rotate(360deg);}
-            }
-
-            animation: spin 3s;
-            animation-iteration-count: infinite;
-        }
-
-        .favorite-button.active a, .favorite-button.active a:hover {
-            color: $color-brand;
-            visibility: visible;
-        }
-
-        .hover-pause:hover i {
-            @extend .fa-pause;
-        }
-
-        .title > div.desktop-only,
-        .title > div.mobile-only > span {
-            display: block;
-            position: relative;
-            top: -10px;
-            margin-bottom: -20px;
-            padding: 10px 0;
-        }
-
-        // Specific styles for cells when active
-        &.active {
-            .title, .artist, .album, .play-button {
-                color: $color-brand;
-                visibility: visible;
-
-                a {
-                    color: $color-brand;
-                }
-            }
-        }
+      &:hover {
+        text-decoration: underline;
+      }
 
     }
+
+    .creation-date, .song-time, .number {
+      color: $color-gray;
+      font-size: 80%;
+      text-align: center;
+    }
+
+    .number {
+      width: 25px;
+    }
+
+    .availability {
+      width: 25px;
+      color: $color-light-gray;
+      text-align: center;
+      opacity: .4;
+    }
+
+    .song-time {
+      width: 50px;
+    }
+
+    .creation-date {
+      width: 75px;
+    }
+
+    .play-button, .add-button, .favorite-button, .remove-button, .download-button {
+      width: 25px;
+      text-align: center;
+    }
+
+    .add-button {
+      width: 20px;
+    }
+
+    .play-button, .add-button, .favorite-button, .download-button {
+      a {
+        color: $color-gray;
+        text-decoration: none;
+        visibility: hidden;
+
+        &:hover {
+          color: $color-light-gray;
+        }
+      }
+
+      i {
+        position: relative;
+        top: -1px;
+      }
+    }
+
+    i.fa-refresh {
+      @keyframes spin {
+        from {
+          -webkit-transform: rotate(0deg);
+        }
+
+        to {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      animation: spin 3s;
+      animation-iteration-count: infinite;
+    }
+
+    .favorite-button.active a, .favorite-button.active a:hover {
+      color: $color-brand;
+      visibility: visible;
+    }
+
+    .hover-pause:hover i {
+      @extend .fa-pause;
+    }
+
+    .hover-remove-song {
+      color: $color-gray !important;
+    }
+
+    .hover-remove-song:hover i {
+      @extend .fa;
+      @extend .fa-trash;
+
+      &::before {
+        font: normal normal normal 14px/1 FontAwesome;
+      }
+    }
+
+    .download-button .hover-remove-download {
+      visibility: visible;
+    }
+
+    .hover-remove-download:hover i {
+      @extend .fa-times;
+      animation: none;
+    }
+
+    .title > div.desktop-only,
+    .title > div.mobile-only > span {
+      display: block;
+      position: relative;
+      top: -10px;
+      margin-bottom: -20px;
+      padding: 10px 0;
+    }
+
+    // Specific styles for cells when active
+    &.active {
+      .title, .artist, .album, .play-button {
+        color: $color-brand;
+        visibility: visible;
+
+        a {
+          color: $color-brand;
+        }
+      }
+    }
+
+  }
 
 }

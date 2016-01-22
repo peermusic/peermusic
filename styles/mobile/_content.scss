@@ -1,77 +1,77 @@
 @import '../colors';
 
 .navigation {
-    display: none;
+  display: none;
 }
 
 .content {
-    .actual-page-content {
-        padding: 0 5px 20px 15px;
-        overflow-y: scroll;
+  .actual-page-content {
+    padding: 0 5px 20px 15px;
+    overflow-y: scroll;
 
-        h2 {
-            margin-bottom: 0;
-            font-size: 24px;
-        }
-
-        h3 {
-            margin-bottom: 0;
-            font-size: 18px;
-        }
+    h2 {
+      margin-bottom: 0;
+      font-size: 24px;
     }
 
-    .page-heading, .search {
-        display: none;
+    h3 {
+      margin-bottom: 0;
+      font-size: 18px;
+    }
+  }
+
+  .page-heading, .search {
+    display: none;
+  }
+
+  .search-results {
+    margin-top: 15px;
+  }
+
+  .import-form {
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+
+  .pretty-form {
+    margin-bottom: 25px;
+
+    > div {
+      flex-direction: column;
+      margin-bottom: 5px;
+      padding-bottom: 0;
+      border: 0;
+
+      label {
+        margin-bottom: 5px;
+        color: $color-gray;
+        font-size: 12px;
+      }
     }
 
-    .search-results {
-        margin-top: 15px;
+    textarea {
+      min-height: 50px;
+    }
+  }
+
+  .initial-import {
+    flex-direction: column;
+
+    img {
+      margin-top: 20px;
+      margin-right: 0;
+      margin-bottom: 40px;
     }
 
-    .import-form {
-        margin-top: 10px;
-        margin-bottom: 15px;
+    div, a {
+      text-align: center;
+      text-decoration: none;
     }
+  }
 
-    .pretty-form {
-        margin-bottom: 25px;
-
-        > div {
-            flex-direction: column;
-            margin-bottom: 5px;
-            padding-bottom: 0;
-            border: 0;
-
-            label {
-                margin-bottom: 5px;
-                color: $color-gray;
-                font-size: 12px;
-            }
-        }
-
-        textarea {
-            min-height: 50px;
-        }
-    }
-
-    .initial-import {
-        flex-direction: column;
-
-        img {
-            margin-top: 20px;
-            margin-right: 0;
-            margin-bottom: 40px;
-        }
-
-        div, a {
-            text-align: center;
-            text-decoration: none;
-        }
-    }
-
-    @import 'components/horizontal-navigation';
-    @import 'components/song-table';
-    @import 'components/album-table';
+  @import 'components/horizontal-navigation';
+  @import 'components/song-table';
+  @import 'components/album-table';
 }
 
 @import 'components/player';

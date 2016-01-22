@@ -2,133 +2,132 @@
 @import '../mixins/custom-scrollbar';
 
 .content {
+  display: flex;
+  flex-grow: 1;
+  color: $color-light-gray;
+  overflow: hidden;
+
+  > div {
     display: flex;
-    flex-grow: 1;
-    color: $color-light-gray;
-    overflow: hidden;
+    flex: 1;
+    flex-direction: column;
+  }
 
-    > div {
-        display: flex;
-        flex: 1;
-        flex-direction: column;
-    }
+  .actual-page-content {
+    @include custom-scrollbar($background-light-gray);
+    padding: 25px;
+    overflow-y: auto;
+  }
 
-    .actual-page-content {
-        @include custom-scrollbar($background-light-gray);
-        padding: 25px;
-        overflow-y: auto;
-    }
+  a {
+    color: $color-brand;
+  }
 
-    a {
-        color: $color-brand;
+  h2 {
+    margin: 0 0 25px;
+    font-size: 40px;
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+
+  h3 {
+    margin: 0 0 15px;
+    color: $color-gray;
+    font-size: 25px;
+    font-weight: 300;
+    letter-spacing: 1px;
+
+    &.white {
+      color: $color-light-gray;
     }
+  }
+
+  .page-heading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: 960px;
+    padding: 25px 25px 0;
 
     h2 {
-        margin: 0 0 25px;
-        font-size: 40px;
-        font-weight: 300;
-        letter-spacing: 1px;
+      flex: 1;
+      margin-bottom: 0;
     }
 
-    h3 {
-        margin: 0 0 15px;
-        color: $color-gray;
-        font-size: 25px;
-        font-weight: 300;
-        letter-spacing: 1px;
-
-        &.white {
-            color: $color-light-gray;
-        }
+    .refresh-all {
+      margin-right: 15px;
     }
 
-    .page-heading {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        max-width: 960px;
-        padding: 25px 25px 0;
-
-        h2 {
-            flex: 1;
-            margin-bottom: 0;
-        }
-
-
-        .refresh-all {
-            margin-right: 15px;
-        }
-
-        .download-all i {
-            margin-right: 5px;
-        }
-
-        .play-all i, .refresh-all i {
-            margin-right: 5px;
-        }
+    .download-all i {
+      margin-right: 5px;
     }
 
-    .initial-import {
-        display: flex;
-        align-items: center;
-        max-width: 960px;
-        margin-top: 25px;
-        color: $color-gray;
-        font-size: 25px;
-        font-weight: 300;
-        letter-spacing: 1px;
+    .play-all i, .refresh-all i {
+      margin-right: 5px;
+    }
+  }
 
-        img {
-            margin-right: 20px;
-            opacity: .3;
-        }
+  .initial-import {
+    display: flex;
+    align-items: center;
+    max-width: 960px;
+    margin-top: 25px;
+    color: $color-gray;
+    font-size: 25px;
+    font-weight: 300;
+    letter-spacing: 1px;
 
-        div {
-            line-height: 40px;
-        }
+    img {
+      margin-right: 20px;
+      opacity: .3;
     }
 
-    @import 'song-table';
-    @import 'album-table';
-    @import 'input';
-    @import 'horizontal-navigation';
-
-    &.queue {
-        flex-grow: 0;
-        flex-shrink: 0;
-        width: 580px;
-        margin-left: 20px;
-        background: $background-gray;
-
-        @media (max-width: 1600px) {
-            display: none;
-        }
+    div {
+      line-height: 40px;
     }
+  }
 
-    p {
-        max-width: 400px;
-        margin-bottom: 25px;
-        color: $color-gray;
-        font-size: 14px;
+  @import 'song-table';
+  @import 'album-table';
+  @import 'input';
+  @import 'horizontal-navigation';
+
+  &.queue {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 580px;
+    margin-left: 20px;
+    background: $background-gray;
+
+    @media (max-width: 1600px) {
+      display: none;
     }
+  }
 
-    @import 'pages/albums';
-    @import 'pages/artists';
-    @import 'pages/manage-servers';
-    @import 'pages/search';
+  p {
+    max-width: 400px;
+    margin-bottom: 25px;
+    color: $color-gray;
+    font-size: 14px;
+  }
+
+  @import 'pages/albums';
+  @import 'pages/artists';
+  @import 'pages/manage-servers';
+  @import 'pages/search';
 }
 
 .import-notification {
-    display: flex;
-    position: absolute;
-    top: 0;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 64px;
-    border-bottom: 3px solid $color-brand;
-    background: rgba($background-dark-gray, .8);
-    color: $color-light-gray;
-    text-align: center;
-    z-index: 999;
+  display: flex;
+  position: absolute;
+  top: 0;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 64px;
+  border-bottom: 3px solid $color-brand;
+  background: rgba($background-dark-gray, .8);
+  color: $color-light-gray;
+  text-align: center;
+  z-index: 999;
 }
