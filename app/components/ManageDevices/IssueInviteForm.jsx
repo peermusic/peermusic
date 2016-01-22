@@ -31,17 +31,6 @@ class IssueInviteForm extends React.Component {
           </label>
           <input type='text' placeholder='Alice from Work' ref='description'/>
         </div>
-        <div>
-          <label>
-            Sharing level
-          </label>
-          <select defaultValue='FRIENDS' ref='sharingLevel'>
-            <option value='LEECH'>leech</option>
-            <option value='PRIVATE'>private</option>
-            <option value='FRIENDS'>friends</option>
-            <option value='PUBLIC'>public</option>
-          </select>
-        </div>
         <div className='no-border'>
           <label>
             Hub url
