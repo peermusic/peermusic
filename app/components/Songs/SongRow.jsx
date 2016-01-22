@@ -84,7 +84,7 @@ class SongRow extends React.Component {
           <a onClick={() => this.props.REMOVE_SONG(this.props.song.id)} className='hover-remove-song'><i className='flaticon-disk'/></a>
         </div>
         <div className='mobile-only'>
-          <i className='flaticon-harddrive'/>
+          <i className='flaticon-disk'/>
         </div>
       </td>
     }
