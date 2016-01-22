@@ -21,7 +21,7 @@ class SongRow extends React.Component {
   renderPlayAndDownload (playback, download) {
     if (!this.props.song.local) {
       const downloadButton = this.props.song.downloading
-        ? <i className='fa fa-refresh'/>
+        ? <a onClick={() => this.props.REMOVE_DOWNLOAD(this.props.song.id)} className='hover-remove-download'><i className='fa fa-refresh'/></a>
         : <a onClick={() => download()}><i className='fa fa-arrow-down'/></a>
       return <td className='download-button'>{downloadButton}</td>
     }
@@ -79,7 +79,14 @@ class SongRow extends React.Component {
 
   renderAvailability () {
     if (this.props.song.local) {
-      return <td className='availability'><i className='flaticon-harddrive'/></td>
+      return <td className='availability'>
+        <div className='desktop-only'>
+          <a onClick={() => this.props.REMOVE_SONG(this.props.song.id)} className='hover-remove-song'><i className='flaticon-disk'/></a>
+        </div>
+        <div className='mobile-only'>
+          <i className='flaticon-harddrive'/>
+        </div>
+      </td>
     }
 
     return (

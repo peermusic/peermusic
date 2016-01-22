@@ -134,6 +134,28 @@
       @extend .fa-pause;
     }
 
+    .hover-remove-song {
+      color: $color-gray !important;
+    }
+
+    .hover-remove-song:hover i {
+      @extend .fa;
+      @extend .fa-trash;
+
+      &::before {
+        font: normal normal normal 14px/1 FontAwesome;
+      }
+    }
+
+    .download-button .hover-remove-download {
+      visibility: visible;
+    }
+
+    .hover-remove-download:hover i {
+      @extend .fa-times;
+      animation: none;
+    }
+
     .title > div.desktop-only,
     .title > div.mobile-only > span {
       display: block;
