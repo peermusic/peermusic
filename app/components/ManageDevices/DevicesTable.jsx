@@ -1,6 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
+const CopyableInput = require('../CopyableInput.jsx')
 const { REMOVE_PEER } = require('../../actions')
 
 function DevicesTable ({ devices, REMOVE_PEER }) {
@@ -21,7 +22,7 @@ function DevicesTable ({ devices, REMOVE_PEER }) {
                 <td className={descriptionClass}>{device.description || '—'}</td>
                 <td className='break-cell'>
                   <span className='mobile-column-heading mobile-only'>{device.description || 'No description'}</span>
-                  {device.peerId}
+                  <CopyableInput value={device.peerId}/>
                 </td>
                 <td className='remove-button'><a onClick={() => REMOVE_PEER(device.peerId)}><i className='fa fa-trash'/></a></td>
               </tr>

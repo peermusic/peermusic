@@ -1,6 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
+const CopyableInput = require('../CopyableInput.jsx')
 const { REMOVE_SCRAPING_SERVER } = require('../../actions')
 
 function ScrapingServerTable ({ servers, REMOVE_SCRAPING_SERVER }) {
@@ -21,7 +22,7 @@ function ScrapingServerTable ({ servers, REMOVE_SCRAPING_SERVER }) {
                 <td className={descriptionClass}>{server.description || 'No description'}</td>
                 <td className='break-cell'>
                   <span className='mobile-column-heading mobile-only'>{server.description || 'No description'}</span>
-                  {server.serverUrl}
+                  <CopyableInput value={server.serverUrl}/>
                 </td>
                 <td className='remove-button'><a onClick={() => REMOVE_SCRAPING_SERVER(i)}><i className='fa fa-trash'/></a></td>
               </tr>
