@@ -4,7 +4,7 @@ const classNames = require('classnames')
 const CopyableInput = require('../CopyableInput.jsx')
 const { REMOVE_PEER } = require('../../actions')
 
-function DevicesTable ({ devices, ownId, REMOVE_PEER }) {
+function DevicesTable ({ devices, myId, sharingLevel, REMOVE_PEER }) {
   return (
       <table className='song-table no-borders'>
         <tbody>
@@ -20,7 +20,7 @@ function DevicesTable ({ devices, ownId, REMOVE_PEER }) {
           <td className='number'></td>
           <td>This device</td>
           <td>
-            <select defaultValue='FRIENDS'>
+            <select defaultValue='{sharingLevel}'>
               <option value='LEECH'>leech</option>
               <option value='PRIVATE'>private</option>
               <option value='FRIENDS'>friends</option>
@@ -29,7 +29,7 @@ function DevicesTable ({ devices, ownId, REMOVE_PEER }) {
           </td>
           <td className='break-cell'>
             <span className='mobile-column-heading mobile-only'></span>
-            <CopyableInput value={ownId}/>
+            <CopyableInput value={myId}/>
           </td>
           <td className='remove-button'></td>
         </tr>
@@ -41,7 +41,7 @@ function DevicesTable ({ devices, ownId, REMOVE_PEER }) {
                 <td className='number'>{i + 1}</td>
                 <td className={descriptionClass}>{device.description || '—'}</td>
                 <td>
-                  <select defaultValue='FRIENDS'>
+                  <select defaultValue={device.sharingLevel} disabled>
                     <option value='LEECH'>leech</option>
                     <option value='PRIVATE'>private</option>
                     <option value='FRIENDS'>friends</option>

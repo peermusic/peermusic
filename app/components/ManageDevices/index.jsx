@@ -8,10 +8,10 @@ const DevicesTable = require('./DevicesTable.jsx')
 const HorizontalNavigation = require('../HorizontalNavigation.jsx')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
 
-function ManageDevices ({ devices, issuedInvitesList, receivedInvitesList, ownId }) {
+function ManageDevices ({ devices, issuedInvitesList, receivedInvitesList, myId }) {
   const devicesView = (
       <div>
-        <DevicesTable devices={devices} ownId={ownId}/>
+        <DevicesTable devices={devices} myId={myId}/>
         {devices.length === 0
             ? <div>
                 <h3>No devices authenticated yet.</h3>
@@ -60,7 +60,8 @@ module.exports = connect(
       issuedInvitesList: state.instances.issuedInvitesList.filter((invite) => {
         return invite.ownInstance
       }),
+      myId: state.instances.keyPair.publicKey,
       receivedInvitesList: state.instances.receivedInvitesList,
-      ownId: state.instances.keyPair.publicKey
+      sharingLevel: state.sync.sharingLevel
     })
 )(ManageDevices)
