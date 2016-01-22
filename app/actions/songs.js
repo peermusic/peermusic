@@ -122,6 +122,9 @@ var actions = {
         dispatch({
           type: 'CLEAR_DATA'
         })
+        dispatch({
+          type: 'RESET_SONG_PROVIDING_CHRONOLOGY'
+        })
       })
     }
   }
