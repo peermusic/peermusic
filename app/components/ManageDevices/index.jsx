@@ -8,10 +8,10 @@ const DevicesTable = require('./DevicesTable.jsx')
 const HorizontalNavigation = require('../HorizontalNavigation.jsx')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
 
-function ManageDevices ({ devices, issuedInvitesList, receivedInvitesList, myId }) {
+function ManageDevices ({ devices, issuedInvitesList, myId, receivedInvitesList, sharingLevel }) {
   const devicesView = (
       <div>
-        <DevicesTable devices={devices} myId={myId}/>
+        <DevicesTable devices={devices} myId={myId} sharingLevel={sharingLevel}/>
         {devices.length === 0
             ? <div>
                 <h3>No devices authenticated yet.</h3>

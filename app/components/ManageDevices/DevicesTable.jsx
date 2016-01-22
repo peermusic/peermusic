@@ -2,9 +2,13 @@ const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
 const CopyableInput = require('../CopyableInput.jsx')
-const { REMOVE_PEER } = require('../../actions')
+const { REMOVE_PEER, SET_SHARING_LEVEL } = require('../../actions')
 
-function DevicesTable ({ devices, myId, sharingLevel, REMOVE_PEER }) {
+function DevicesTable ({ devices, myId, sharingLevel, REMOVE_PEER, SET_SHARING_LEVEL }) {
+  function setSharingLevel (event) {
+    SET_SHARING_LEVEL(event.target.value)
+  }
+
   return (
       <table className='song-table no-borders'>
         <tbody>
@@ -20,7 +24,7 @@ function DevicesTable ({ devices, myId, sharingLevel, REMOVE_PEER }) {
           <td className='number'></td>
           <td>This device</td>
           <td>
-            <select defaultValue='{sharingLevel}'>
+            <select defaultValue={sharingLevel} onChange={setSharingLevel}>
               <option value='LEECH'>leech</option>
               <option value='PRIVATE'>private</option>
               <option value='FRIENDS'>friends</option>
@@ -61,4 +65,4 @@ function DevicesTable ({ devices, myId, sharingLevel, REMOVE_PEER }) {
   )
 }
 
-module.exports = connect(null, {REMOVE_PEER})(DevicesTable)
+module.exports = connect(null, {REMOVE_PEER, SET_SHARING_LEVEL})(DevicesTable)

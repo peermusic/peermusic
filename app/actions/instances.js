@@ -170,6 +170,15 @@ var actions = {
         peerId
       })
     }
+  },
+
+  SET_SHARING_LEVEL: (sharingLevel) => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: 'SET_SHARING_LEVEL',
+        sharingLevel
+      })
+    }
   }
 }
 
