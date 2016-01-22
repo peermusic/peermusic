@@ -8,14 +8,16 @@ const DevicesTable = require('./DevicesTable.jsx')
 const HorizontalNavigation = require('../HorizontalNavigation.jsx')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
 
-function ManageDevices ({ devices, issuedInvitesList, receivedInvitesList }) {
+function ManageDevices ({ devices, issuedInvitesList, myId, receivedInvitesList, sharingLevel }) {
   const devicesView = (
       <div>
-        {devices.length > 0 ? <DevicesTable devices={devices}/>
-            : <div>
+        <DevicesTable devices={devices} myId={myId} sharingLevel={sharingLevel}/>
+        {devices.length === 0
+            ? <div>
                 <h3>No devices authenticated yet.</h3>
                 <p>To authenticate devices, create a new invite on the "issue invites" page and paste the resulting URL into the "recieve invites" page on your other device.</p>
-              </div>}
+              </div>
+            : null}
       </div>
   )
 
@@ -36,7 +38,7 @@ function ManageDevices ({ devices, issuedInvitesList, receivedInvitesList }) {
   )
 
   const views = [
-    {path: '/manage-devices/authenticated', name: 'Authenticated Devices (' + devices.length + ')', content: devicesView},
+    {path: '/manage-devices/authenticated', name: 'Devices', content: devicesView},
     {path: '/manage-devices/issue', name: 'Issue Invites (' + issuedInvitesList.length + ')', content: issueView},
     {path: '/manage-devices/receive', name: 'Receive Invites (' + receivedInvitesList.length + ')', content: receiveView}
   ]
@@ -58,6 +60,8 @@ module.exports = connect(
       issuedInvitesList: state.instances.issuedInvitesList.filter((invite) => {
         return invite.ownInstance
       }),
-      receivedInvitesList: state.instances.receivedInvitesList
+      myId: state.instances.keyPair.publicKey,
+      receivedInvitesList: state.instances.receivedInvitesList,
+      sharingLevel: state.sync.sharingLevel
     })
 )(ManageDevices)

@@ -2,6 +2,7 @@
 
 const initialState = {
   providers: {},
+  sharingLevel: 'FRIENDS',
   forFriends: [],
   allowedPendingDownloadsForFriends: 50
 }
@@ -10,6 +11,10 @@ module.exports = (state = initialState, action) => {
   var reducer = {
     'SET_PROVIDER_LIST': () => {
       return {...state, providers: action.providers}
+    },
+
+    'SET_SHARING_LEVEL_SELF': () => {
+      return {...state, sharingLevel: action.sharingLevel}
     },
 
     'SHIFT_SONG_PROVIDING_CHRONOLOGY': () => {

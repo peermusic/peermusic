@@ -9,11 +9,9 @@ class IssueInviteForm extends React.Component {
 
     var description = ReactDOM.findDOMNode(this.refs.description)
     var hubUrl = ReactDOM.findDOMNode(this.refs.hubUrl)
-    var sharingLevel = ReactDOM.findDOMNode(this.refs.sharingLevel)
 
     this.props.ISSUE_INVITE(description.value,
-      hubUrl.value ? hubUrl.value : 'localhost:7000',
-      true, sharingLevel.value
+      hubUrl.value ? hubUrl.value : 'localhost:7000', true
     )
 
     description.value = ''
@@ -30,17 +28,6 @@ class IssueInviteForm extends React.Component {
             Description
           </label>
           <input type='text' placeholder='Alice from Work' ref='description'/>
-        </div>
-        <div>
-          <label>
-            Sharing level
-          </label>
-          <select defaultValue='FRIENDS' ref='sharingLevel'>
-            <option value='LEECH'>leech</option>
-            <option value='PRIVATE'>private</option>
-            <option value='FRIENDS'>friends</option>
-            <option value='PUBLIC'>public</option>
-          </select>
         </div>
         <div className='no-border'>
           <label>
