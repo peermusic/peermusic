@@ -130,7 +130,8 @@
       visibility: visible;
     }
 
-    .hover-pause:hover i {
+    .hover-pause:hover i,
+    .hover-pause.hovered i {
       @extend .fa-pause;
     }
 
@@ -163,6 +164,7 @@
       top: -10px;
       margin-bottom: -20px;
       padding: 10px 0;
+      cursor: pointer;
     }
 
     // Specific styles for cells when active
@@ -173,6 +175,7 @@
 
         a {
           color: $color-brand;
+          visibility: visible;
         }
       }
     }

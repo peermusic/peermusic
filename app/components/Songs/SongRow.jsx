@@ -32,12 +32,40 @@ class SongRow extends React.Component {
     return <td className='play-button'>{playButton}</td>
   }
 
+  // Hacky hover function to also hover the play
+  // button if you hover the play button
+  onMouseOverTitle (e) {
+    let playButton = e.target.parentNode.parentNode.children[0].children[0]
+    playButton.classList.add('hovered')
+  }
+
+  onMouseOutTitle (e) {
+    let playButton = e.target.parentNode.parentNode.children[0].children[0]
+    playButton.classList.remove('hovered')
+  }
+
   renderTitle (playback, download) {
-    let localAction = this.props.options.activeRow && this.props.selected && this.props.playing ? () => this.props.PLAYER_SET_PLAYING(false) : () => playback()
-    let action = !this.props.song.local ? () => download() : localAction
+    let action = (e) => {
+      if (!this.props.song.local) {
+        download()
+      } else if (this.props.options.activeRow && this.props.selected && this.props.playing) {
+        this.props.PLAYER_SET_PLAYING(false)
+      } else {
+        playback()
+      }
+
+      window.setTimeout(() => {
+        this.onMouseOverTitle(e)
+      }, 0)
+    }
+
     return (
         <td className='title'>
-          <div className='desktop-only' onClick={() => action()}>
+          <div className='desktop-only'
+               onClick={(e) => action(e)}
+               onMouseOver={(e) => this.onMouseOverTitle(e)}
+               onMouseOut={(e) => this.onMouseOutTitle(e)}
+          >
             {this.props.song.title}
           </div>
           <div className='mobile-only'>
