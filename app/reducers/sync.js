@@ -3,7 +3,7 @@
 const initialState = {
   providers: {},
   forFriends: [],
-  allowedPendingDownloadsForFriends: 1
+  allowedPendingDownloadsForFriends: 50
 }
 
 module.exports = (state = initialState, action) => {
