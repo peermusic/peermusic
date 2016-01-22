@@ -1,68 +1,68 @@
 @font-face {
-    font-family: 'Flaticon';
-    src: url('../fonts/flaticon.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Flaticon';
+  src: url('../fonts/flaticon.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 [class^='flaticon-']::before, [class*=' flaticon-']::before,
 [class^='flaticon-']::after, [class*=' flaticon-']::after {
-    font-family: Flaticon;
-    font-style: normal;
+  font-family: Flaticon;
+  font-style: normal;
 }
 
 .flaticon-devices::before {
-    content: '\e000';
+  content: '\e000';
 }
 
 .flaticon-download::before {
-    content: '\e001';
+  content: '\e001';
 }
 
 .flaticon-harddrive::before {
-    content: '\e002';
+  content: '\e002';
 }
 
 .flaticon-servers::before {
-    content: '\e003';
+  content: '\e003';
 }
 
 .flaticon-favorite::before {
-    content: '\e004';
+  content: '\e004';
 }
 
 .flaticon-friends::before {
-    content: '\e005';
+  content: '\e005';
 }
 
 .flaticon-history::before {
-    content: '\e006';
+  content: '\e006';
 }
 
 .flaticon-search::before {
-    content: '\e007';
+  content: '\e007';
 }
 
 .flaticon-songs::before {
-    content: '\e008';
+  content: '\e008';
 }
 
 .flaticon-albums::before {
-    content: '\e009';
+  content: '\e009';
 }
 
 .flaticon-overview::before {
-    content: '\e00a';
+  content: '\e00a';
 }
 
 .flaticon-queue::before {
-    content: '\e00b';
+  content: '\e00b';
 }
 
 .flaticon-speaker::before {
-    content: '\e00c';
+  content: '\e00c';
 }
 
 .flaticon-artist::before {
-    content: '\e00d';
+  content: '\e00d';
 }

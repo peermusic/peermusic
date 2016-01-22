@@ -3,128 +3,128 @@
 @import '../mixins/custom-scrollbar';
 
 .navigation {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: flex-start;
+  width: 220px;
+  background: $background-light-gray;
+  color: $color-gray;
+  font-size: 14px;
+
+  .mobile-toggle {
+    display: none;
+  }
+
+  .search {
+    display: block;
+    width: 100%;
+
+    input {
+      display: block;
+      width: 80%;
+      margin: 25px auto auto;
+      padding: 7px 10px;
+      border: 1px solid $background-light-gray;
+      border-radius: 5px;
+      background: $background-dark-gray;
+      color: $color-light-gray;
+
+      &::-webkit-input-placeholder {
+        color: $color-dark-gray;
+      }
+
+      &:focus {
+        border: 1px solid $color-brand;
+        outline: none;
+      }
+    }
+
+  }
+
+  .navigation-links {
+    @include custom-scrollbar($background-gray);
+    flex-grow: 1;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    ul {
+      @include reset-list;
+    }
+
+    // Headings
+    .heading {
+      margin-top: 25px;
+      margin-bottom: 10px;
+      padding-left: 25px;
+      font-size: 80%;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    // Navigation links
+    li a {
+      display: flex;
+      align-items: center;
+      height: 35px;
+      padding-left: 25px;
+      color: $color-gray;
+      text-decoration: none;
+
+      &::before {
+        margin-top: 2px;
+        margin-right: 10px;
+        font-size: 16px;
+      }
+
+      &:hover {
+        color: $color-light-gray;
+      }
+
+      &.selected {
+        padding-left: 20px;
+        border-left: 5px solid $color-brand;
+        background-color: $background-gray;
+        color: $color-light-gray;
+      }
+
+    }
+
+  }
+
+  .current-song {
     flex-shrink: 0;
-    align-items: flex-start;
-    width: 220px;
-    background: $background-light-gray;
-    color: $color-gray;
-    font-size: 14px;
+    align-self: flex-end;
 
-    .mobile-toggle {
-        display: none;
+    img {
+      display: block;
+      width: 220px;
+      height: 220px;
+      border-top: 1px solid $background-dark-gray;
     }
 
-    .search {
-        display: block;
-        width: 100%;
+    .text {
+      padding: 10px;
+      border-top: 1px solid $background-dark-gray;
 
-        input {
-            display: block;
-            width: 80%;
-            margin: 25px auto auto;
-            padding: 7px 10px;
-            border: 1px solid $background-light-gray;
-            border-radius: 5px;
-            background: $background-dark-gray;
-            color: $color-light-gray;
+      a {
+        color: $color-gray;
+        text-decoration: none;
 
-            &::-webkit-input-placeholder {
-                color: $color-dark-gray;
-            }
-
-            &:focus {
-                border: 1px solid $color-brand;
-                outline: none;
-            }
+        &:hover {
+          text-decoration: underline;
         }
+      }
 
+      .song-title {
+        color: $color-light-gray;
+      }
+
+      .song-artist {
+        margin-top: 5px;
+        font-size: 12px;
+      }
     }
-
-    .navigation-links {
-        @include custom-scrollbar($background-gray);
-        flex-grow: 1;
-        width: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
-
-        ul {
-            @include reset-list;
-        }
-
-        // Headings
-        .heading {
-            margin-top: 25px;
-            margin-bottom: 10px;
-            padding-left: 25px;
-            font-size: 80%;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        // Navigation links
-        li a {
-            display: flex;
-            align-items: center;
-            height: 35px;
-            padding-left: 25px;
-            color: $color-gray;
-            text-decoration: none;
-
-            &::before {
-                margin-top: 2px;
-                margin-right: 10px;
-                font-size: 16px;
-            }
-
-            &:hover {
-                color: $color-light-gray;
-            }
-
-            &.selected {
-                padding-left: 20px;
-                border-left: 5px solid $color-brand;
-                background-color: $background-gray;
-                color: $color-light-gray;
-            }
-
-        }
-
-    }
-
-    .current-song {
-        flex-shrink: 0;
-        align-self: flex-end;
-
-        img {
-            display: block;
-            width: 220px;
-            height: 220px;
-            border-top: 1px solid $background-dark-gray;
-        }
-
-        .text {
-            padding: 10px;
-            border-top: 1px solid $background-dark-gray;
-
-            a {
-                color: $color-gray;
-                text-decoration: none;
-
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
-
-            .song-title {
-                color: $color-light-gray;
-            }
-
-            .song-artist {
-                margin-top: 5px;
-                font-size: 12px;
-            }
-        }
-    }
+  }
 }
