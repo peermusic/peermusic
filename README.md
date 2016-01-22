@@ -35,3 +35,7 @@ npm install -g standard
 npm install -g sass-lint
 npm test
 ```
+
+***
+
+[![We practice Ethical Design.](https://ind.ie/ethical-design/images/ethical-design-badge-small.svg)](https://github.com/pguth/Ethical-Design-Manifesto)
