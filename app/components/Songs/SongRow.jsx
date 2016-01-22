@@ -81,7 +81,7 @@ class SongRow extends React.Component {
     if (this.props.song.local) {
       return <td className='availability'>
         <div className='desktop-only'>
-          <a onClick={() => this.props.REMOVE_SONG(this.props.song.id)} className='hover-remove-song'><i className='flaticon-harddrive'/></a>
+          <a onClick={() => this.props.REMOVE_SONG(this.props.song.id)} className='hover-remove-song'><i className='flaticon-disk'/></a>
         </div>
         <div className='mobile-only'>
           <i className='flaticon-harddrive'/>

@@ -11,58 +11,62 @@
     font-style: normal;
 }
 
-.flaticon-devices::before {
+.flaticon-devices:before {
     content: '\e000';
 }
 
-.flaticon-download::before {
+.flaticon-download:before {
     content: '\e001';
 }
 
-.flaticon-harddrive::before {
+.flaticon-disk:before {
     content: '\e002';
 }
 
-.flaticon-servers::before {
+.flaticon-harddrive:before {
     content: '\e003';
 }
 
-.flaticon-favorite::before {
+.flaticon-servers:before {
     content: '\e004';
 }
 
-.flaticon-friends::before {
+.flaticon-favorite:before {
     content: '\e005';
 }
 
-.flaticon-history::before {
+.flaticon-friends:before {
     content: '\e006';
 }
 
-.flaticon-search::before {
+.flaticon-history:before {
     content: '\e007';
 }
 
-.flaticon-songs::before {
+.flaticon-search:before {
     content: '\e008';
 }
 
-.flaticon-albums::before {
+.flaticon-songs:before {
     content: '\e009';
 }
 
-.flaticon-overview::before {
+.flaticon-albums:before {
     content: '\e00a';
 }
 
-.flaticon-queue::before {
+.flaticon-overview:before {
     content: '\e00b';
 }
 
-.flaticon-speaker::before {
+.flaticon-queue:before {
     content: '\e00c';
 }
 
-.flaticon-artist::before {
+.flaticon-speaker:before {
     content: '\e00d';
+}
+
+.flaticon-artist:before {
+    content: '\e00e';
 }
