@@ -30,6 +30,15 @@ const song = (state = {}, action) => {
         ...state,
         downloading: action.value || !state.downloading
       }
+    case 'TOGGLE_SONG_FOR_FRIEND':
+      if (state.id !== action.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        forFriend: action.value || !state.forFriend
+      }
     case 'SET_SONG_DURATION':
       if (state.id !== action.id) {
         return state
@@ -72,6 +81,8 @@ const songs = (state = [], action) => {
     case 'TOGGLE_SONG_LOCAL':
       return state.map(s => song(s, action))
     case 'TOGGLE_SONG_DOWNLOADING':
+      return state.map(s => song(s, action))
+    case 'TOGGLE_SONG_FOR_FRIEND':
       return state.map(s => song(s, action))
     case 'REMOVE_SONG':
       return state.filter(x => x.id !== action.id)

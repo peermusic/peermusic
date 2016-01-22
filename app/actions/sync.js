@@ -41,6 +41,13 @@ var actions = {
         },
 
         REQUEST_SONG: () => {
+          var song = getState().songs.find((song) => song.id === data.id)
+          if (!song || !song.local) {
+            debug('received request for a song we dont hold')
+
+            actions.REQUEST_SONG_FOR_FRIEND(data.id)(dispatch, getState)
+            return
+          }
           actions.SEND_SONG(data.id, peerId)(dispatch, getState)
         },
 
@@ -200,6 +207,8 @@ var actions = {
 
   REQUEST_SONG: (id) => {
     return (dispatch, getState) => {
+      debug('trying to download', id)
+
       var song = getState().songs.find((song) => song.id === id)
       if (song.local) {
         return
@@ -219,6 +228,60 @@ var actions = {
           id: id
         }, provider)
       })
+    }
+  },
+
+  REQUEST_SONG_FOR_FRIEND: (id) => {
+    return (dispatch, getState) => {
+      var stash = getState().sync.forFriends
+      var song = getState().songs.some((song) => song.id === id)
+
+      if (!song) {
+        debug('peer tries to download a song we dont know yet - skipping', id)
+        return
+      }
+
+      if (stash.indexOf(id) !== -1) {
+        debug('we are already trying to download the song for a friend - skipping')
+        return
+      }
+
+      if (song.downloading) {
+        debug('we are already downloading the requested song for ourselves - skipping')
+        return
+      }
+
+      var allowedPendingDownloadsForFriends = getState().sync.allowedPendingDownloadsForFriends
+      if (stash.length >= allowedPendingDownloadsForFriends) {
+        debug('list of pending downloads for friends too long - dropping oldest')
+
+        var oldId = stash[0]
+        var oldSong = getState().songs.find((song) => song.id === oldId)
+
+        dispatch({
+          type: 'TOGGLE_SONG_DOWNLOADING',
+          id: oldId,
+          value: false
+        })
+
+        if (oldSong.local && oldSong.favorite !== true) {
+          debug('we probably only kept that song around for a friend - deleting', oldSong.title)
+
+          require('./songs').REMOVE_SONG(oldId)(dispatch, getState)
+        }
+
+        dispatch({
+          type: 'REMOVE_FROM_SONG_PROVIDING_CHRONOLOGY',
+          id: oldId
+        })
+      }
+
+      dispatch({
+        type: 'PUSH_TO_SONG_PROVIDING_CHRONOLOGY',
+        id
+      })
+
+      actions.REQUEST_SONG(id)(dispatch, getState)
     }
   },
 
@@ -312,6 +375,12 @@ var actions = {
         type: 'TOGGLE_SONG_DOWNLOADING',
         id
       })
+      if (getState().sync.forFriends.indexOf(id) !== -1) {
+        dispatch({
+          type: 'REMOVE_FROM_SONG_PROVIDING_CHRONOLOGY',
+          id
+        })
+      }
     }
   },
 
