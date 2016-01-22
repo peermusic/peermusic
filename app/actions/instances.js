@@ -137,6 +137,10 @@ var actions = {
       })
 
       if (invite.ownInstance) {
+        window.setTimeout(() => {
+          require('./sync').MULTICAST_SHARING_LEVEL()(dispatch, getState)
+        }, 1000 * 2)
+
         dispatch({
           type: 'ADD_DEVICE',
           description: invite.description,

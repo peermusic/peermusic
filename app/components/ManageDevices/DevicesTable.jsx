@@ -46,6 +46,7 @@ function DevicesTable ({ devices, myId, sharingLevel, REMOVE_PEER, SET_SHARING_L
                 <td className={descriptionClass}>{device.description || '—'}</td>
                 <td>
                   <select value={device.sharingLevel} disabled>
+                    <option value='WAITING'>waiting...</option>
                     <option value='LEECH'>leech</option>
                     <option value='PRIVATE'>private</option>
                     <option value='FRIENDS'>friends</option>

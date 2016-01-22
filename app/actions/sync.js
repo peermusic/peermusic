@@ -401,7 +401,9 @@ var actions = {
   MULTICAST_SHARING_LEVEL: (sharingLevel) => {
     return (dispatch, getState) => {
       var devices = getState().devices
+      if (!sharingLevel) sharingLevel = getState().sync.sharingLevel
 
+      debug('multicasting sharing level to devices', sharingLevel)
       devices.forEach((device) => {
         peers.send({
           type: 'MULTICAST_SHARING_LEVEL',
