@@ -5,8 +5,8 @@ const CopyableInput = require('../CopyableInput.jsx')
 const { REMOVE_PEER, SET_SHARING_LEVEL } = require('../../actions')
 
 function DevicesTable ({ devices, myId, sharingLevel, REMOVE_PEER, SET_SHARING_LEVEL }) {
-  function setSharingLevel (event) {
-    SET_SHARING_LEVEL(event.target.value)
+  function setMySharingLevel (event) {
+    SET_SHARING_LEVEL(event.target.value, 'self')
   }
 
   return (
@@ -24,7 +24,7 @@ function DevicesTable ({ devices, myId, sharingLevel, REMOVE_PEER, SET_SHARING_L
           <td className='number'></td>
           <td>This device</td>
           <td>
-            <select defaultValue={sharingLevel} onChange={setSharingLevel}>
+            <select defaultValue={sharingLevel} onChange={setMySharingLevel}>
               <option value='LEECH'>leech</option>
               <option value='PRIVATE'>private</option>
               <option value='FRIENDS'>friends</option>
@@ -45,7 +45,7 @@ function DevicesTable ({ devices, myId, sharingLevel, REMOVE_PEER, SET_SHARING_L
                 <td className='number'>{i + 1}</td>
                 <td className={descriptionClass}>{device.description || '—'}</td>
                 <td>
-                  <select defaultValue={device.sharingLevel} disabled>
+                  <select value={device.sharingLevel} disabled>
                     <option value='LEECH'>leech</option>
                     <option value='PRIVATE'>private</option>
                     <option value='FRIENDS'>friends</option>

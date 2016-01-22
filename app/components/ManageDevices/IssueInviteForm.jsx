@@ -9,11 +9,9 @@ class IssueInviteForm extends React.Component {
 
     var description = ReactDOM.findDOMNode(this.refs.description)
     var hubUrl = ReactDOM.findDOMNode(this.refs.hubUrl)
-    var sharingLevel = ReactDOM.findDOMNode(this.refs.sharingLevel)
 
     this.props.ISSUE_INVITE(description.value,
-      hubUrl.value ? hubUrl.value : 'localhost:7000',
-      true, sharingLevel.value
+      hubUrl.value ? hubUrl.value : 'localhost:7000', true
     )
 
     description.value = ''

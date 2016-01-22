@@ -8,6 +8,13 @@ const device = (state = {}, action) => {
         peerId: action.peerId,
         sharingLevel: action.sharingLevel
       }
+    case 'SET_SHARING_LEVEL_DEVICE':
+      if (action.peerId !== state.peerId) return
+
+      return {
+        ...state,
+        sharingLevel: action.sharingLevel
+      }
     default:
       return state
   }
@@ -22,6 +29,8 @@ const devices = (state = [], action) => {
       var index = state.findIndex((device) => device.peerId = action.peerId)
       if (index === -1) return state
       return [...state.slice(0, index), ...state.slice(index + 1)]
+    case 'SET_SHARING_LEVEL_DEVICE':
+      return state.map(s => device(s, action))
     default:
       return state
   }

@@ -67,6 +67,10 @@ var actions = {
 
         SEND_SIMILAR: () => {
           actions.RECEIVE_SIMILAR(data.song, data.songs)(dispatch, getState)
+        },
+
+        MULTICAST_SHARING_LEVEL: () => {
+          actions.RECEIVE_SHARING_LEVEL(data.sharingLevel, peerId)(dispatch, getState)
         }
       }
 
@@ -373,6 +377,55 @@ var actions = {
   RECEIVE_SIMILAR: (song, songs) => {
     return (dispatch, getState) => {
       require('./player.js').SET_RADIO_SONGS(songs, song, true)(dispatch, getState)
+    }
+  },
+
+  SET_SHARING_LEVEL: (sharingLevel, peerId) => {
+    return (dispatch, getState) => {
+      actions.MULTICAST_SHARING_LEVEL(sharingLevel)(dispatch, getState)
+
+      if (peerId === 'self') {
+        dispatch({
+          type: 'SET_SHARING_LEVEL_SELF',
+          sharingLevel
+        })
+      }
+
+      dispatch({
+        type: 'SET_SHARING_LEVEL_FRIEND',
+        sharingLevel
+      })
+    }
+  },
+
+  MULTICAST_SHARING_LEVEL: (sharingLevel) => {
+    return (dispatch, getState) => {
+      var devices = getState().devices
+
+      devices.forEach((device) => {
+        peers.send({
+          type: 'MULTICAST_SHARING_LEVEL',
+          sharingLevel
+        }, device.peerId)
+      })
+    }
+  },
+
+  RECEIVE_SHARING_LEVEL: (sharingLevel, peerId) => {
+    return (dispatch, getState) => {
+      var devices = getState().devices
+
+      if (!devices.some((device) => device.peerId === peerId)) {
+        debug('received sharing level from unkown device - skipping', peerId)
+        return
+      }
+
+      debug('received sharing level update from device', sharingLevel, peerId)
+      dispatch({
+        type: 'SET_SHARING_LEVEL_DEVICE',
+        peerId,
+        sharingLevel
+      })
     }
   }
 }

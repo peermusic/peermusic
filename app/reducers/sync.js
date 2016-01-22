@@ -10,7 +10,7 @@ module.exports = (state = initialState, action) => {
     'SET_PROVIDER_LIST': () => {
       return {...state, providers: action.providers}
     },
-    'SET_SHARING_LEVEL': () => {
+    'SET_SHARING_LEVEL_SELF': () => {
       return {...state, sharingLevel: action.sharingLevel}
     }
   }
