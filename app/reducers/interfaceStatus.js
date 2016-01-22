@@ -2,7 +2,8 @@ const initialState = {
   initialPopover: true,
   playingNextPanel: false,
   mobileNavigation: false,
-  importingSongs: 0
+  importingSongs: 0,
+  desktopNotifications: false
 }
 
 const interfaceStatus = (state = initialState, action) => {
@@ -19,6 +20,8 @@ const interfaceStatus = (state = initialState, action) => {
       return {...state, importingSongs: state.importingSongs - 1}
     case 'RESET_IMPORTING_SONGS':
       return {...state, importingSongs: 0}
+    case 'TOGGLE_DESKTOP_NOTIFICATIONS':
+      return {...state, desktopNotifications: !state.desktopNotifications}
     default:
       return state
   }

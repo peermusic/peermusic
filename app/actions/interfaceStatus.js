@@ -17,6 +17,11 @@ var actions = {
   // Toggle the navigation state for mobile
   TOGGLE_MOBILE_NAVIGATION: () => ({
     type: 'TOGGLE_MOBILE_NAVIGATION'
+  }),
+
+  // Toggle desktop notifications
+  TOGGLE_DESKTOP_NOTIFICATIONS: () => ({
+    type: 'TOGGLE_DESKTOP_NOTIFICATIONS'
   })
 
 }
