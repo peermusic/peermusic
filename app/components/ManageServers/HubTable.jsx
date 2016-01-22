@@ -1,4 +1,5 @@
 const React = require('react')
+const CopyableInput = require('../CopyableInput.jsx')
 
 function HubTable ({ hubs }) {
   return (
@@ -13,7 +14,7 @@ function HubTable ({ hubs }) {
               <tr key={i}>
                 <td className='number'>{i + 1}</td>
                 <td className='break-cell'>
-                  {hub}
+                  <CopyableInput value={hub}/>
                 </td>
               </tr>
           )

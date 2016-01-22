@@ -1,6 +1,7 @@
 const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
+const CopyableInput = require('../CopyableInput.jsx')
 const { DISCARD_ISSUED_INVITE } = require('../../actions')
 
 function IssuedInvitesTable ({ issuedInvitesList, DISCARD_ISSUED_INVITE }) {
@@ -22,7 +23,7 @@ function IssuedInvitesTable ({ issuedInvitesList, DISCARD_ISSUED_INVITE }) {
               <td className={descriptionClass}>{invite.description || 'No description'}</td>
               <td className={inviteClass}>
                 <span className='mobile-column-heading mobile-only'>{invite.description || 'No description'}</span>
-                <input type='text' value={invite.uri || '—'} readOnly onFocus={e => e.target.select()}/>
+                <CopyableInput value={invite.uri || '—'}/>
               </td>
               <td className='remove-button'><a onClick={() => DISCARD_ISSUED_INVITE(invite.sharedSignPubKey)}><i className='fa fa-trash'/></a></td>
             </tr>
