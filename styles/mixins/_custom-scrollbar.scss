@@ -1,18 +1,18 @@
 @mixin custom-scrollbar($color) {
-    &::-webkit-scrollbar {
-        width: 26px;
-    }
+  &::-webkit-scrollbar {
+    width: 26px;
+  }
 
-    &::-webkit-scrollbar-thumb {
-        border: 8px solid rgba(0, 0, 0, 0);
-        border-radius: 100px;
-        background-clip: padding-box;
-        background-color: $color;
-        box-shadow: inset -1px -1px 0 rgba(0, 0, 0, .05), inset 1px 1px 0 rgba(0, 0, 0, .05);
-    }
+  &::-webkit-scrollbar-thumb {
+    border: 8px solid rgba(0, 0, 0, 0);
+    border-radius: 100px;
+    background-clip: padding-box;
+    background-color: $color;
+    box-shadow: inset -1px -1px 0 rgba(0, 0, 0, .05), inset 1px 1px 0 rgba(0, 0, 0, .05);
+  }
 
-    ::-webkit-scrollbar-corner, ::-webkit-resizer, ::-webkit-scrollbar-button {
-        display: none;
-        -webkit-appearance: none;
-    }
+  ::-webkit-scrollbar-corner, ::-webkit-resizer, ::-webkit-scrollbar-button {
+    display: none;
+    -webkit-appearance: none;
+  }
 }

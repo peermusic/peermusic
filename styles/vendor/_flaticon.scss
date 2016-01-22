@@ -1,17 +1,17 @@
 @font-face {
-    font-family: 'Flaticon';
-    src: url('../fonts/flaticon.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Flaticon';
+  src: url('../fonts/flaticon.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 [class^='flaticon-']::before, [class*=' flaticon-']::before,
 [class^='flaticon-']::after, [class*=' flaticon-']::after {
-    font-family: Flaticon;
-    font-style: normal;
+  font-family: Flaticon;
+  font-style: normal;
 }
 
-.flaticon-devices:before {
+.flaticon-devices::before {
     content: '\e000';
 }
 
