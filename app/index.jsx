@@ -10,7 +10,7 @@ const thunk = require('redux-thunk')
 const reduxStorage = require('redux-storage')
 const storageEngine = require('redux-storage/engines/localStorage').default('peermusic-storage')
 const { PLAYER_SYNCHRONIZE, RESET_IMPORTING_SONGS, INSTANCES_CONNECT, INITIATE_SYNC,
-  INITIALLY_LOAD_COVERS, START_DOWNLOAD_LOOP } = require('./actions')
+  INITIALLY_LOAD_COVERS, START_DOWNLOAD_LOOP, START_SHARING_LEVEL_SYNC_LOOP } = require('./actions')
 
 // Create our reducer composition via the reducers registered in reducers/index.js
 const reducer = reduxStorage.reducer(combineReducers(require('./reducers')))
@@ -40,6 +40,7 @@ load(store).then(() => {
   render()
 
   START_DOWNLOAD_LOOP(1000 * 5, 1000 * 60 * 1)(store.dispatch, store.getState)
+  START_SHARING_LEVEL_SYNC_LOOP(1000 * 5, 1000 * 60 * 1)(store.dispatch, store.getState)
 })
 
 // Require our application components

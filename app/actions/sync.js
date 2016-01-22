@@ -188,6 +188,16 @@ var actions = {
     }
   },
 
+  START_SHARING_LEVEL_SYNC_LOOP: (timeout, interval) => {
+    return (dispatch, getState) => {
+      window.setTimeout(muticastSharingLevel, timeout)
+      window.setInterval(muticastSharingLevel, interval)
+      function muticastSharingLevel () {
+        actions.MULTICAST_SHARING_LEVEL()(dispatch, getState)
+      }
+    }
+  },
+
   REQUEST_SONG: (id) => {
     return (dispatch, getState) => {
       var song = getState().songs.find((song) => song.id === id)
