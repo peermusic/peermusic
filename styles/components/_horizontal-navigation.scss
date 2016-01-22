@@ -2,36 +2,36 @@
 @import '../mixins/reset-list';
 
 .horizontal-navigation-wrapper {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .horizontal-navigation {
-    display: flex;
-    max-width: 960px;
-    margin: 10px 25px 15px;
-    border-bottom: 1px solid $background-gray;
+  display: flex;
+  max-width: 960px;
+  margin: 10px 25px 15px;
+  border-bottom: 1px solid $background-gray;
 
-    a {
-        margin-right: 25px;
-        padding: 15px 0;
-        color: $color-gray;
-        font-size: 80%;
-        letter-spacing: 1px;
-        text-decoration: none;
-        text-transform: uppercase;
+  a {
+    margin-right: 25px;
+    padding: 15px 0;
+    color: $color-gray;
+    font-size: 80%;
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
 
-        &:hover {
-            color: $color-light-gray;
-        }
-
-        &.active {
-            padding-bottom: 13px;
-            border-bottom: 2px solid $color-brand;
-            color: $color-light-gray;
-        }
-
+    &:hover {
+      color: $color-light-gray;
     }
+
+    &.active {
+      padding-bottom: 13px;
+      border-bottom: 2px solid $color-brand;
+      color: $color-light-gray;
+    }
+
+  }
 
 }

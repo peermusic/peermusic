@@ -1,45 +1,45 @@
 @import '../../colors';
 
 .song-table {
-    tr:first-child {
-        display: none;
-    }
+  tr:first-child {
+    display: none;
+  }
 
-    td, th {
-        padding: 10px 0;
-    }
+  td, th {
+    padding: 10px 0;
+  }
 
-    tr:not(:first-child):hover {
-        background: transparent;
-    }
+  tr:not(:first-child):hover {
+    background: transparent;
+  }
 
-    .title small {
-        display: block;
-        margin-top: 2px;
-        color: $color-gray;
-    }
+  .title small {
+    display: block;
+    margin-top: 2px;
+    color: $color-gray;
+  }
 
-    .number, .play-button, .artist, .album, .creation-date, .song-time, .download-button {
-        display: none;
-    }
+  .number, .play-button, .artist, .album, .creation-date, .song-time, .download-button {
+    display: none;
+  }
 
-    .add-button, .favorite-button, .availability {
-        padding: 10px 5px;
-    }
+  .add-button, .favorite-button, .availability {
+    padding: 10px 5px;
+  }
 
-    .play-button, .add-button, .favorite-button, .download-button {
-        a {
-            visibility: visible;
-        }
+  .play-button, .add-button, .favorite-button, .download-button {
+    a {
+      visibility: visible;
     }
+  }
 
-    .mobile-column-heading {
-        margin-bottom: 5px;
-        color: $color-gray;
-        font-size: 12px;
-    }
+  .mobile-column-heading {
+    margin-bottom: 5px;
+    color: $color-gray;
+    font-size: 12px;
+  }
 
-    &.no-borders tr td {
-        border: 0;
-    }
+  &.no-borders tr td {
+    border: 0;
+  }
 }
