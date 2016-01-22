@@ -109,7 +109,7 @@ gulp.task('generateAppcache', function () {
   return gulp.src(['public/**/*'], {base: 'public/'})
     .pipe(manifest({
       hash: true,
-      preferOnline: true,
+      preferOnline: false,
       network: [],
       filename: 'page.appcache',
       exclude: 'page.appcache'
