@@ -25,13 +25,13 @@ textarea {
 }
 
 select {
-    padding: 6px 25px 6px 10px;
-    background: $background-dark-gray url('../assets/dropdown.png') no-repeat 90% 0;
-    -webkit-appearance: none;
+  padding: 6px 25px 6px 10px;
+  background: $background-dark-gray url('../assets/dropdown.png') no-repeat 90% 0;
+  -webkit-appearance: none;
 
-    &:disabled {
-        background: $background-dark-gray;
-    }
+  &:disabled {
+    background: $background-dark-gray;
+  }
 }
 
 .copyable-input {
