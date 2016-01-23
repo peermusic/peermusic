@@ -3,7 +3,8 @@ const initialState = {
   playingNextPanel: false,
   mobileNavigation: false,
   importingSongs: 0,
-  notifications: false
+  notifications: false,
+  theme: 'dark'
 }
 
 const interfaceStatus = (state = initialState, action) => {
@@ -20,6 +21,8 @@ const interfaceStatus = (state = initialState, action) => {
       return {...state, importingSongs: state.importingSongs - 1}
     case 'RESET_IMPORTING_SONGS':
       return {...state, importingSongs: 0}
+    case 'TOGGLE_THEME':
+      return {...state, theme: action.theme}
     case 'TOGGLE_NOTIFICATIONS':
       return {...state, notifications: !state.notifications}
     default:
