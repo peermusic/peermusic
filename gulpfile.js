@@ -8,7 +8,6 @@ var watchify = require('watchify')
 var babelify = require('babelify')
 var notifier = require('node-notifier')
 var chalk = require('chalk')
-var concat = require('gulp-concat')
 var sass = require('gulp-sass')
 var livereload = require('gulp-livereload')
 var http = require('http')
@@ -82,7 +81,6 @@ gulp.task('scssTask', function () {
     var start = Date.now()
     var pipe = gulp.src('./styles/**/*.scss')
       .pipe(sass().on('error', handleErrors))
-      .pipe(concat('bundle.css'))
       .pipe(gulp.dest('./public/build/'))
 
     if (!deploy) {

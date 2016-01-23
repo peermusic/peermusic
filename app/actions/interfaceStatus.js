@@ -30,6 +30,33 @@ var actions = {
 
       dispatch({type: 'TOGGLE_NOTIFICATIONS'})
     }
+  },
+
+  TOGGLE_THEME: (theme) => {
+    return (dispatch, getState) => {
+      dispatch({type: 'TOGGLE_THEME', theme})
+      actions.LOAD_THEME()(dispatch, getState)
+    }
+  },
+
+  // Change the theme
+  LOAD_THEME: () => {
+    return (dispatch, getState) => {
+      const theme = getState().interfaceStatus.theme
+      const href = `build/theme-${theme}.css`
+
+      // Remove the current theme stylesheet
+      let currentLink = document.querySelector('#style')
+      let head = currentLink.parentElement
+      head.removeChild(currentLink)
+
+      // Add the new theme stylesheet
+      let newLink = document.createElement('link')
+      newLink.setAttribute('id', 'style')
+      newLink.setAttribute('rel', 'stylesheet')
+      newLink.setAttribute('href', href)
+      head.appendChild(newLink)
+    }
   }
 
 }
