@@ -14,6 +14,7 @@ function ManageDevices ({ devices, issuedInvitesList, myId, receivedInvitesList,
         <DevicesTable devices={devices} myId={myId} sharingLevel={sharingLevel}/>
         {devices.length === 0
             ? <div>
+                <br/>
                 <h3>No devices authenticated yet.</h3>
                 <p>To authenticate devices, create a new invite on the "issue invites" page and paste the resulting URL into the "recieve invites" page on your other device.</p>
               </div>

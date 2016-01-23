@@ -16,6 +16,7 @@ function Navigation ({ routing, TOGGLE_MOBILE_NAVIGATION }) {
   var friendsLinkClasses = classNames('flaticon-friends', {selected: routing.path.indexOf('/manage-friends') === 0})
   var devicesLinkClasses = classNames('flaticon-devices', {selected: routing.path.indexOf('/manage-devices') === 0})
   var manageServersLinkClasses = classNames('flaticon-servers', {selected: routing.path.indexOf('/manage-servers') === 0})
+  var manageInternalsLinkClasses = classNames('flaticon-internals', {selected: routing.path.indexOf('/manage-internals') === 0})
 
   return (
       <div className='navigation'>
@@ -40,6 +41,7 @@ function Navigation ({ routing, TOGGLE_MOBILE_NAVIGATION }) {
             <li><Link to='/manage-songs' className='flaticon-songs' {...linkProperties}>Songs</Link></li>
             <li><Link to='/manage-servers/scraping' className={manageServersLinkClasses} {...linkProperties}>Servers</Link></li>
             <li><Link to='/manage-downloads' className='flaticon-download' {...linkProperties}>Downloads</Link></li>
+            <li><Link to='/manage-internals/settings' className={manageInternalsLinkClasses} {...linkProperties}>Internals</Link></li>
           </ul>
         </div>
         <CurrentSong/>

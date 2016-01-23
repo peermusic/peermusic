@@ -25,8 +25,10 @@ textarea {
 }
 
 select {
+  height: 33px;
   padding: 6px 25px 6px 10px;
-  background: $background-dark-gray url('../assets/dropdown.png') no-repeat 90% 0;
+  background: $background-dark-gray url('../assets/dropdown.png') no-repeat 90% -1px;
+  font-size: 14px;
   -webkit-appearance: none;
 
   &:disabled {
@@ -153,7 +155,7 @@ input[type='submit'], input[type='button'], button, .fake-file-input {
     label {
       align-self: flex-start;
       width: 150px;
-      padding-top: 10px;
+      padding-top: 3px;
       color: $color-light-gray;
       font-size: 12px;
       text-transform: uppercase;

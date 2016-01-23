@@ -15,58 +15,46 @@
   content: '\e000';
 }
 
-.flaticon-download:before {
+.flaticon-download::before {
   content: '\e001';
 }
 
-.flaticon-disk:before {
+.flaticon-disk::before {
   content: '\e002';
 }
 
-.flaticon-harddrive:before {
+.flaticon-servers::before {
   content: '\e003';
 }
 
-.flaticon-servers:before {
+.flaticon-favorite::before {
   content: '\e004';
 }
 
-.flaticon-favorite:before {
+.flaticon-internals::before {
   content: '\e005';
 }
 
-.flaticon-friends:before {
+.flaticon-friends::before {
   content: '\e006';
 }
 
-.flaticon-history:before {
+.flaticon-history::before {
   content: '\e007';
 }
 
-.flaticon-search:before {
+.flaticon-songs::before {
   content: '\e008';
 }
 
-.flaticon-songs:before {
+.flaticon-albums::before {
   content: '\e009';
 }
 
-.flaticon-albums:before {
+.flaticon-queue::before {
   content: '\e00a';
 }
 
-.flaticon-overview:before {
+.flaticon-artist::before {
   content: '\e00b';
-}
-
-.flaticon-queue:before {
-  content: '\e00c';
-}
-
-.flaticon-speaker:before {
-  content: '\e00d';
-}
-
-.flaticon-artist:before {
-  content: '\e00e';
 }

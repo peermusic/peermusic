@@ -17,7 +17,20 @@ var actions = {
   // Toggle the navigation state for mobile
   TOGGLE_MOBILE_NAVIGATION: () => ({
     type: 'TOGGLE_MOBILE_NAVIGATION'
-  })
+  }),
+
+  // Toggle desktop notifications
+  TOGGLE_NOTIFICATIONS: () => {
+    return (dispatch, getState) => {
+      const state = getState()
+
+      if (!state.interfaceStatus.notifications && window.Notification.permission !== 'granted') {
+        window.Notification.requestPermission()
+      }
+
+      dispatch({type: 'TOGGLE_NOTIFICATIONS'})
+    }
+  }
 
 }
 

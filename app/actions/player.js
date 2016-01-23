@@ -2,6 +2,7 @@ var engine = require('player-engine')()
 var coversActions = require('./covers.js')
 var shuffle = require('shuffle-array')
 var musicSimilarity = require('music-similarity')
+const ifvisible = require('ifvisible.js')
 
 var actions = {
 
@@ -10,7 +11,7 @@ var actions = {
     return (dispatch, getState) => {
       // Bind the event listeners to the actions
       engine.on('timeupdate', duration => dispatch(actions.PLAYER_CURRENT_DURATION(duration)))
-      engine.on('ended', () => dispatch(actions.PLAYBACK_NEXT()))
+      engine.on('ended', () => dispatch(actions.PLAYBACK_NEXT(true)))
 
       // Get the current state (just after loading)
       const state = getState()
@@ -214,14 +215,18 @@ var actions = {
   },
 
   // Set the next song for the player
-  PLAYBACK_NEXT: () => {
+  PLAYBACK_NEXT: (automatic) => {
     return (dispatch, getState) => {
       const state = getState()
+      const displayNotification = automatic && state.interfaceStatus.notifications && !ifvisible.now()
+        ? (s) => actions.SONG_NOTIFICATION(s)(dispatch, getState)
+        : () => {}
 
       // If we have a queue entry, it *always* takes priority
       const userQueue = state.player.userQueue
       if (userQueue.length > 0) {
         dispatch(actions.PLAYER_SET_SONG(userQueue[0]))
+        displayNotification(userQueue[0])
         dispatch({
           type: 'PLAYBACK_USER_QUEUE_POP'
         })
@@ -233,6 +238,7 @@ var actions = {
       if (history.songs.length - 1 > history.currentIndex) {
         const id = history.songs[history.currentIndex + 1]
         dispatch(actions.PLAYER_SET_SONG(id, true))
+        displayNotification(id)
         dispatch({
           type: 'HISTORY_NEXT'
         })
@@ -256,6 +262,7 @@ var actions = {
       // (e.g. songs of a album or the radio songs)
       if (automaticQueue.length > 0) {
         dispatch(actions.PLAYER_SET_SONG(automaticQueue[0]))
+        displayNotification(automaticQueue[0])
         dispatch({
           type: 'PLAYBACK_AUTOMATIC_QUEUE_POP'
         })
@@ -266,6 +273,26 @@ var actions = {
       console.log('Queue empty')
       actions.PLAYER_SET_PLAYING(false)(dispatch, getState)
       dispatch(actions.PLAYER_SEEK(0))
+    }
+  },
+
+  // Display a notification for the next song if
+  // a) the song transition was automatic
+  // b) the user has desktop notifications enabled
+  // c) the user does not have the window active
+  SONG_NOTIFICATION: (song) => {
+    return (dispatch, getState) => {
+      const state = getState()
+      const songMetadata = state.songs.find(x => x.id === song)
+      const currentCover = state.covers.filter(c => c.id === songMetadata.coverId)[0]
+      const icon = currentCover ? currentCover.url : null
+
+      let notification = new window.Notification(songMetadata.title, {
+        icon: icon,
+        body: songMetadata.artist + ' - ' + songMetadata.album
+      })
+
+      setTimeout(() => notification.close(), 4000)
     }
   },
 

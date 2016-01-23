@@ -56,6 +56,7 @@ const ManageDevices = require('./components/ManageDevices/index.jsx')
 const ManageSongs = require('./components/ManageSongs/index.jsx')
 const ManageServers = require('./components/ManageServers/index.jsx')
 const ManageDownloads = require('./components/ManageDownloads/index.jsx')
+const ManageInternals = require('./components/ManageInternals/index.jsx')
 const Search = require('./components/Search/index.jsx')
 const CurrentlyPlaying = require('./components/CurrentlyPlaying/index.jsx')
 const ProtocolHandler = require('./components/ProtocolHandler.js')
@@ -79,6 +80,7 @@ function render () {
           <Route path='manage-songs' component={ManageSongs}/>
           <Route path='manage-servers/*' component={ManageServers}/>
           <Route path='manage-downloads' component={ManageDownloads}/>
+          <Route path='manage-internals/*' component={ManageInternals}/>
           <Route path='search' component={Search}/>
           <Route path='handle-protocol' component={ProtocolHandler}/>
         </Route>
