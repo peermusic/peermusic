@@ -4,7 +4,7 @@ const initialState = {
   mobileNavigation: false,
   importingSongs: 0,
   notifications: false,
-  theme: 'dark'
+  theme: 'classic'
 }
 
 const interfaceStatus = (state = initialState, action) => {
