@@ -25,11 +25,11 @@ textarea {
 }
 
 select {
+  height: 33px;
   padding: 6px 25px 6px 10px;
   background: $background-dark-gray url('../assets/dropdown.png') no-repeat 90% -1px;
-  -webkit-appearance: none;
   font-size: 14px;
-  height: 33px;
+  -webkit-appearance: none;
 
   &:disabled {
     background: $background-dark-gray;

@@ -20,9 +20,17 @@ var actions = {
   }),
 
   // Toggle desktop notifications
-  TOGGLE_DESKTOP_NOTIFICATIONS: () => ({
-    type: 'TOGGLE_DESKTOP_NOTIFICATIONS'
-  })
+  TOGGLE_NOTIFICATIONS: () => {
+    return (dispatch, getState) => {
+      const state = getState()
+
+      if (!state.interfaceStatus.notifications && window.Notification.permission !== 'granted') {
+        window.Notification.requestPermission()
+      }
+
+      dispatch({type: 'TOGGLE_NOTIFICATIONS'})
+    }
+  }
 
 }
 

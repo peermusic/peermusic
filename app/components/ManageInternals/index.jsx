@@ -4,9 +4,9 @@ const HorizontalNavigation = require('../HorizontalNavigation.jsx')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
 const SettingsForm = require('./SettingsForm.jsx')
 
-function ManageInternals ({  }) {
+function ManageInternals () {
   const views = [
-    {path: '/manage-internals/settings', name: 'Application settings', content: <SettingsForm/>},
+    {path: '/manage-internals/settings', name: 'Application settings', content: <SettingsForm/>}
   ]
   const internalsDisplay = <HorizontalNavigation views={views}/>
 
