@@ -7,11 +7,13 @@ var fs = require('file-system')(['image/jpeg', 'image/jpg', '', 'audio/mp3', 'au
 var musicSimilarity = require('music-similarity')
 
 inherits(Peers, events.EventEmitter)
-var peers = new Peers()
+var peers
 
 var actions = {
   INITIATE_SYNC: () => {
     return (dispatch, getState) => {
+      peers = new Peers(dispatch, getState)
+
       peers.on('data', function (data, peerId) {
         actions.PROCESS_INCOMING_DATA(data, peerId)(dispatch, getState)
       })
@@ -511,9 +513,45 @@ var actions = {
   }
 }
 
-function Peers () {
+function Peers (dispatch, getState) {
+  if (!getState) throw new Error('need getState')
+
   var self = this
   self.remotes = {}
+
+  function honorSharingLevel (sharingLevel, type, devices, peerId) {
+    switch (sharingLevel) {
+      case 'LEECH':
+        if (
+          devices.indexOf(peerId) !== -1 ||
+          type !== 'REQUEST_INVENTORY' ||
+          type !== 'REQUEST_SONG' ||
+          type !== 'MULTICAST_SHARING_LEVEL'
+        ) {
+          debug('I am a leech - cannot send:', type)
+          debug('removing songs that are no longer available')
+          actions.RECEIVE_INVENTORY([], peerId)(dispatch, getState)
+          return false
+        }
+        break
+      case 'PRIVATE':
+        if (
+          devices.indexOf(peerId) !== -1 ||
+          type !== 'MULTICAST_SHARING_LEVEL'
+        ) {
+          debug('I am private - cannot send:', type)
+          debug('removing songs that are no longer available')
+          actions.RECEIVE_INVENTORY({}, peerId)(dispatch, getState)
+          return false
+        }
+        break
+      case 'FRIENDS':
+      case 'EVERYONE':
+        break
+      default: return false
+    }
+    return true
+  }
 
   self.add = (peer, peerId) => {
     self.remotes[peerId] = peer
@@ -572,16 +610,27 @@ function Peers () {
 
   self.send = (data, peerId) => {
     debug('sending to peer', peerId, data.type)
+    var sharingLevel = getState().sync.sharingLevel
+    var devices = getState().devices
+
+    if (!honorSharingLevel(sharingLevel, data.type, devices, peerId)) return
+
     if (!self.remotes[peerId]) {
       debug('cannot send to offline peer', peerId)
       return
     }
+
     self.remotes[peerId].send(data)
   }
 
   self.broadcast = (data) => {
     debug('broadcasting to ' + Object.keys(self.remotes).length + ' peers', data.type)
+    var sharingLevel = getState().sync.sharingLevel
+    var devices = getState().devices
+
     for (let peerId in self.remotes) {
+      if (!honorSharingLevel(sharingLevel, data.type, devices, peerId)) continue
+
       self.remotes[peerId].send(data)
     }
   }
