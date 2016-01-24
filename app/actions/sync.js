@@ -187,16 +187,19 @@ var actions = {
   // Ban a song (do not display anymore)
   BAN_SONG: (id) => {
     return (dispatch, getState) => {
-      let confirm = true
-
-      if (getState().interfaceStatus.showBanNotification) {
-        confirm = window.confirm('This will completely ban the song from ever showing up again.')
-      }
-
-      if (confirm) {
+      if (getState().interfaceStatus.showBanNotification === false) {
         dispatch({type: 'BAN_SONG', id})
         dispatch({type: 'REMOVE_PROVIDER_SONG', id})
+        return
       }
+
+      let confirm = require('../components/Confirm.jsx')
+      confirm('This will completely ban the song from ever showing up again.', 'Okay, ban the song', 'Nevermind').then((value) => {
+        if (value === true) {
+          dispatch({type: 'BAN_SONG', id})
+          dispatch({type: 'REMOVE_PROVIDER_SONG', id})
+        }
+      })
     }
   },
 
