@@ -129,11 +129,15 @@ var actions = {
         return song
       }
 
-      const songs = getState().songs
+      const state = getState()
+      const songs = state.songs
+      const bannedSongs = state.sync.bannedSongs
 
-      // Ignore all songs that we have already
+      // Ignore all songs that we have already or that we explicitly banned
       const localSongs = songs.filter(x => x.local).map(x => x.id)
-      var remoteSongs = theirSongs.filter(x => localSongs.indexOf(x.id) === -1).map(cleanReceivedSong)
+      var remoteSongs = theirSongs.filter(x => bannedSongs.indexOf(x.id) === -1)
+        .filter(x => localSongs.indexOf(x.id) === -1)
+        .map(cleanReceivedSong)
 
       // Load their songs in our state object, if we don't know it yet
       // "knowing" is either holding it locally or knowing of it's remote existence
@@ -177,6 +181,22 @@ var actions = {
         type: 'SET_PROVIDER_LIST',
         providers: providerMap
       })
+    }
+  },
+
+  // Ban a song (do not display anymore)
+  BAN_SONG: (id) => {
+    return (dispatch, getState) => {
+      let confirm = true
+
+      if (getState().interfaceStatus.showBanNotification) {
+        confirm = window.confirm('This will completely ban the song from ever showing up again.')
+      }
+
+      if (confirm) {
+        dispatch({type: 'BAN_SONG', id})
+        dispatch({type: 'REMOVE_PROVIDER_SONG', id})
+      }
     }
   },
 

@@ -148,6 +148,19 @@
       }
     }
 
+    .hover-ban-song {
+      color: $color-gray !important;
+    }
+
+    .hover-ban-song:hover i {
+      @extend .fa;
+      @extend .fa-ban;
+
+      &::before {
+        font: normal normal normal 14px/1 FontAwesome;
+      }
+    }
+
     .download-button .hover-remove-download {
       visibility: visible;
     }

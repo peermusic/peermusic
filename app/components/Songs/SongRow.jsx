@@ -2,7 +2,7 @@ const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
 const { PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, REMOVE_DOWNLOAD,
-  TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG } = require('../../actions')
+  TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG, BAN_SONG } = require('../../actions')
 const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
@@ -119,7 +119,9 @@ class SongRow extends React.Component {
 
     return (
       <td className='availability'>
-        <span className='desktop-only'><i className='flaticon-download'/></span>
+        <span className='desktop-only'>
+          <a onClick={() => this.props.BAN_SONG(this.props.song.id)} className='hover-ban-song'><i className='flaticon-download'/></a>
+        </span>
         <span className='mobile-only'>{this.props.song.downloading ? <i className='fa fa-refresh'/> : <i className='flaticon-download'/>}</span>
       </td>
     )
@@ -222,8 +224,9 @@ SongRow.propTypes = {
   REMOVE_DOWNLOAD: React.PropTypes.func,
   TOGGLE_SONG_FAVORITE: React.PropTypes.func,
   PLAYER_SET_PLAYING: React.PropTypes.func,
-  REQUEST_SONG: React.PropTypes.func
+  REQUEST_SONG: React.PropTypes.func,
+  BAN_SONG: React.PropTypes.func
 }
 
 module.exports = connect(null, {PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG,
-  REMOVE_DOWNLOAD, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG})(SongRow)
+  REMOVE_DOWNLOAD, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG, BAN_SONG})(SongRow)
