@@ -98,10 +98,14 @@ var actions = {
       const filename = state.songs.filter(x => x.id === id)[0].hashName
       fs.delete(filename, (err) => {
         if (err) throw new Error('Error removing song: ' + err)
-        dispatch({
-          type: 'REMOVE_SONG',
-          id
-        })
+
+        // If we still hold providers for this, just set the song on "local",
+        // else it was a song that only we had, so remove it completely
+        if (state.sync.providers[id] && state.sync.providers[id].length > 0) {
+          dispatch({type: 'TOGGLE_SONG_LOCAL', id})
+        } else {
+          dispatch({type: 'REMOVE_SONG', id})
+        }
       })
     }
   },

@@ -132,12 +132,11 @@ var actions = {
       const state = getState()
       const songs = state.songs
       const bannedSongs = state.sync.bannedSongs.map(x => x.id)
+      theirSongs = theirSongs.filter(x => bannedSongs.indexOf(x.id) === -1)
 
       // Ignore all songs that we have already or that we explicitly banned
       const localSongs = songs.filter(x => x.local).map(x => x.id)
-      var remoteSongs = theirSongs.filter(x => bannedSongs.indexOf(x.id) === -1)
-        .filter(x => localSongs.indexOf(x.id) === -1)
-        .map(cleanReceivedSong)
+      var remoteSongs = theirSongs.filter(x => localSongs.indexOf(x.id) === -1).map(cleanReceivedSong)
 
       // Load their songs in our state object, if we don't know it yet
       // "knowing" is either holding it locally or knowing of it's remote existence
@@ -151,7 +150,7 @@ var actions = {
       })
 
       // Update the providers list
-      remoteSongs = remoteSongs.map(x => x.id)
+      remoteSongs = theirSongs.map(x => x.id)
       var providerMap = {...getState().sync.providers}
 
       // Remove the current peer of the song providers
