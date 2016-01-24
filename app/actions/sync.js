@@ -629,7 +629,7 @@ function Peers (dispatch, getState) {
     var devices = getState().devices
 
     for (let peerId in self.remotes) {
-      if (!honorSharingLevel(sharingLevel, data.type, devices, peerId)) return
+      if (!honorSharingLevel(sharingLevel, data.type, devices, peerId)) continue
 
       self.remotes[peerId].send(data)
     }
