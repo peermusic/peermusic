@@ -39,7 +39,7 @@ function ManageDevices ({ devices, issuedInvitesList, myId, receivedInvitesList,
   )
 
   const views = [
-    {path: '/manage-devices/authenticated', name: 'Devices', content: devicesView},
+    {path: '/manage-devices/authenticated', name: 'Devices (' + devices.length + ')', content: devicesView},
     {path: '/manage-devices/issue', name: 'Issue Invites (' + issuedInvitesList.length + ')', content: issueView},
     {path: '/manage-devices/receive', name: 'Receive Invites (' + receivedInvitesList.length + ')', content: receiveView}
   ]
