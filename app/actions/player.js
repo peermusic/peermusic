@@ -292,6 +292,11 @@ var actions = {
         body: songMetadata.artist + ' - ' + songMetadata.album
       })
 
+      notification.onclick = () => {
+        window.focus()
+        notification.close()
+      }
+
       setTimeout(() => notification.close(), 4000)
     }
   },
