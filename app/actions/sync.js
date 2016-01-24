@@ -131,7 +131,7 @@ var actions = {
 
       const state = getState()
       const songs = state.songs
-      const bannedSongs = state.sync.bannedSongs
+      const bannedSongs = state.sync.bannedSongs.map(x => x.id)
 
       // Ignore all songs that we have already or that we explicitly banned
       const localSongs = songs.filter(x => x.local).map(x => x.id)
@@ -187,8 +187,10 @@ var actions = {
   // Ban a song (do not display anymore)
   BAN_SONG: (id) => {
     return (dispatch, getState) => {
+      const song = getState().songs.find(x => x.id == id)
+
       if (getState().interfaceStatus.showBanNotification === false) {
-        dispatch({type: 'BAN_SONG', id})
+        dispatch({type: 'BAN_SONG', song})
         dispatch({type: 'REMOVE_PROVIDER_SONG', id})
         return
       }
@@ -196,7 +198,7 @@ var actions = {
       let confirm = require('../components/Confirm.jsx')
       confirm('This will completely ban the song from ever showing up again.', 'Okay, ban the song', 'Nevermind').then((value) => {
         if (value === true) {
-          dispatch({type: 'BAN_SONG', id})
+          dispatch({type: 'BAN_SONG', song})
           dispatch({type: 'REMOVE_PROVIDER_SONG', id})
         }
       })

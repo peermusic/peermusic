@@ -37,7 +37,7 @@ module.exports = (state = initialState, action) => {
     },
 
     'BAN_SONG': () => {
-      return {...state, bannedSongs: [...state.bannedSongs, action.id]}
+      return {...state, bannedSongs: [...state.bannedSongs, action.song]}
     }
   }
 
