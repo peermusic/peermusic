@@ -46,7 +46,22 @@ class SongRow extends React.Component {
 
   renderTitle (playback, download) {
     if (this.props.options.actionDisabled) {
-      return <td className='title'>{this.props.song.title}</td>
+      return (
+        <td className='title'>
+          <div className='desktop-only'>
+            {this.props.song.title}
+          </div>
+          <div className='mobile-only'>
+            {this.props.song.title}
+            <small>
+              {this.props.song.artist}
+              {this.props.options.album &&
+              <span> - {this.props.song.album}</span>
+              }
+            </small>
+          </div>
+        </td>
+      )
     }
 
     let action = (e) => {
