@@ -187,7 +187,7 @@ var actions = {
   // Ban a song (do not display anymore)
   BAN_SONG: (id) => {
     return (dispatch, getState) => {
-      const song = getState().songs.find(x => x.id == id)
+      const song = getState().songs.find(x => x.id === id)
 
       if (getState().interfaceStatus.showBanNotification === false) {
         dispatch({type: 'BAN_SONG', song})
@@ -204,6 +204,11 @@ var actions = {
       })
     }
   },
+
+  REMOVE_BAN: (id) => ({
+    type: 'REMOVE_BAN',
+    id
+  }),
 
   START_SYNC_LOOP: () => {
     return null

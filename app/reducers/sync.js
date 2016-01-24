@@ -38,6 +38,10 @@ module.exports = (state = initialState, action) => {
 
     'BAN_SONG': () => {
       return {...state, bannedSongs: [...state.bannedSongs, action.song]}
+    },
+
+    'REMOVE_BAN': () => {
+      return {...state, bannedSongs: state.bannedSongs.filter(x => x.id !== action.id)}
     }
   }
 

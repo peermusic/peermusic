@@ -2,7 +2,6 @@ const React = require('react')
 const { connect } = require('react-redux')
 const { ADD_SONG, CLEAR_DATA } = require('../../actions')
 const SongTable = require('../Songs/SongTable.jsx')
-const MobilePageHeader = require('../MobilePageHeader.jsx')
 const InitialImportMessage = require('../InitialImportMessage.jsx')
 
 class OwnSongs extends React.Component {

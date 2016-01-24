@@ -17,7 +17,9 @@ var defaultColumns = {
   favorite: true,
   remove: false,
   availability: true,
-  desaturateRemote: true
+  desaturateRemote: true,
+  actionDisabled: false,
+  removeBan: false
 }
 
 function SongTable ({ songs, totalSongs, playing, currentSong, options }) {
@@ -40,6 +42,7 @@ function SongTable ({ songs, totalSongs, playing, currentSong, options }) {
           {options.favorite && <th className='favorite-button'/>}
           {options.remove && <th className='remove-button'/>}
           {options.removeDownload && <th className='remove-button'/>}
+          {options.removeBan && <th className='remove-button'/>}
         </tr>
         {songs.map((song, i) => {
           const selected = song.id === currentSong
