@@ -16,4 +16,8 @@
   h3 {
     padding-bottom: 20px;
   }
+
+  button:not(:first-child) {
+    margin-left: 15px;
+  }
 }

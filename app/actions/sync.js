@@ -129,11 +129,15 @@ var actions = {
         return song
       }
 
-      const songs = getState().songs
+      const state = getState()
+      const songs = state.songs
+      const bannedSongs = state.sync.bannedSongs.map(x => x.id)
 
-      // Ignore all songs that we have already
+      // Ignore all songs that we have already or that we explicitly banned
       const localSongs = songs.filter(x => x.local).map(x => x.id)
-      var remoteSongs = theirSongs.filter(x => localSongs.indexOf(x.id) === -1).map(cleanReceivedSong)
+      var remoteSongs = theirSongs.filter(x => bannedSongs.indexOf(x.id) === -1)
+        .filter(x => localSongs.indexOf(x.id) === -1)
+        .map(cleanReceivedSong)
 
       // Load their songs in our state object, if we don't know it yet
       // "knowing" is either holding it locally or knowing of it's remote existence
@@ -179,6 +183,32 @@ var actions = {
       })
     }
   },
+
+  // Ban a song (do not display anymore)
+  BAN_SONG: (id) => {
+    return (dispatch, getState) => {
+      const song = getState().songs.find(x => x.id === id)
+
+      if (getState().interfaceStatus.showBanNotification === false) {
+        dispatch({type: 'BAN_SONG', song})
+        dispatch({type: 'REMOVE_PROVIDER_SONG', id})
+        return
+      }
+
+      let confirm = require('../components/Confirm.jsx')
+      confirm('This will completely ban the song from ever showing up again.', 'Okay, ban the song', 'Nevermind').then((value) => {
+        if (value === true) {
+          dispatch({type: 'BAN_SONG', song})
+          dispatch({type: 'REMOVE_PROVIDER_SONG', id})
+        }
+      })
+    }
+  },
+
+  REMOVE_BAN: (id) => ({
+    type: 'REMOVE_BAN',
+    id
+  }),
 
   START_SYNC_LOOP: () => {
     return null

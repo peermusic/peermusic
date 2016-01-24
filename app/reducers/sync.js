@@ -4,7 +4,8 @@ const initialState = {
   providers: {},
   sharingLevel: 'FRIENDS',
   forFriends: [],
-  allowedPendingDownloadsForFriends: 50
+  allowedPendingDownloadsForFriends: 50,
+  bannedSongs: []
 }
 
 module.exports = (state = initialState, action) => {
@@ -33,6 +34,14 @@ module.exports = (state = initialState, action) => {
 
     'RESET_SONG_PROVIDING_CHRONOLOGY': () => {
       return {...state, forFriends: []}
+    },
+
+    'BAN_SONG': () => {
+      return {...state, bannedSongs: [...state.bannedSongs, action.song]}
+    },
+
+    'REMOVE_BAN': () => {
+      return {...state, bannedSongs: state.bannedSongs.filter(x => x.id !== action.id)}
     }
   }
 

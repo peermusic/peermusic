@@ -2,7 +2,7 @@ const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
 const { PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, REMOVE_DOWNLOAD,
-  TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG } = require('../../actions')
+  TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG, BAN_SONG, REMOVE_BAN } = require('../../actions')
 const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
@@ -45,6 +45,10 @@ class SongRow extends React.Component {
   }
 
   renderTitle (playback, download) {
+    if (this.props.options.actionDisabled) {
+      return <td className='title'>{this.props.song.title}</td>
+    }
+
     let action = (e) => {
       if (!this.props.song.local) {
         download()
@@ -119,7 +123,9 @@ class SongRow extends React.Component {
 
     return (
       <td className='availability'>
-        <span className='desktop-only'><i className='flaticon-download'/></span>
+        <span className='desktop-only'>
+          <a onClick={() => this.props.BAN_SONG(this.props.song.id)} className='hover-ban-song'><i className='flaticon-download'/></a>
+        </span>
         <span className='mobile-only'>{this.props.song.downloading ? <i className='fa fa-refresh'/> : <i className='flaticon-download'/>}</span>
       </td>
     )
@@ -153,6 +159,10 @@ class SongRow extends React.Component {
 
   renderRemoveDownload () {
     return <td className='remove-button'><a onClick={() => this.props.REMOVE_DOWNLOAD(this.props.song.id)}><i className='fa fa-trash'/></a></td>
+  }
+
+  renderRemoveBan () {
+    return <td className='remove-button'><a onClick={() => this.props.REMOVE_BAN(this.props.song.id)}><i className='fa fa-trash'/></a></td>
   }
 
   playbackFunction () {
@@ -204,6 +214,7 @@ class SongRow extends React.Component {
           {this.props.options.favorite ? this.renderFavorite() : undefined}
           {this.props.options.remove ? this.renderRemove() : undefined}
           {this.props.options.removeDownload ? this.renderRemoveDownload() : undefined}
+          {this.props.options.removeBan ? this.renderRemoveBan() : undefined}
         </tr>
     )
   }
@@ -222,8 +233,10 @@ SongRow.propTypes = {
   REMOVE_DOWNLOAD: React.PropTypes.func,
   TOGGLE_SONG_FAVORITE: React.PropTypes.func,
   PLAYER_SET_PLAYING: React.PropTypes.func,
-  REQUEST_SONG: React.PropTypes.func
+  REQUEST_SONG: React.PropTypes.func,
+  BAN_SONG: React.PropTypes.func,
+  REMOVE_BAN: React.PropTypes.func
 }
 
 module.exports = connect(null, {PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG,
-  REMOVE_DOWNLOAD, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG})(SongRow)
+  REMOVE_DOWNLOAD, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG, BAN_SONG, REMOVE_BAN})(SongRow)

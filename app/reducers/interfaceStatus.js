@@ -4,7 +4,8 @@ const initialState = {
   mobileNavigation: false,
   importingSongs: 0,
   notifications: false,
-  theme: 'classic'
+  theme: 'classic',
+  showBanNotification: true
 }
 
 const interfaceStatus = (state = initialState, action) => {
@@ -25,6 +26,8 @@ const interfaceStatus = (state = initialState, action) => {
       return {...state, theme: action.theme}
     case 'TOGGLE_NOTIFICATIONS':
       return {...state, notifications: !state.notifications}
+    case 'BAN_SONG':
+      return {...state, showBanNotification: false}
     default:
       return state
   }
