@@ -69,6 +69,35 @@
       width: 25px;
     }
 
+    .status {
+      width: 75px;
+    }
+
+    .mobile-status {
+      margin-top: 10px;
+      margin-left: 3px;
+      font-size: 12px;
+
+      > span:not(:first-child) {
+        margin-left: 7px;
+      }
+    }
+
+    .status, .mobile-status {
+      .fa {
+        margin-right: 3px;
+      }
+
+      .online {
+        color: $color-brand;
+      }
+
+      .offline {
+        color: $color-gray;
+        opacity: .5;
+      }
+    }
+
     .qr {
       width: 150px;
     }
