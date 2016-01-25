@@ -136,6 +136,11 @@ var actions = {
         sharedSignPubKey
       })
 
+      dispatch({
+        type: 'WHITELIST_ADD',
+        peerId
+      })
+
       if (invite.ownInstance) {
         window.setTimeout(() => {
           require('./sync').MULTICAST_SHARING_LEVEL()(dispatch, getState)
