@@ -41,20 +41,31 @@ const instances = (state = initialState, action) => {
     },
 
     INVITE_VALIDATED: () => {
-      var whitelist = [...state.whitelist, action.peerId]
-
       if (action.sharedSignPubKey) {
         // closing issued invite:
         const issuedInvites = state.issuedInvites.filter(x => x !== action.sharedSignPubKey)
         const issuedInvitesList = state.issuedInvitesList.filter(x => x.sharedSignPubKey !== action.sharedSignPubKey)
-        return {...state, whitelist, issuedInvites, issuedInvitesList}
+        return {...state, issuedInvites, issuedInvitesList}
       } else {
         // closing received invite
         let receivedInvites = {...state.receivedInvites}
         delete receivedInvites[action.peerId]
         const receivedInvitesList = state.receivedInvitesList.filter(x => x.theirPubKey !== action.peerId)
-        return {...state, whitelist, receivedInvites, receivedInvitesList}
+        return {...state, receivedInvites, receivedInvitesList}
       }
+    },
+
+    WEBRTC_WHITELIST_ADD: () => {
+      return {...state, whitelist: [...state.whitelist, action.peerId]}
+    },
+
+    WEBRTC_WHITELIST_REMOVE: () => {
+      var index = state.whitelist.indexOf(action.peerId)
+      const whitelist = [
+        ...state.whitelist.slice(0, index),
+        ...state.whitelist.slice(index + 1)
+      ]
+      return {...state, whitelist}
     },
 
     DISCARD_RECEIVED_INVITE: () => {
@@ -74,15 +85,6 @@ const instances = (state = initialState, action) => {
         ...state.issuedInvitesList.slice(index + 1)
       ]
       return {...state, issuedInvitesList}
-    },
-
-    REMOVE_PEER: () => {
-      var index = state.whitelist.indexOf(action.peerId)
-      const whitelist = [
-        ...state.whitelist.slice(0, index),
-        ...state.whitelist.slice(index + 1)
-      ]
-      return {...state, whitelist}
     }
   }
 
