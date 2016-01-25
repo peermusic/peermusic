@@ -136,6 +136,11 @@ var actions = {
         sharedSignPubKey
       })
 
+      dispatch({
+        type: 'WEBRTC_WHITELIST_ADD',
+        peerId
+      })
+
       if (invite.ownInstance) {
         window.setTimeout(() => {
           require('./sync').MULTICAST_SHARING_LEVEL()(dispatch, getState)
@@ -160,7 +165,7 @@ var actions = {
   REMOVE_PEER: (peerId) => {
     return (dispatch) => {
       dispatch({
-        type: 'REMOVE_PEER',
+        type: 'WEBRTC_WHITELIST_REMOVE',
         peerId
       })
 
