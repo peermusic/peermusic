@@ -7,7 +7,7 @@ function InitialImportMessage ({ manage }) {
       <img src='assets/import-songs.png'/>
       {manage
         ? <div className='mobile-only'>You didn't add any songs yet! Just tap the button above!</div>
-        : <Link className='mobile-only' to='/manage-songs'>You didn't add any songs yet! You can add them by tapping here!</Link>
+        : <Link className='mobile-only' to='/manage-songs/own'>You didn't add any songs yet! You can add them by tapping here!</Link>
       }
       <div className='desktop-only'>
         You didn't add any songs yet!<br/>
