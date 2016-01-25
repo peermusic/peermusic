@@ -27,34 +27,38 @@
   content: '\e003';
 }
 
-.flaticon-favorite::before {
+.flaticon-remote::before {
   content: '\e004';
 }
 
-.flaticon-internals::before {
+.flaticon-favorite::before {
   content: '\e005';
 }
 
-.flaticon-friends::before {
+.flaticon-internals::before {
   content: '\e006';
 }
 
-.flaticon-history::before {
+.flaticon-friends::before {
   content: '\e007';
 }
 
-.flaticon-songs::before {
+.flaticon-history::before {
   content: '\e008';
 }
 
-.flaticon-albums::before {
+.flaticon-songs::before {
   content: '\e009';
 }
 
-.flaticon-queue::before {
+.flaticon-albums::before {
   content: '\e00a';
 }
 
-.flaticon-artist::before {
+.flaticon-queue::before {
   content: '\e00b';
+}
+
+.flaticon-artist::before {
+  content: '\e00c';
 }

@@ -5,7 +5,8 @@ const initialState = {
   importingSongs: 0,
   notifications: false,
   theme: 'classic',
-  showBanNotification: true
+  showBanNotification: true,
+  remotePlaybackPanel: false
 }
 
 const interfaceStatus = (state = initialState, action) => {
@@ -14,6 +15,8 @@ const interfaceStatus = (state = initialState, action) => {
       return {...state, initialPopover: false}
     case 'TOGGLE_PLAYING_NEXT_PANEL':
       return {...state, playingNextPanel: !state.playingNextPanel}
+    case 'TOGGLE_REMOTE_PLAYBACK_PANEL':
+      return {...state, remotePlaybackPanel: !state.remotePlaybackPanel}
     case 'TOGGLE_MOBILE_NAVIGATION':
       return {...state, mobileNavigation: !state.mobileNavigation}
     case 'INCREMENT_IMPORTING_SONGS':

@@ -15,6 +15,13 @@ const device = (state = {}, action) => {
         ...state,
         sharingLevel: action.sharingLevel
       }
+    case 'TOGGLE_DEVICE_REMOTE_PLAYBACK':
+      if (action.peerId !== state.peerId) return
+
+      return {
+        ...state,
+        remotePlayback: !state.remotePlayback
+      }
     default:
       return state
   }
@@ -30,6 +37,8 @@ const devices = (state = [], action) => {
       if (index === -1) return state
       return [...state.slice(0, index), ...state.slice(index + 1)]
     case 'SET_SHARING_LEVEL_DEVICE':
+      return state.map(s => device(s, action))
+    case 'TOGGLE_DEVICE_REMOTE_PLAYBACK':
       return state.map(s => device(s, action))
     default:
       return state

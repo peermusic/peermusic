@@ -14,6 +14,13 @@ var actions = {
     }
   },
 
+  // Show / hide the remote playback panel
+  TOGGLE_REMOTE_PLAYBACK_PANEL: () => {
+    return {
+      type: 'TOGGLE_REMOTE_PLAYBACK_PANEL'
+    }
+  },
+
   // Toggle the navigation state for mobile
   TOGGLE_MOBILE_NAVIGATION: () => ({
     type: 'TOGGLE_MOBILE_NAVIGATION'

@@ -3,17 +3,18 @@ const ReactDOM = require('react-dom')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
 const {
-    TOGGLE_PLAYING_NEXT_PANEL,
-    PLAYER_SET_PLAYING,
-    PLAYER_SEEK,
-    PLAYER_SET_VOLUME,
-    PLAYBACK_NEXT,
-    PLAYBACK_BACK,
-    TOGGLE_SONG_FAVORITE,
-    TOGGLE_RANDOM_PLAYBACK,
-    TOGGLE_REPEAT_PLAYBACK,
-    TOGGLE_RADIO_PLAYBACK
-} = require('../actions')
+  TOGGLE_PLAYING_NEXT_PANEL,
+  PLAYER_SET_PLAYING,
+  PLAYER_SEEK,
+  PLAYER_SET_VOLUME,
+  PLAYBACK_NEXT,
+  PLAYBACK_BACK,
+  TOGGLE_SONG_FAVORITE,
+  TOGGLE_RANDOM_PLAYBACK,
+  TOGGLE_REPEAT_PLAYBACK,
+  TOGGLE_RADIO_PLAYBACK,
+  TOGGLE_REMOTE_PLAYBACK_PANEL
+  } = require('../actions')
 const Duration = require('./Duration.jsx')
 const CurrentSong = require('./CurrentSong.jsx')
 
@@ -58,10 +59,11 @@ class Player extends React.Component {
 
   render () {
     const {
-        player, currentSong, backEnabled, playingNextPanel, randomPlayback, radioPlayback,
-        repeatPlayback, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYBACK_NEXT,
-        PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK, TOGGLE_REPEAT_PLAYBACK, TOGGLE_RADIO_PLAYBACK
-    } = this.props
+      player, currentSong, backEnabled, playingNextPanel, randomPlayback, radioPlayback,
+      repeatPlayback, remotePlaybackPanel, TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYBACK_NEXT,
+      PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK, TOGGLE_REPEAT_PLAYBACK, TOGGLE_RADIO_PLAYBACK,
+      TOGGLE_REMOTE_PLAYBACK_PANEL
+      } = this.props
 
     const backButton = (backEnabled)
         ? <button onClick={() => PLAYBACK_BACK()}><i className='fa fa-step-backward'/></button>
@@ -74,6 +76,7 @@ class Player extends React.Component {
     var repeatClass = classNames('repeat', {active: repeatPlayback})
     var favoriteClass = classNames('favorite', {active: currentSong && currentSong.favorite})
     var playlistClass = classNames('playlist', {active: playingNextPanel})
+    var remotePlaybackClass = classNames('remote-playback', {active: remotePlaybackPanel})
     var shuffleClass = classNames('shuffle', {active: randomPlayback})
     var radioClass = classNames('radio', {active: radioPlayback})
     var currentDuration = 0
@@ -134,6 +137,10 @@ class Player extends React.Component {
             <div className={playlistClass}>
               <a onClick={() => TOGGLE_PLAYING_NEXT_PANEL() }><i className='flaticon-queue'/></a>
             </div>
+
+            <div className={remotePlaybackClass}>
+              <a onClick={() => TOGGLE_REMOTE_PLAYBACK_PANEL() }><i className='flaticon-remote'/></a>
+            </div>
           </div>
 
           <div className='mobile-current-song'>
@@ -159,6 +166,7 @@ Player.propTypes = {
   randomPlayback: React.PropTypes.bool,
   radioPlayback: React.PropTypes.bool,
   repeatPlayback: React.PropTypes.bool,
+  remotePlaybackPanel: React.PropTypes.bool,
   TOGGLE_PLAYING_NEXT_PANEL: React.PropTypes.func,
   PLAYER_SET_PLAYING: React.PropTypes.func,
   PLAYBACK_NEXT: React.PropTypes.func,
@@ -166,7 +174,8 @@ Player.propTypes = {
   TOGGLE_SONG_FAVORITE: React.PropTypes.func,
   TOGGLE_RANDOM_PLAYBACK: React.PropTypes.func,
   TOGGLE_REPEAT_PLAYBACK: React.PropTypes.func,
-  TOGGLE_RADIO_PLAYBACK: React.PropTypes.func
+  TOGGLE_RADIO_PLAYBACK: React.PropTypes.func,
+  TOGGLE_REMOTE_PLAYBACK_PANEL: React.PropTypes.func
 }
 
 module.exports = connect(
@@ -177,7 +186,8 @@ module.exports = connect(
       playingNextPanel: state.interfaceStatus.playingNextPanel,
       randomPlayback: state.player.randomPlayback,
       repeatPlayback: state.player.repeatPlayback,
-      radioPlayback: state.player.radioPlayback
+      radioPlayback: state.player.radioPlayback,
+      remotePlaybackPanel: state.interfaceStatus.remotePlaybackPanel
     }),
-    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK, TOGGLE_REPEAT_PLAYBACK, TOGGLE_RADIO_PLAYBACK}
+    {TOGGLE_PLAYING_NEXT_PANEL, PLAYER_SET_PLAYING, PLAYER_SEEK, PLAYER_SET_VOLUME, PLAYBACK_NEXT, PLAYBACK_BACK, TOGGLE_SONG_FAVORITE, TOGGLE_RANDOM_PLAYBACK, TOGGLE_REPEAT_PLAYBACK, TOGGLE_RADIO_PLAYBACK, TOGGLE_REMOTE_PLAYBACK_PANEL}
 )(Player)

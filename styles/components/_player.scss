@@ -130,7 +130,7 @@
     display: none;
   }
 
-  .favorite, .playlist, .shuffle, .radio, .share, .repeat {
+  .favorite, .playlist, .shuffle, .radio, .share, .repeat, .remote-playback {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -161,6 +161,19 @@
   }
 
   .playlist {
+    margin-left: 35px;
+
+    @media (max-width: 1600px) {
+      display: none;
+    }
+
+    i {
+      position: relative;
+      top: -2px;
+    }
+  }
+
+  .remote-playback {
     margin-right: 50px;
     margin-left: 35px;
 

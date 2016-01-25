@@ -4,10 +4,11 @@ const Navigation = require('./Navigation.jsx')
 const Player = require('./Player.jsx')
 const DropPageWrapper = require('./DropPageWrapper.jsx')
 const PlayingNext = require('./PlayingNext/index.jsx')
+const RemoteDevicePlayback = require('./RemoteDevicePlayback/index.jsx')
 const { HIDE_INITIAL_POPOVER } = require('../actions')
 
-function App ({ children, currentUrl, playingNextPanel, initialPopover, HIDE_INITIAL_POPOVER }) {
-  var playingNext, popover
+function App ({ children, currentUrl, playingNextPanel, initialPopover, remotePlaybackPanel, HIDE_INITIAL_POPOVER }) {
+  var playingNext, remoteDeviceSync, popover
   if (currentUrl !== '/playing-next' && playingNextPanel) {
     playingNext = <div className='content queue'><PlayingNext options={{index: false, play: false, added: false, length: false, favorite: false}}/></div>
   }
@@ -23,6 +24,10 @@ function App ({ children, currentUrl, playingNextPanel, initialPopover, HIDE_INI
     )
   }
 
+  if (remotePlaybackPanel) {
+    remoteDeviceSync = <RemoteDevicePlayback/>
+  }
+
   return (
       <DropPageWrapper>
         {popover}
@@ -34,6 +39,7 @@ function App ({ children, currentUrl, playingNextPanel, initialPopover, HIDE_INI
           {playingNext}
         </div>
         <Player/>
+        {remoteDeviceSync}
       </DropPageWrapper>
   )
 }
@@ -42,7 +48,8 @@ module.exports = connect(
     (state) => ({
       currentUrl: state.routing.path,
       playingNextPanel: state.interfaceStatus.playingNextPanel,
-      initialPopover: state.interfaceStatus.initialPopover
+      initialPopover: state.interfaceStatus.initialPopover,
+      remotePlaybackPanel: state.interfaceStatus.remotePlaybackPanel
     }),
     { HIDE_INITIAL_POPOVER }
 )(App)

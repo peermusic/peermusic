@@ -539,6 +539,13 @@ var actions = {
         sharingLevel
       })
     }
+  },
+
+  TOGGLE_DEVICE_REMOTE_PLAYBACK: (peerId) => {
+    return (dispatch, getState) => {
+      // TODO networking things
+      dispatch({type: 'TOGGLE_DEVICE_REMOTE_PLAYBACK', peerId})
+    }
   }
 }
 
