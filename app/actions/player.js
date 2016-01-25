@@ -1,3 +1,4 @@
+/* global MusicControls */
 var engine = require('player-engine')()
 var coversActions = require('./covers.js')
 var shuffle = require('shuffle-array')
@@ -11,7 +12,7 @@ var actions = {
   // Synchronize the player engine with the loaded state
   PLAYER_SYNCHRONIZE: () => {
     return (dispatch, getState) => {
-      isAndroid = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+      isAndroid = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1
 
       // Bind the event listeners to the actions
       engine.on('timeupdate', duration => dispatch(actions.PLAYER_CURRENT_DURATION(duration)))
@@ -35,7 +36,7 @@ var actions = {
         engine.load(filename)
         engine.seek(state.player.currentDuration)
       }
-      if (isAndroid){
+      if (isAndroid) {
         createController(dispatch, getState)
       }
     }
@@ -63,10 +64,9 @@ var actions = {
       coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
 
       // Update media controls
-      if (isAndroid){
+      if (isAndroid) {
         createController(dispatch, getState)
       }
-
 
       // Update the view
       dispatch({
@@ -84,8 +84,8 @@ var actions = {
         actions.FIX_TRACKS_FOR_ANDRIOD()(dispatch, getState)
       }
       (playing) ? engine.play() : engine.pause()
-      if (isAndroid){
-          MusicControls.updateIsPlaying(playing)
+      if (isAndroid) {
+        MusicControls.updateIsPlaying(playing)
       }
       dispatch({type: 'PLAYER_SET_PLAYING', playing})
     }
@@ -493,85 +493,65 @@ function getSimilarLibrarySongs (song, state) {
   return results.slice(0, 3)
 }
 
-function createController(dispatch, getState) {
+function createController (dispatch, getState) {
   var state = getState()
-  var song = getSong(state.player.songId, state)? getSong(state.player.songId, state) : ''
-  var songTitle = '';
-  var songArtist = '';
-  var isPlaying = state.player.playing? state.player.playing : false
+  var song = getSong(state.player.songId, state)
+  var icon
 
-  if (song !== '') {
-   if ('title' in song) {
-     songTitle = song.title;
-   }
-
-   if ('artist' in song) {
-     songArtist = song.artist;
-   }
+  if (song) {
+    var currentCover = state.covers.filter((s) => s.id === song.coverId)[0]
+    icon = currentCover ? currentCover.url : null
   }
 
-  var currentCover = state.covers.filter(function (c) {
-    return c.id === song.coverId;
-  })[0];
-  var icon = currentCover ? currentCover.url : null;
+  var isPlaying = state.player.playing ? state.player.playing : false
 
   MusicControls.create({
-    track: songTitle, // optional, default : ''
-    artist: songArtist, // optional, default : ''
-    cover: icon, // optional, default : nothing
-    isPlaying   : isPlaying,                         // optional, default : true
-    // dismissable : true,                         // optional, default : false
-
-    // hide previous/next/close buttons:
-    hasPrev: true, // show previous button, optional, default: true
-    hasNext: true, // show next button, optional, default: true
-    hasClose: false, // show close button, optional, default: false
-
-    // Android only, optional
-    // text displayed in the status bar when the notification (and the ticker) are updated
-    ticker: 'Now playing "Time is Running Out"'
-  }, function () {}, function () {});
+    track: song ? song.title : '',
+    artist: song ? song.artist : '',
+    cover: icon,
+    isPlaying: isPlaying,
+    hasPrev: true,
+    hasNext: true,
+    hasClose: false
+  }, () => {}, () => {})
 
   // Register callback
-  MusicControls.subscribe((a) => controllerEvents(a, dispatch, getState));
+  MusicControls.subscribe((a) => controllerEvents(a, dispatch, getState))
 
   // Start listening for events
   // The plugin will run the events function each time an event is fired
-  MusicControls.listen();
+  MusicControls.listen()
 }
 
-function controllerEvents(action, dispatch, getState) {
-    switch(action) {
-        case 'music-controls-next':
-            actions.PLAYBACK_NEXT()(dispatch, getState)
-            break;
-        case 'music-controls-previous':
-            actions.PLAYBACK_BACK()(dispatch, getState)
-            break;
-        case 'music-controls-pause':
-            actions.PLAYER_SET_PLAYING(false)(dispatch, getState)
-            break;
-        case 'music-controls-play':
-            actions.PLAYER_SET_PLAYING(true)(dispatch, getState)
-            break;
-        case 'music-controls-destroy':
-            // Do something
-            break;
+function controllerEvents (action, dispatch, getState) {
+  switch (action) {
+    case 'music-controls-next':
+      actions.PLAYBACK_NEXT()(dispatch, getState)
+      break
+    case 'music-controls-previous':
+      actions.PLAYBACK_BACK()(dispatch, getState)
+      break
+    case 'music-controls-pause':
+      actions.PLAYER_SET_PLAYING(false)(dispatch, getState)
+      break
+    case 'music-controls-play':
+      actions.PLAYER_SET_PLAYING(true)(dispatch, getState)
+      break
+    case 'music-controls-destroy':
+      break
 
-        // Headset events (Android only)
-        case 'music-controls-media-button' :
-            // Do something
-            break;
-        case 'music-controls-headset-unplugged':
-            actions.PLAYER_SET_PLAYING(false)(dispatch, getState)
-            break;
-        case 'music-controls-headset-plugged':
-            actions.PLAYER_SET_PLAYING(true)(dispatch, getState)
-            break;
-        default:
-            break;
-    }
+    // Headset events (Android only)
+    case 'music-controls-media-button' :
+      break
+    case 'music-controls-headset-unplugged':
+      actions.PLAYER_SET_PLAYING(false)(dispatch, getState)
+      break
+    case 'music-controls-headset-plugged':
+      actions.PLAYER_SET_PLAYING(true)(dispatch, getState)
+      break
+    default:
+      break
+  }
 }
-
 
 module.exports = actions
