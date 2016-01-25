@@ -55,8 +55,17 @@ const instances = (state = initialState, action) => {
       }
     },
 
-    WHITELIST_ADD: () => {
+    WEBRTC_WHITELIST_ADD: () => {
       return {...state, whitelist: [...state.whitelist, action.peerId]}
+    },
+
+    WEBRTC_WHITELIST_REMOVE: () => {
+      var index = state.whitelist.indexOf(action.peerId)
+      const whitelist = [
+        ...state.whitelist.slice(0, index),
+        ...state.whitelist.slice(index + 1)
+      ]
+      return {...state, whitelist}
     },
 
     DISCARD_RECEIVED_INVITE: () => {
@@ -76,15 +85,6 @@ const instances = (state = initialState, action) => {
         ...state.issuedInvitesList.slice(index + 1)
       ]
       return {...state, issuedInvitesList}
-    },
-
-    REMOVE_PEER: () => {
-      var index = state.whitelist.indexOf(action.peerId)
-      const whitelist = [
-        ...state.whitelist.slice(0, index),
-        ...state.whitelist.slice(index + 1)
-      ]
-      return {...state, whitelist}
     }
   }
 

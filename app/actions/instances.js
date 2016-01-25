@@ -137,7 +137,7 @@ var actions = {
       })
 
       dispatch({
-        type: 'WHITELIST_ADD',
+        type: 'WEBRTC_WHITELIST_ADD',
         peerId
       })
 
@@ -165,7 +165,7 @@ var actions = {
   REMOVE_PEER: (peerId) => {
     return (dispatch) => {
       dispatch({
-        type: 'REMOVE_PEER',
+        type: 'WEBRTC_WHITELIST_REMOVE',
         peerId
       })
 
