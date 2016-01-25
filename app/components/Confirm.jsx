@@ -7,10 +7,10 @@ class Confirm extends React.Component {
       <div className='page-wrapper'>
         <div className='popover content'>
           <div>
-            <h3 className='white'>{this.props.message}</h3>
+            <h3 className='white' dangerouslySetInnerHTML={this.props.message}></h3>
             <div>
               <button onClick={() => this.props.resolve(true)}>{this.props.yesButton}</button>
-              <button onClick={() => this.props.resolve(false)}>{this.props.noButton}</button>
+              {this.props.noButton && <button onClick={() => this.props.resolve(false)}>{this.props.noButton}</button>}
             </div>
           </div>
         </div>
@@ -20,7 +20,7 @@ class Confirm extends React.Component {
 }
 
 Confirm.propTypes = {
-  message: React.PropTypes.string,
+  message: React.PropTypes.object,
   yesButton: React.PropTypes.string,
   noButton: React.PropTypes.string,
   resolve: React.PropTypes.func
@@ -28,6 +28,7 @@ Confirm.propTypes = {
 
 function confirm (message, yesButton, noButton) {
   return new Promise((resolve) => {
+    message = typeof message === 'object' ? message : {__html: message}
     let wrapper = document.body.appendChild(document.createElement('div'))
     let resolver = (value) => {
       ReactDOM.unmountComponentAtNode(wrapper)
