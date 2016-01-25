@@ -69,6 +69,18 @@
       width: 25px;
     }
 
+    .qr {
+      width: 150px;
+    }
+
+    .mobile-qr-button {
+      margin-top: 10px;
+
+      button {
+        width: 100%;
+      }
+    }
+
     .availability {
       width: 25px;
       color: $color-light-gray;
