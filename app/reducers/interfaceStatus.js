@@ -18,7 +18,7 @@ const interfaceStatus = (state = initialState, action) => {
     case 'TOGGLE_REMOTE_PLAYBACK_PANEL':
       return {...state, remotePlaybackPanel: !state.remotePlaybackPanel}
     case 'TOGGLE_MOBILE_NAVIGATION':
-      return {...state, mobileNavigation: !state.mobileNavigation}
+      return {...state, mobileNavigation: !state.mobileNavigation, remotePlaybackPanel: false}
     case 'INCREMENT_IMPORTING_SONGS':
       return {...state, importingSongs: state.importingSongs + 1}
     case 'DECREMENT_IMPORTING_SONGS':

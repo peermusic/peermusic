@@ -74,4 +74,12 @@
   @import 'components/album-table';
 }
 
+.remote-sync-popover {
+  right: 0;
+  bottom: 80px;
+  left: 0;
+  width: auto;
+  min-height: 120px;
+}
+
 @import 'components/player';
