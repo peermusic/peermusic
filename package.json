@@ -33,6 +33,7 @@
     "music-similarity": "git+https://github.com/peermusic/music-similarity.git",
     "player-engine": "git+https://github.com/peermusic/player-engine.git",
     "qrcode-npm": "0.0.3",
+    "qrcode-reader": "^0.1.0",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-redux": "^4.0.4",

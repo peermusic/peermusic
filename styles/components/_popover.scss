@@ -20,4 +20,9 @@
   button:not(:first-child) {
     margin-left: 15px;
   }
+
+  img {
+    width: 300px;
+    height: auto !important;
+  }
 }
