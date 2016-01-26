@@ -1,3 +1,4 @@
+/* global MediaStreamTrack */
 const React = require('react')
 const ReactDOM = require('react-dom')
 const QrCode = require('qrcode-reader')
@@ -24,52 +25,61 @@ function readQRCode (match) {
     var qr = new QrCode()
     var localStream
 
-    // Stream user media into video element
-    navigator.webkitGetUserMedia(
-      {audio: false, video: true},
-      stream => {
-        localStream = stream
-        document.querySelector('video').src = window.URL.createObjectURL(stream)
-      },
-      error => console.log('Error getting camera', error)
-    )
+    MediaStreamTrack.getSources((sources) => {
+      // Get the best possible video camera
+      sources = sources.filter(x => x.kind === 'video')
+      let front = sources.filter(x => x.facing === 'environment')
+      let source = front.length > 0 ? front[0] : sources[0]
 
-    // Take a snapshot every 250 milliseconds and try to decode qr codes of it
-    window.setInterval(function () {
-      try {
-        var video = document.querySelector('video')
-        var canvas = document.createElement('canvas')
-        canvas.width = video.videoWidth
-        canvas.height = video.videoHeight
-        var context = canvas.getContext('2d')
-        context.drawImage(video, 0, 0)
-        var data = context.getImageData(0, 0, video.videoWidth, video.videoHeight)
-        qr.decode(data)
-      } catch (e) {
+      // Stream user media into video element
+      navigator.webkitGetUserMedia(
+        {audio: false, video: {optional: [{sourceId: source.id}]}},
+        stream => {
+          localStream = stream
+          document.querySelector('video').src = window.URL.createObjectURL(stream)
+        },
+        error => console.log('Error getting camera', error)
+      )
+
+      // Take a snapshot every 250 milliseconds and try to decode qr codes of it
+      window.setInterval(function () {
+        try {
+          var video = document.querySelector('video')
+          var canvas = document.createElement('canvas')
+          canvas.width = video.videoWidth
+          canvas.height = video.videoHeight
+          var context = canvas.getContext('2d')
+          context.drawImage(video, 0, 0)
+          var data = context.getImageData(0, 0, video.videoWidth, video.videoHeight)
+          qr.decode(data)
+        } catch (e) {
+        }
+      }, 250)
+
+      // Render the elements
+      let wrapper = document.body.appendChild(document.createElement('div'))
+
+      // When the qr reader calls back, check if it is a valid link
+      // and if yes, stop the video track, remove our elements and resolve the promise
+      let resolver = (result) => {
+        localStream.getVideoTracks()[0].stop()
+        ReactDOM.unmountComponentAtNode(wrapper)
+        setTimeout(() => wrapper.remove(), 0)
+        resolve(result)
       }
-    }, 250)
 
-    // Render the elements
-    let wrapper = document.body.appendChild(document.createElement('div'))
+      qr.callback = result => {
+        console.log(result)
 
-    // When the qr reader calls back, check if it is a valid link
-    // and if yes, stop the video track, remove our elements and resolve the promise
-    let resolver = (result) => {
-      localStream.getVideoTracks()[0].stop()
-      ReactDOM.unmountComponentAtNode(wrapper)
-      setTimeout(() => wrapper.remove(), 0)
-      resolve(result)
-    }
+        if (result.indexOf(match) !== 0) {
+          return
+        }
 
-    qr.callback = result => {
-      if (result.indexOf(match) !== 0) {
-        return
+        resolver(result)
       }
 
-      resolver(result)
-    }
-
-    ReactDOM.render(<QRReaderPopover resolver={resolver}/>, wrapper)
+      ReactDOM.render(<QRReaderPopover resolver={resolver}/>, wrapper)
+    })
   })
 }
 
