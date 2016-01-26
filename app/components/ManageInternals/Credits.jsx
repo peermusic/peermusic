@@ -56,7 +56,7 @@ function Credits () {
 
       <h3>Special thanks</h3>
       <div className='attribution-medium'>
-        <img src='https://avatars2.githubusercontent.com/u/15308786?v=3&s=460'/>
+        <img src='https://gravatar.com/avatar/2ebfa986acc010cdad620278a0258458'/>
         <div>
           <strong>Tony Schulz</strong>
           <span className='description'>Scrum Master</span>
