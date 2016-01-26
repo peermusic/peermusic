@@ -1,5 +1,6 @@
 var arrayBufferToBuffer = require('arraybuffer-to-buffer')
 var createTorrent = require('create-torrent')
+const debug = require('debug')('peermusic:torrent:actions')
 var WebTorrent = require('webtorrent')
 var fs = require('file-system')(['', 'audio/mp3', 'audio/wav', 'audio/ogg'])
 
@@ -21,18 +22,17 @@ var actions = {
 
   GENERATE_TORRENT: (filename) => {
     return (dispatch, getState) => {
-      console.log('filename', filename)
+      debug('generating torrent for ', filename)
 
       fs.getArrayBuffer(filename, function (err, arrayBuffer) {
         if (err) throw err
 
         debug('generating torrent file')
-        debug(arrayBuffer.toString())
-        // var buffer = arrayBufferToBuffer(arrayBuffer)
-        // buffer.name = '-'
-        //createTorrent(buffer, {name: ' '}, function () {
-        //  console.log('rasdfasfdasfl;sajdfk;laskfjsal;fjas;ldfk')
-        //})
+        var buffer = arrayBufferToBuffer(arrayBuffer)
+        buffer.name = '-'
+        createTorrent(buffer, {name: ' '}, function (err, torrent) {
+          debug('generated torrent', torrent)
+        })
       })
     }
   }

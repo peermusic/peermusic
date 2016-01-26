@@ -55,6 +55,9 @@ var actions = {
                 throw new Error('Error adding file: ' + err)
               }
 
+              // Generate a torrent file
+              require('./torrent').GENERATE_TORRENT(hashName)(dispatch, getState)
+
               // Read the file as an url from the filesystem
               fs.get(hashName, (err, url) => {
                 if (err) {
