@@ -2,8 +2,19 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 const { connect } = require('react-redux')
 const { RECEIVE_INVITE } = require('../../actions')
+const qrreader = require('../QRReader.jsx')
 
 class ReceiveInviteForm extends React.Component {
+  readQR (e) {
+    e.preventDefault()
+
+    qrreader('web+peermusic://FRIEND').then((value) => {
+      if (value) {
+        ReactDOM.findDOMNode(this.refs.friendUrl).value = value
+      }
+    })
+  }
+
   onSubmit (e) {
     e.preventDefault()
 
@@ -36,7 +47,11 @@ class ReceiveInviteForm extends React.Component {
             <label>
               Friend URL
             </label>
-            <textarea placeholder='web+peermusic://INVITE#host:port#pubKey#signPrivKey' ref='friendUrl' defaultValue={this.props.defaultValue}/>
+            <div>
+              <textarea placeholder='web+peermusic://FRIEND#host:port#pubKey#signPrivKey' ref='friendUrl' defaultValue={this.props.defaultValue}/>
+              <br/>
+              <button onClick={(e) => this.readQR(e)}>Read QR code</button>
+            </div>
           </div>
 
           <div className='no-border'>
