@@ -19,7 +19,7 @@ function QRReaderPopover ({ resolver }) {
   )
 }
 
-function readQRCode () {
+function readQRCode (match) {
   return new Promise((resolve) => {
     var qr = new QrCode()
     var localStream
@@ -62,7 +62,7 @@ function readQRCode () {
     }
 
     qr.callback = result => {
-      if (result.indexOf('web+peermusic') !== 0) {
+      if (result.indexOf(match) !== 0) {
         return
       }
 
