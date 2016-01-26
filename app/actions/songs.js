@@ -53,6 +53,7 @@ var actions = {
               audio.src = url
               audio.addEventListener('durationchange', () => {
                 var duration = audio.duration
+                let favorites = getState().favorites.map(x => x.id)
 
                 // Dispatch an action to update the view and save
                 // the song data in local storage
@@ -63,7 +64,7 @@ var actions = {
                   addedAt: (new Date()).toString(),
                   local: true,
                   duration: duration,
-                  favorited: false,
+                  favorite: favorites.indexOf(hash) !== -1,
                   coverId: getCoverId(meta),
                   availability: 0,
                   hashName: hashName,
