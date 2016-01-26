@@ -90,8 +90,6 @@ const songs = (state = [], action) => {
       return state.filter(x => x.local || x.id !== action.id)
     case 'FIX_SONG_FILENAME':
       return state.map(s => song(s, action))
-    case 'CLEAR_DATA':
-      return []
     default:
       return state
   }

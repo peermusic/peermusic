@@ -136,17 +136,16 @@ var actions = {
 
   // Remove all songs
   CLEAR_DATA: () => {
-    return (dispatch) => {
-      fs.clear((err) => {
-        if (err) throw new Error('Error clearing filesystem: ' + err)
-        dispatch({
-          type: 'CLEAR_DATA'
-        })
-        dispatch({
-          type: 'RESET_SONG_PROVIDING_CHRONOLOGY'
-        })
-      })
-    }
+    // Clear the filesystem
+    fs.clear((err) => {
+      if (err) throw new Error('Error clearing filesystem: ' + err)
+
+      // Remove the state from local storage
+      window.localStorage.removeItem('peermusic-storage')
+
+      // Refresh the page
+      window.location.reload()
+    })
   }
 
 }
