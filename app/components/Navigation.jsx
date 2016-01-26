@@ -13,6 +13,7 @@ function Navigation ({ routing, TOGGLE_MOBILE_NAVIGATION }) {
   }
 
   var songLinkClasses = classNames('flaticon-songs', {selected: routing.path.indexOf('/songs') === 0})
+  var favoritesLinkClasses = classNames('flaticon-favorite', {selected: routing.path.indexOf('/favorites') === 0})
   var friendsLinkClasses = classNames('flaticon-friends', {selected: routing.path.indexOf('/manage-friends') === 0})
   var devicesLinkClasses = classNames('flaticon-devices', {selected: routing.path.indexOf('/manage-devices') === 0})
   var manageSongsLinkClasses = classNames('flaticon-songs', {selected: routing.path.indexOf('/manage-songs') === 0})
@@ -33,7 +34,7 @@ function Navigation ({ routing, TOGGLE_MOBILE_NAVIGATION }) {
             <li><Link to='/albums' className='flaticon-albums' {...linkProperties}>Albums</Link></li>
             <li><Link to='/artists' className='flaticon-artist' {...linkProperties}>Artists</Link></li>
             <li className='heading'>Playlists</li>
-            <li><Link to='/favorites' className='flaticon-favorite' {...linkProperties}>Favorites</Link></li>
+            <li><Link to='/favorites/available' className={favoritesLinkClasses} {...linkProperties}>Favorites</Link></li>
             <li><Link to='/playing-next' className='flaticon-queue' {...linkProperties}>Playing Next</Link></li>
             <li><Link to='/history' className='flaticon-history' {...linkProperties}>History</Link></li>
             <li className='heading'>Manage</li>
