@@ -10,7 +10,8 @@ const thunk = require('redux-thunk')
 const reduxStorage = require('redux-storage')
 const storageEngine = require('redux-storage/engines/localStorage').default('peermusic-storage')
 const { PLAYER_SYNCHRONIZE, RESET_IMPORTING_SONGS, INSTANCES_CONNECT, INITIATE_SYNC,
-  INITIALLY_LOAD_COVERS, START_DOWNLOAD_LOOP, START_SHARING_LEVEL_SYNC_LOOP, START_MULTICAST_DEVICES_LOOP, LOAD_THEME } = require('./actions')
+  INITIALLY_LOAD_COVERS, START_DOWNLOAD_LOOP, START_SHARING_LEVEL_SYNC_LOOP,
+  START_MULTICAST_DEVICES_LOOP, LOAD_THEME, INIT_WEBTORRENT, DOWNLOAD_TORRENT } = require('./actions')
 
 // Enforce the user to use SSL if used via github pages
 if (window.location.host === 'peermusic.github.io' && window.location.protocol === 'http:') {
@@ -44,10 +45,14 @@ load(store).then(() => {
   syncReduxAndRouter(history, store)
   render()
 
-  START_DOWNLOAD_LOOP(1000 * 5, 1000 * 60 * 1)(store.dispatch, store.getState)
+  START_DOWNLOAD_LOOP(1000 * 3, 1000 * 60)(store.dispatch, store.getState)
   START_SHARING_LEVEL_SYNC_LOOP(1000 * 5, 1000 * 60 * 1)(store.dispatch, store.getState)
   START_MULTICAST_DEVICES_LOOP(1000 * 3, 1000 * 5)(store.dispatch, store.getState)
   LOAD_THEME()(store.dispatch, store.getState)
+
+  if (store.getState().sync.sharingLevel === 'EVERYONE') {
+    INIT_WEBTORRENT()
+  }
 })
 
 // Require our application components
