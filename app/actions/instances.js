@@ -44,6 +44,7 @@ var actions = {
         actions.INVITE_VALIDATED(peerId, sharedSignPubKey)(dispatch, getState)
       })
       connections.metaSwarm.on('connect', function (peer, peerId) {
+        debug('---- PEER CAME ONLINE ----', peerId)
         sync.REGISTER_PEER(peer, peerId)
       })
       connections.metaSwarm.on('disconnect', function (peer, peerId) {
@@ -151,6 +152,9 @@ var actions = {
           description: invite.description,
           peerId
         })
+        dispatch({
+          type: 'UPDATED_DEVICE_LIST'
+        })
         return
       }
 
@@ -172,6 +176,9 @@ var actions = {
       dispatch({
         type: 'REMOVE_DEVICE',
         peerId
+      })
+      dispatch({
+        type: 'UPDATED_DEVICE_LIST'
       })
 
       dispatch({
