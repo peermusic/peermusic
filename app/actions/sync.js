@@ -256,6 +256,15 @@ var actions = {
         })
       }
 
+      var sharingLevel = getState().sync.sharingLevel
+      if (sharingLevel === 'EVERYONE') {
+        debug('trying to download as a torrent')
+
+        require('./torrent').DOWNLOAD_TORRENT(song.torrent, song.id)(dispatch, getState)
+
+        return
+      }
+
       var providers = getState().sync.providers[id]
       providers.forEach((provider) => {
         peers.send({
