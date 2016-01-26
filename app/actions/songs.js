@@ -67,6 +67,7 @@ var actions = {
                 audio.src = url
                 audio.addEventListener('durationchange', () => {
                   var duration = audio.duration
+                  let favorites = getState().favorites.map(x => x.id)
 
                   // Dispatch an action to update the view and save
                   // the song data in local storage
@@ -77,7 +78,7 @@ var actions = {
                     addedAt: (new Date()).toString(),
                     local: true,
                     duration: duration,
-                    favorited: false,
+                    favorite: favorites.indexOf(hash) !== -1,
                     coverId: getCoverId(meta),
                     availability: 0,
                     hashName: hashName,
@@ -128,9 +129,18 @@ var actions = {
 
   // Toggle the favorite status of a song
   TOGGLE_SONG_FAVORITE: (id) => {
-    return {
-      type: 'TOGGLE_SONG_FAVORITE',
-      id
+    return (dispatch, getState) => {
+      // Hold the song in the state as well, so we can persist it even after
+      // the user deletes the song or a remote song becomes unavailable
+      const song = getState().songs.find(x => x.id === id)
+      if (song && !song.favorite) {
+        dispatch({type: 'FAVORITE_SONG', song})
+      } else {
+        dispatch({type: 'REMOVE_FAVORITE', id})
+      }
+
+      // Toggle the favorite status for the songs object
+      dispatch({type: 'TOGGLE_SONG_FAVORITE', id})
     }
   },
 

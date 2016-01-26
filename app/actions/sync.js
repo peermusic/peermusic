@@ -126,14 +126,16 @@ var actions = {
 
   RECEIVE_INVENTORY: (theirSongs, peerId) => {
     return (dispatch, getState) => {
+      const state = getState()
+      let favorites = state.favorites.map(x => x.id)
+
       function cleanReceivedSong (song) {
         song.addedAt = (new Date()).toString()
-        song.favorited = false
+        song.favorite = favorites.indexOf(song.id) !== -1
         song.local = false
         return song
       }
 
-      const state = getState()
       const songs = state.songs
       const bannedSongs = state.sync.bannedSongs.map(x => x.id)
       theirSongs = theirSongs.filter(x => bannedSongs.indexOf(x.id) === -1)
