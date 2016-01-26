@@ -166,6 +166,16 @@ var actions = {
     }
   },
 
+  RECOGNIZE_PEER_ON_HUBS: (peerId) => {
+    debug('adding peerId into active swarm', peerId)
+    connections.metaSwarm.addPeer(peerId)
+  },
+
+  IGNORE_PEER_ON_HUBS: (peerId) => {
+    debug('removing peerId from active swarm', peerId)
+    connections.metaSwarm.removePeer(peerId)
+  },
+
   REMOVE_PEER: (peerId) => {
     return (dispatch) => {
       dispatch({
@@ -185,6 +195,8 @@ var actions = {
         type: 'REMOVE_FRIEND',
         peerId
       })
+
+      actions.IGNORE_PEER_ON_HUBS(peerId)
     }
   }
 }

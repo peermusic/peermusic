@@ -614,6 +614,7 @@ var actions = {
           type: 'ADD_DEVICE',
           ...receivedDevice
         })
+        require('./instances').RECOGNIZE_PEER_ON_HUBS(receivedDevice.peerId)
       })
 
       removedDevices.forEach((removedDevice) => {
@@ -627,6 +628,7 @@ var actions = {
           type: 'REMOVE_DEVICE',
           peerId: removedDevice.peerId
         })
+        require('./instances').IGNORE_PEER_ON_HUBS(removedDevice.peerId)
       })
 
       dispatch({
