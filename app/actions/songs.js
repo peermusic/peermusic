@@ -36,14 +36,12 @@ var actions = {
         var hash = rusha.digestFromArrayBuffer(arrayBuffer)
         var hashName = hash + file_ending
 
-        // Create torrent file
-        // create-torrent should be able to take in file objects but threw errors
+        // Create torrent file. We are giving create torrent an array buffer,
+        // because else it threw errors. This sadly completely crashes for big files
         var buffer = arrayBufferToBuffer(arrayBuffer)
         buffer.name = '-'
-        createTorrent(buffer, {
-          name: '',
-          announceList: [[]]
-        }, (err, torrent) => {
+
+        createTorrent(buffer, {name: '', announceList: [[]]}, (err, torrent) => {
           if (err) throw err
 
           // Get the metadata off the file
@@ -54,9 +52,6 @@ var actions = {
                 dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
                 throw new Error('Error adding file: ' + err)
               }
-
-              // Generate a torrent file
-              require('./torrent').GENERATE_TORRENT(hashName)(dispatch, getState)
 
               // Read the file as an url from the filesystem
               fs.get(hashName, (err, url) => {

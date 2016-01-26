@@ -18,23 +18,6 @@ var actions = {
         console.log('torrend added', arguments)
       })
     }
-  },
-
-  GENERATE_TORRENT: (filename) => {
-    return (dispatch, getState) => {
-      debug('generating torrent for ', filename)
-
-      fs.getArrayBuffer(filename, function (err, arrayBuffer) {
-        if (err) throw err
-
-        debug('generating torrent file')
-        var buffer = arrayBufferToBuffer(arrayBuffer)
-        buffer.name = '-'
-        createTorrent(buffer, {name: ' '}, function (err, torrent) {
-          debug('generated torrent', torrent)
-        })
-      })
-    }
   }
 }
 
