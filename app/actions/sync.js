@@ -31,7 +31,7 @@ var actions = {
 
   PROCESS_INCOMING_DATA: (data, peerId) => {
     return (dispatch, getState) => {
-      debug('processing incoming data', data)
+      debug('<< incoming data', data.type, data)
 
       var networkActions = {
         REQUEST_INVENTORY: () => {
@@ -80,6 +80,10 @@ var actions = {
 
         MULTICAST_SHARING_LEVEL: () => {
           actions.RECEIVE_SHARING_LEVEL(data.sharingLevel, peerId)(dispatch, getState)
+        },
+
+        MULTICAST_DEVICES: () => {
+          actions.RECEIVE_DEVICES(data.devices, data.deviceListVersion, peerId)(dispatch, getState)
         }
       }
 
@@ -252,6 +256,15 @@ var actions = {
           type: 'TOGGLE_SONG_DOWNLOADING',
           id
         })
+      }
+
+      var sharingLevel = getState().sync.sharingLevel
+      if (sharingLevel === 'EVERYONE') {
+        debug('trying to download as a torrent')
+
+        require('./torrent').DOWNLOAD_TORRENT(song.torrent, song.id)(dispatch, getState)
+
+        return
       }
 
       var providers = getState().sync.providers[id]
@@ -536,9 +549,102 @@ var actions = {
 
       debug('received sharing level update from device', sharingLevel, peerId)
       dispatch({
-        type: 'SET_SHARING_LEVEL_DEVICE',
+        type: 'SET_SHARING_LEVEL',
         peerId,
         sharingLevel
+      })
+    }
+  },
+
+  START_MULTICAST_DEVICES_LOOP: (timeout, interval) => {
+    return (dispatch, getState) => {
+      window.setTimeout(multicastDevices, timeout)
+      window.setInterval(multicastDevices, interval)
+      function multicastDevices () {
+        actions.MULTICAST_DEVICES()(dispatch, getState)
+      }
+    }
+  },
+
+  MULTICAST_DEVICES: () => {
+    return (dispatch, getState) => {
+      var devices = getState().devices
+      var friends = getState().friends
+
+      debug('multicasting devices to devices', friends)
+      devices.forEach((device) => {
+        peers.send({
+          type: 'MULTICAST_DEVICES',
+          devices,
+          deviceListVersion: getState().sync.deviceListVersion
+        }, device.peerId)
+      })
+    }
+  },
+
+  RECEIVE_DEVICES: (receivedDevices, deviceListVersion, peerId) => {
+    return (dispatch, getState) => {
+      if (deviceListVersion <= getState().sync.deviceListVersion) {
+        debug('received a device list not newer than mine - skipping')
+        return
+      }
+
+      var myId = getState().instances.keyPair.publicKey
+      var devices = getState().devices
+
+      function isOwnDevice (peerId) {
+        return devices.some((device) => {
+          return device.peerId === peerId
+        })
+      }
+
+      if (!isOwnDevice(peerId)) {
+        debug('only own devices are allowed to update friends list - skipping', peerId)
+        return
+      }
+
+      var removedDevices = devices.slice()
+
+      receivedDevices.forEach((receivedDevice) => {
+        if (receivedDevice.peerId === myId) return
+
+        var index = devices.findIndex((device) => device.peerId === receivedDevice.peerId)
+
+        if (index !== -1) {
+          removedDevices.splice(index, 1)
+          return
+        }
+
+        debug('got informed of a new device - adding', receivedDevice.peerId)
+
+        dispatch({
+          type: 'WEBRTC_WHITELIST_ADD',
+          peerId: receivedDevice.peerId
+        })
+        dispatch({
+          type: 'ADD_DEVICE',
+          ...receivedDevice
+        })
+        require('./instances').RECOGNIZE_PEER_ON_HUBS(receivedDevice.peerId)
+      })
+
+      removedDevices.forEach((removedDevice) => {
+        if (removedDevice.peerId === peerId) return
+
+        dispatch({
+          type: 'WEBRTC_WHITELIST_REMOVE',
+          peerId: removedDevice.peerId
+        })
+        dispatch({
+          type: 'REMOVE_DEVICE',
+          peerId: removedDevice.peerId
+        })
+        require('./instances').IGNORE_PEER_ON_HUBS(removedDevice.peerId)
+      })
+
+      dispatch({
+        type: 'UPDATED_DEVICE_LIST',
+        version: deviceListVersion
       })
     }
   }
@@ -640,7 +746,7 @@ function Peers (dispatch, getState) {
   }
 
   self.send = (data, peerId) => {
-    debug('sending to peer', peerId, data.type)
+    debug('>> sending to peer', data.type, data, peerId)
     var sharingLevel = getState().sync.sharingLevel
     var devices = getState().devices
 
@@ -655,7 +761,7 @@ function Peers (dispatch, getState) {
   }
 
   self.broadcast = (data) => {
-    debug('broadcasting to ' + Object.keys(self.remotes).length + ' peers', data.type)
+    debug('>> >> broadcasting to ' + Object.keys(self.remotes).length + ' peers', data.type)
     var sharingLevel = getState().sync.sharingLevel
     var devices = getState().devices
 

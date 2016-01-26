@@ -1,3 +1,5 @@
+var arrayBufferToBuffer = require('arraybuffer-to-buffer')
+var createTorrent = require('create-torrent')
 var rusha = new (require('rusha'))()
 var metadataReader = require('music-metadata')
 var fs = require('file-system')(['', 'audio/mp3', 'audio/wav', 'audio/ogg'])
@@ -21,63 +23,77 @@ var actions = {
 
       // Read the file as an data url
       var reader = new window.FileReader()
-      reader.readAsDataURL(file)
+      reader.readAsArrayBuffer(file)
       reader.onerror = function (err) {
         dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
         throw new Error('Error reading file: ' + err)
       }
 
       reader.onloadend = function () {
+        var arrayBuffer = this.result
+
         // Hash the file contents and set the filename based on that
-        var hash = rusha.digestFromString(this.result)
+        var hash = rusha.digestFromArrayBuffer(arrayBuffer)
         var hashName = hash + file_ending
 
-        // Get the metadata off the file
-        metadataReader(file, meta => {
-          // Add the song to the file system
-          fs.add({filename: hashName, file: file}, (err) => {
-            if (err) {
-              dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
-              throw new Error('Error adding file: ' + err)
-            }
+        // Create torrent file. We are giving create torrent an array buffer,
+        // because else it threw errors. This sadly completely crashes for big files
+        var buffer = arrayBufferToBuffer(arrayBuffer)
+        buffer.name = file.name
 
-            // Read the file as an url from the filesystem
-            fs.get(hashName, (err, url) => {
+        createTorrent(buffer, {
+          // announceList: [[]]
+        }, (err, torrent) => {
+          if (err) throw err
+
+          // Get the metadata off the file
+          metadataReader(file, meta => {
+            // Add the song to the file system
+            fs.add({filename: hashName, file: file}, (err) => {
               if (err) {
                 dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
-                throw new Error('Error getting file: ' + err)
+                throw new Error('Error adding file: ' + err)
               }
 
-              // Create an audio element to check on the duration
-              var audio = document.createElement('audio')
-              audio.src = url
-              audio.addEventListener('durationchange', () => {
-                var duration = audio.duration
-                let favorites = getState().favorites.map(x => x.id)
-
-                // Dispatch an action to update the view and save
-                // the song data in local storage
-                var song = {
-                  id: hash,
-                  filename: url,
-                  ...meta,
-                  addedAt: (new Date()).toString(),
-                  local: true,
-                  duration: duration,
-                  favorite: favorites.indexOf(hash) !== -1,
-                  coverId: getCoverId(meta),
-                  availability: 0,
-                  hashName: hashName,
-                  originalFilename: file.name
+              // Read the file as an url from the filesystem
+              fs.get(hashName, (err, url) => {
+                if (err) {
+                  dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+                  throw new Error('Error getting file: ' + err)
                 }
 
-                // Dispatch an action to get the cover from the scraping server
-                coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
+                // Create an audio element to check on the duration
+                var audio = document.createElement('audio')
+                audio.src = url
+                audio.addEventListener('durationchange', () => {
+                  var duration = audio.duration
+                  let favorites = getState().favorites.map(x => x.id)
 
-                dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
-                dispatch({
-                  type: 'ADD_SONG',
-                  song: song
+                  // Dispatch an action to update the view and save
+                  // the song data in local storage
+                  var song = {
+                    id: hash,
+                    filename: url,
+                    ...meta,
+                    addedAt: (new Date()).toString(),
+                    local: true,
+                    duration: duration,
+                    favorite: favorites.indexOf(hash) !== -1,
+                    coverId: getCoverId(meta),
+                    availability: 0,
+                    hashName: hashName,
+                    originalFilename: file.name,
+                    torrent
+                  }
+
+                  // Dispatch an action to get the cover from the scraping server
+                  coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
+
+                  dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+                  dispatch({
+                    type: 'ADD_SONG',
+                    song: song
+                  })
                 })
               })
             })

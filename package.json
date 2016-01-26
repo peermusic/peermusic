@@ -20,10 +20,12 @@
   },
   "homepage": "https://github.com/peermusic/desktop#readme",
   "dependencies": {
+    "arraybuffer-to-buffer": "0.0.4",
     "async": "1.5.*",
     "base64-arraybuffer": "^0.1.5",
     "classnames": "^2.2.1",
     "connect-instances": "git+https://github.com/peermusic/connect-instances.git",
+    "create-torrent": "^3.20.3",
     "debug": "^2.2.0",
     "file-system": "git+https://github.com/peermusic/file-system.git",
     "history": "^1.17.0",
@@ -32,7 +34,8 @@
     "music-metadata": "git+https://github.com/peermusic/music-metadata.git",
     "music-similarity": "git+https://github.com/peermusic/music-similarity.git",
     "player-engine": "git+https://github.com/peermusic/player-engine.git",
-    "qrcode-npm": "0.0.3",
+    "qr-image": "^3.1.0",
+    "qrcode-reader": "^0.1.0",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-redux": "^4.0.4",
@@ -48,6 +51,7 @@
     "shuffle-array": "^0.1.1",
     "subfolders-too": "git+https://github.com/peermusic/subfolders-too.git",
     "tweetnacl": "^0.13.3",
+    "webtorrent": "^0.72.2",
     "xhr": "^2.2.0"
   },
   "devDependencies": {

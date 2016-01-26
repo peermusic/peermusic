@@ -56,6 +56,7 @@ const instances = (state = initialState, action) => {
     },
 
     WEBRTC_WHITELIST_ADD: () => {
+      if (state.whitelist.indexOf(action.peerId) !== -1) return state
       return {...state, whitelist: [...state.whitelist, action.peerId]}
     },
 

@@ -20,4 +20,17 @@
   button:not(:first-child) {
     margin-left: 15px;
   }
+
+  svg {
+    width: 500px;
+    max-width: 90%;
+    height: auto !important;
+    background-color: #fff;
+  }
+
+  video {
+    max-width: 90%;
+    height: auto !important;
+    margin: auto;
+  }
 }

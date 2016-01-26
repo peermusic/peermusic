@@ -10,7 +10,8 @@ var actions = {
   ...require('./scrapingServers.js'),
   ...require('./covers.js'),
   ...require('./instances.js'),
-  ...require('./sync.js')
+  ...require('./sync.js'),
+  ...require('./torrent.js')
 }
 
 module.exports = actions

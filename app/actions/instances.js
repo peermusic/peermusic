@@ -44,6 +44,7 @@ var actions = {
         actions.INVITE_VALIDATED(peerId, sharedSignPubKey)(dispatch, getState)
       })
       connections.metaSwarm.on('connect', function (peer, peerId) {
+        debug('---- PEER CAME ONLINE ----', peerId)
         sync.REGISTER_PEER(peer, peerId)
       })
       connections.metaSwarm.on('disconnect', function (peer, peerId) {
@@ -151,6 +152,9 @@ var actions = {
           description: invite.description,
           peerId
         })
+        dispatch({
+          type: 'UPDATED_DEVICE_LIST'
+        })
         return
       }
 
@@ -160,6 +164,16 @@ var actions = {
         peerId
       })
     }
+  },
+
+  RECOGNIZE_PEER_ON_HUBS: (peerId) => {
+    debug('adding peerId into active swarm', peerId)
+    connections.metaSwarm.addPeer(peerId)
+  },
+
+  IGNORE_PEER_ON_HUBS: (peerId) => {
+    debug('removing peerId from active swarm', peerId)
+    connections.metaSwarm.removePeer(peerId)
   },
 
   REMOVE_PEER: (peerId) => {
@@ -173,11 +187,16 @@ var actions = {
         type: 'REMOVE_DEVICE',
         peerId
       })
+      dispatch({
+        type: 'UPDATED_DEVICE_LIST'
+      })
 
       dispatch({
         type: 'REMOVE_FRIEND',
         peerId
       })
+
+      actions.IGNORE_PEER_ON_HUBS(peerId)
     }
   }
 }
