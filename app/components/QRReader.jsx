@@ -41,7 +41,7 @@ function readQRCode (match) {
         error => console.log('Error getting camera', error)
       )
 
-      // Take a snapshot every 250 milliseconds and try to decode qr codes of it
+      // Take a snapshot every 500 milliseconds and try to decode qr codes of it
       window.setInterval(function () {
         try {
           var video = document.querySelector('video')
@@ -54,7 +54,7 @@ function readQRCode (match) {
           qr.decode(data)
         } catch (e) {
         }
-      }, 250)
+      }, 500)
 
       // Render the elements
       let wrapper = document.body.appendChild(document.createElement('div'))
@@ -69,7 +69,7 @@ function readQRCode (match) {
       }
 
       qr.callback = result => {
-        console.log(result)
+        console.log('Reading QR code', result)
 
         if (result.indexOf(match) !== 0) {
           return
