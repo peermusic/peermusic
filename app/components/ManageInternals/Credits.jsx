@@ -39,7 +39,7 @@ function Credits () {
         </div>
       </div>
       <div className='attribution-big'>
-        <img src='https://avatars0.githubusercontent.com/u/15221036?v=3&s=460'/>
+        <img src='https://gravatar.com/avatar/6b0ab00560e62bdcba126f0e8907e839'/>
         <div>
           <strong>Chee-Kui Cheung</strong>
           <span className='description'>Developer</span>
@@ -63,7 +63,7 @@ function Credits () {
         </div>
       </div>
       <div className='attribution-medium'>
-        <img src='https://avatars2.githubusercontent.com/u/15308786?v=3&s=460'/>
+        <img src='https://gravatar.com/avatar/'/>
         <div>
           <strong>Prof. Roland Kiefer</strong>
           <span className='description'>Supervising Professor</span>
