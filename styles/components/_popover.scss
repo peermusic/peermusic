@@ -21,9 +21,11 @@
     margin-left: 15px;
   }
 
-  img {
-    width: 300px;
+  svg {
+    width: 500px;
+    max-width: 90%;
     height: auto !important;
+    background-color: #fff;
   }
 
   video {
