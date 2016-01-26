@@ -112,9 +112,18 @@ var actions = {
 
   // Toggle the favorite status of a song
   TOGGLE_SONG_FAVORITE: (id) => {
-    return {
-      type: 'TOGGLE_SONG_FAVORITE',
-      id
+    return (dispatch, getState) => {
+      // Hold the song in the state as well, so we can persist it even after
+      // the user deletes the song or a remote song becomes unavailable
+      const song = getState().songs.find(x => x.id === id)
+      if (song && !song.favorite) {
+        dispatch({type: 'FAVORITE_SONG', song})
+      } else {
+        dispatch({type: 'REMOVE_FAVORITE', id})
+      }
+
+      // Toggle the favorite status for the songs object
+      dispatch({type: 'TOGGLE_SONG_FAVORITE', id})
     }
   },
 
