@@ -11,7 +11,7 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
     var year = songs.map(s => s.year).filter(s => s)[0]
   }
 
-  const linkTargetAlbum = '/albums?album=' + album + '&artist=' + artist
+  const linkTargetAlbum = '/albums?album=' + encodeURIComponent(album)
   const linkTargetArtist = '/artists?artist=' + artist
   const wrapperClass = artistPage ? '' : 'actual-page-content'
 
@@ -46,7 +46,7 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
           <div>
             <h2>{artistPage ? <Link to={linkTargetAlbum}>{album}</Link> : album}</h2>
             <h3>
-              {!artistPage &&
+              {!artistPage && artist &&
                 <span>
                   <Link to={linkTargetArtist} className='artist'>{artist}</Link>
                   <span className='padder'>&mdash;</span>
@@ -77,23 +77,29 @@ function AlbumDetail ({ album, artist, songs, totalSongs, currentCover, artistPa
           </div>
         </div>
         <div className={wrapperClass}>
-          <SongTable songs={songs} totalSongs={totalSongs || songs} options={{track: true, artist: false, album: false}}/>
+          <SongTable songs={songs} totalSongs={totalSongs || songs} options={{track: true, artist: !artist, album: false}}/>
         </div>
       </div>
   )
 }
 
 function mapStateToProps (state, ownProps) {
-  var songs = state.songs.filter(x => x.album === ownProps.album && x.artist === ownProps.artist)
+  var songs = !ownProps.artistPage
+    ? state.songs.filter(x => x.album === ownProps.album)
+    : state.songs.filter(x => x.album === ownProps.album && x.artist === ownProps.artist)
 
   // Order the songs by track
   songs.sort((a, b) => (a.track > b.track) ? 1 : ((b.track > a.track) ? -1 : 0))
+
+  // Only display the artist if the album is by one artist only
+  let artists = songs.map(x => x.artist).filter((v, i, s) => s.indexOf(v) === i)
 
   // Grab the cover off the first track
   const currentCover = state.covers.filter(c => c.id === songs[0].coverId)[0]
 
   return {
     songs,
+    artist: artists.length > 1 ? false : artists[0],
     currentCover: currentCover ? currentCover.url : ''
   }
 }

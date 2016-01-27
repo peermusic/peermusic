@@ -5,8 +5,7 @@ function AlbumTable ({ albums }) {
   return (
       <div className='album-table'>
         {albums.map((album, i) => {
-          var linkTargetAlbum = '/albums?album=' + album.album + '&artist=' + album.artist
-          var linkTargetArtist = '/artists?artist=' + album.artist
+          var linkTargetAlbum = '/albums?album=' + encodeURIComponent(album.album)
 
           return (
               <div key={i} className='album'>
@@ -14,14 +13,14 @@ function AlbumTable ({ albums }) {
                   <Link to={linkTargetAlbum}><img className='cover-art' src={album.coverUrl}/></Link>
                   <div className='text'>
                     <Link to={linkTargetAlbum} className='album'>{album.album}</Link>
-                    <Link to={linkTargetArtist} className='artist'>{album.artist}</Link>
+                    <span className='songs'>{album.songs} {album.songs > 1 ? 'songs' : 'song'}</span>
                   </div>
                 </div>
                 <Link to={linkTargetAlbum} className='mobile-only'>
                     <img className='cover-art' src={album.coverUrl}/>
                     <div className='text'>
                       <span className='album'>{album.album}</span>
-                      <span className='artist'>{album.artist}</span>
+                      <span className='songs'>{album.songs} {album.songs > 1 ? 'songs' : 'song'}</span>
                     </div>
                 </Link>
               </div>

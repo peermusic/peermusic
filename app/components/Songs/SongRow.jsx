@@ -110,7 +110,7 @@ class SongRow extends React.Component {
   }
 
   renderAlbum () {
-    const linkTargetAlbum = '/albums?album=' + this.props.song.album + '&artist=' + this.props.song.artist
+    const linkTargetAlbum = '/albums?album=' + encodeURIComponent(this.props.song.album)
     const albumClass = classNames('album', {inactive: !this.props.song.album})
     const albumLink = !this.props.song.album ? '—' : <Link to={linkTargetAlbum}>{this.props.song.album}</Link>
     return <td className={albumClass}>{albumLink}</td>
