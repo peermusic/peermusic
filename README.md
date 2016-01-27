@@ -17,7 +17,7 @@
 - [x] Features a beautiful mobile ready interface with different themes for every taste.
 - [x] Allows for association of different instances (as `private` or `friend`).
 - [x] Connects peer-to-peer between instances to share data.
-- [x] Secures the communication cryptographically.
+- [x] Secures the communication cryptographically (regular WebRTC encryption - no public key pinning).
 - [x] Does not leak IP information to the central signalhub server that faciliates the peer-to-peer connection setup.
 - [x] Gossips the index of available music between all (directly or indirectly) connected instances.
   - Over time every instance will know about all songs that other (directly or indirectly) connected instances hold.
