@@ -8,6 +8,9 @@
 
 [![Peermusic interface on desktop and mobile phone](http://i.imgur.com/MDw72Vx.png)](http://peermusic.github.io/)
 
+
+## Features
+
 <a href=https://github.com/pguth/Ethical-Design-Manifesto><img src=https://ind.ie/ethical-design/images/ethical-design-badge-small.svg align=right alt="We strive to practice Ethical Design." /></a>
 
 - [x] Runs in your browser tab.
