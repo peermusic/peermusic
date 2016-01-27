@@ -1,7 +1,6 @@
 const Connect = require('connect-instances')
 const debug = require('debug')('peermusic:instances:actions')
 const nacl = require('tweetnacl')
-const sync = require('./sync')
 
 var connections
 
@@ -44,7 +43,7 @@ var actions = {
         actions.INVITE_VALIDATED(peerId, sharedSignPubKey)(dispatch, getState)
       })
       connections.metaSwarm.on('connect', function (peer, peerId) {
-        sync.REGISTER_PEER(peer, peerId)
+        require('./sync').REGISTER_PEER(peer, peerId)(dispatch, getState)
       })
       connections.metaSwarm.on('disconnect', function (peer, peerId) {
       })
@@ -153,6 +152,36 @@ var actions = {
         type: 'ADD_FRIEND',
         description: invite.description,
         peerId
+      })
+    }
+  },
+
+  SET_ONLINE_STATE: (online, peerId) => {
+    return (dispatch, getState) => {
+      var isDevice = getState().devices.some((device) => device.peerId = peerId)
+
+      if (isDevice) {
+        dispatch({
+          type: 'SET_ONLINE_STATE_DEVICE',
+          peerId,
+          online
+        })
+        return
+      }
+
+      dispatch({
+        type: 'SET_ONLINE_STATE_FRIEND',
+        peerId,
+        online
+      })
+    }
+  },
+
+  SET_ALL_TO_OFFLINE: () => {
+    return (dispatch, getState) => {
+      var instances = [...getState().friends, ...getState().devices]
+      instances.forEach((instance) => {
+        actions.SET_ONLINE_STATE(false, instance.peerId)(dispatch, getState)
       })
     }
   },

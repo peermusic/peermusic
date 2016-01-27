@@ -18,7 +18,7 @@ var actions = {
         actions.PROCESS_INCOMING_DATA(data, peerId)(dispatch, getState)
       })
       peers.on('close', function (peer, peerId) {
-        actions.DEREGISTER_PEER(peer, peerId)
+        actions.DEREGISTER_PEER(peer, peerId)(dispatch, getState)
       })
       window.setTimeout(() => {
         actions.REQUEST_INVENTORY()
@@ -91,13 +91,19 @@ var actions = {
   },
 
   REGISTER_PEER: (peer, peerId) => {
-    debug('registering WebRTC peer', peerId)
-    peers.add(peer, peerId)
+    return (dispatch, getState) => {
+      debug('registering WebRTC peer', peerId)
+      peers.add(peer, peerId)
+      require('./instances').SET_ONLINE_STATE(true, peerId)(dispatch, getState)
+    }
   },
 
   DEREGISTER_PEER: (peer, peerId) => {
-    debug('deregistering WebRTC peer', peerId)
-    peers.remove(peerId)
+    return (dispatch, getState) => {
+      debug('deregistering WebRTC peer', peerId)
+      peers.remove(peerId)
+      require('./instances').SET_ONLINE_STATE(false, peerId)(dispatch, getState)
+    }
   },
 
   REQUEST_INVENTORY: () => {

@@ -7,6 +7,14 @@ const friend = (state = {}, action) => {
         description: !action.description || action.description === '' ? null : action.description,
         peerId: action.peerId
       }
+    case 'SET_ONLINE_STATE_FRIEND':
+      if (state.peerId !== action.peerId) {
+        return state
+      }
+      return {
+        ...state,
+        online: action.online
+      }
     default:
       return state
   }
@@ -21,6 +29,8 @@ const friends = (state = [], action) => {
       var index = state.findIndex((friend) => friend.peerId = action.peerId)
       if (index === -1) return state
       return [...state.slice(0, index), ...state.slice(index + 1)]
+    case 'SET_ONLINE_STATE_FRIEND':
+      return state.map(s => friend(s, action))
     default:
       return state
   }
