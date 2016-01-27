@@ -23,9 +23,9 @@
 - [x] Facilitates music sharing via an escrow concept:
   - A asks B which in turn asks C which holds the requested file.
   - B downloads from C and then A downloads from B.
-- [x] Different sharing levels are avaliable: `leech`, `private` and `everyone`.
-  - `leech` and `private` only connect to instances that were added as `private`.
-  - `everyone` means that [WebTorrent](https://github.com/feross/webtorrent) will be used:
+- [x] Different sharing levels are avaliable:
+  - `leech` and `private` only connect to the users own Peermusic instances.
+  - `everyone` takes advantage of [WebTorrent](https://github.com/feross/webtorrent):
     - Locally available songs will be seeded via WebTorrent.
     - Locally unavailable songs that are requested by other instances will be downloaded via WebTorrent.
 - [x] Metadata about songs is gossiped between all (directly or indirectly) connected instances.
