@@ -14,7 +14,7 @@
 <a href=https://github.com/pguth/Ethical-Design-Manifesto><img src=https://ind.ie/ethical-design/images/ethical-design-badge-small.svg align=right alt="We strive to practice Ethical Design." /></a>
 
 - [x] Runs in your browser tab.
-- [x] Data is only shared between Peermusic instances that got deliberately connected by the user.
+- [x] Data is only shared with Peermusic instances that got deliberately connected by the user.
 - [x] The music player is a single-page applications that can run offline.
 - [x] Requires minimal server infrastructure:
   - (required) A [signalhub server](https://github.com/mafintosh/signalhub) via which instances can initiate their peer-to-peer connections.
