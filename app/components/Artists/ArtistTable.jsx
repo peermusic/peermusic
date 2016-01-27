@@ -13,14 +13,14 @@ function ArtistTable ({ artists }) {
                   <Link to={linkTargetArtist}><img className='cover-art' src={artist.coverUrl}/></Link>
                   <div className='text'>
                     <Link to={linkTargetArtist} className='album'>{artist.artist}</Link>
-                    <span className='artist'>{artist.songs} {artist.songs > 1 ? 'songs' : 'song'}</span>
+                    <span className='songs'>{artist.songs} {artist.songs > 1 ? 'songs' : 'song'}</span>
                   </div>
                 </div>
                 <Link to={linkTargetArtist} className='mobile-only'>
                     <img className='cover-art' src={artist.coverUrl}/>
                     <div className='text'>
                       <span className='album'>{artist.artist}</span>
-                      <span className='artist'>{artist.songs} {artist.songs > 1 ? 'songs' : 'song'}</span>
+                      <span className='songs'>{artist.songs} {artist.songs > 1 ? 'songs' : 'song'}</span>
                     </div>
                 </Link>
               </div>
