@@ -5,7 +5,8 @@ const initialState = {
   sharingLevel: 'FRIENDS',
   forFriends: [],
   allowedPendingDownloadsForFriends: 50,
-  bannedSongs: []
+  bannedSongs: [],
+  deviceListVersion: 0
 }
 
 module.exports = (state = initialState, action) => {
@@ -42,6 +43,12 @@ module.exports = (state = initialState, action) => {
 
     'REMOVE_BAN': () => {
       return {...state, bannedSongs: state.bannedSongs.filter(x => x.id !== action.id)}
+    },
+
+    'UPDATED_DEVICE_LIST': () => {
+      return {...state, deviceListVersion: action.version
+        ? action.version
+        : state.deviceListVersion + 1}
     }
   }
 

@@ -1,5 +1,5 @@
 const React = require('react')
-const qrcode = require('qrcode-npm')
+const qrcode = require('qr-image')
 const confirm = require('./Confirm.jsx')
 
 let qrcodes = {}
@@ -14,10 +14,7 @@ function showQRCode (data) {
 
 function renderQR (data) {
   if (!qrcodes[data]) {
-    let qr = qrcode.qrcode(10, 'M')
-    qr.addData(data)
-    qr.make()
-    qrcodes[data] = {__html: qr.createImgTag()}
+    qrcodes[data] = {__html: qrcode.imageSync(data, {type: 'svg'})}
   }
 
   return qrcodes[data]
