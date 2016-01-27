@@ -36,12 +36,16 @@ class SongRow extends React.Component {
   // button if you hover the play button
   onMouseOverTitle (e) {
     let playButton = e.target.parentNode.parentNode.children[0].children[0]
-    playButton.classList.add('hovered')
+    if (playButton) {
+      playButton.classList.add('hovered')
+    }
   }
 
   onMouseOutTitle (e) {
     let playButton = e.target.parentNode.parentNode.children[0].children[0]
-    playButton.classList.remove('hovered')
+    if (playButton) {
+      playButton.classList.remove('hovered')
+    }
   }
 
   renderTitle (playback, download) {
