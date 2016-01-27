@@ -8,6 +8,8 @@
 
 [![Peermusic interface on desktop and mobile phone](http://i.imgur.com/MDw72Vx.png)](http://peermusic.github.io/)
 
+<a href=https://github.com/pguth/Ethical-Design-Manifesto><img src=https://ind.ie/ethical-design/images/ethical-design-badge-small.svg align=right alt="We strive to practice Ethical Design." /></a>
+
 - [x] Runs in your browser tab.
 - [x] Data is only shared between Peermusic instances that got deliberately connected by the user.
 - [x] The music player is a single-page applications that can run offline.
@@ -50,7 +52,3 @@ A local webserver will be started on [http://localhost:8000](http://localhost:80
 Also a local signalhub server will be started on `localhost:7000` to allow for easy testing of the peer-to-peer features. To run a different instance of Peermusic within the same browser use [http://127.0.0.1:8000](http://127.0.0.1:7000).
 
 If you have [livereload](http://livereload.com/extensions/) installed browser reloads will be triggered automatically on code changes.
-
-***
-
-[![We strive to practice Ethical Design.](https://ind.ie/ethical-design/images/ethical-design-badge-small.svg)](https://github.com/pguth/Ethical-Design-Manifesto)
