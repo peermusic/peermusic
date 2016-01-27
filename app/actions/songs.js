@@ -2,7 +2,7 @@ var arrayBufferToBuffer = require('arraybuffer-to-buffer')
 var createTorrent = require('create-torrent')
 var rusha = new (require('rusha'))()
 var metadataReader = require('music-metadata')
-var fs = require('file-system')(['', 'audio/mp3', 'audio/wav', 'audio/ogg'])
+var fs = require('file-system')(['', 'audio/mp3'])
 var coversActions = require('./covers.js')
 
 var actions = {
@@ -16,9 +16,14 @@ var actions = {
       dispatch({type: 'INCREMENT_IMPORTING_SONGS'})
 
       // Extract the file ending
-      var file_ending = 'mp3'
-      if (file.name.match(/^.*(\.[A-Za-z0-9]{3})$/)) {
-        file_ending = file.name.replace(/^.*(\.[A-Za-z0-9]{3})$/, '$1')
+      var file_ending = file.name.match(/^.*\..*$/)
+        ? file.name.replace(/^.*\.(.*)$/, '$1')
+        : 'mp3'
+
+      if (file_ending !== 'mp3') {
+        dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+        console.log('Skipping non-music file', file.name)
+        return
       }
 
       // Read the file as an data url
