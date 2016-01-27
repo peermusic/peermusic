@@ -1,5 +1,3 @@
-var arrayBufferToBuffer = require('arraybuffer-to-buffer')
-var createTorrent = require('create-torrent')
 var rusha = new (require('rusha'))()
 var metadataReader = require('music-metadata')
 var fs = require('file-system')(['', 'audio/mp3'])
