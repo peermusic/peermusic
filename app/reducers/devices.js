@@ -15,6 +15,13 @@ const device = (state = {}, action) => {
         ...state,
         sharingLevel: action.sharingLevel
       }
+    case 'SET_ONLINE_STATE_DEVICE':
+      if (state.peerId !== action.peerId) return state
+
+      return {
+        ...state,
+        online: action.online
+      }
     default:
       return state
   }
@@ -31,6 +38,8 @@ const devices = (state = [], action) => {
       if (index === -1) return state
       return [...state.slice(0, index), ...state.slice(index + 1)]
     case 'SET_SHARING_LEVEL':
+      return state.map(s => device(s, action))
+    case 'SET_ONLINE_STATE_DEVICE':
       return state.map(s => device(s, action))
     default:
       return state

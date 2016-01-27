@@ -11,7 +11,7 @@ const reduxStorage = require('redux-storage')
 const storageEngine = require('redux-storage/engines/localStorage').default('peermusic-storage')
 const { PLAYER_SYNCHRONIZE, RESET_IMPORTING_SONGS, INSTANCES_CONNECT, INITIATE_SYNC,
   INITIALLY_LOAD_COVERS, START_DOWNLOAD_LOOP, START_SHARING_LEVEL_SYNC_LOOP,
-  START_MULTICAST_DEVICES_LOOP, LOAD_THEME, INIT_WEBTORRENT } = require('./actions')
+  START_MULTICAST_DEVICES_LOOP, LOAD_THEME, INIT_WEBTORRENT, SET_ALL_TO_OFFLINE } = require('./actions')
 
 // Enforce the user to use SSL if used via github pages
 if (window.location.host === 'peermusic.github.io' && window.location.protocol === 'http:') {
@@ -43,6 +43,7 @@ load(store).then(() => {
     INITIALLY_LOAD_COVERS()(store.dispatch, store.getState)
   }, 1000 * 5)
   syncReduxAndRouter(history, store)
+  SET_ALL_TO_OFFLINE()(store.dispatch, store.getState)
   render()
 
   START_DOWNLOAD_LOOP(1000 * 3, 1000 * 60)(store.dispatch, store.getState)
