@@ -17,7 +17,7 @@
 - [x] Data is only shared between Peermusic instances that got deliberately connected by the user.
 - [x] The music player is a single-page applications that can run offline.
 - [x] Requires minimal server infrastructure:
-  - (required) A [signalhub server](https://github.com/mafintosh/signalhub) via instances can initiate their peer-to-peer connection.
+  - (required) A [signalhub server](https://github.com/mafintosh/signalhub) via which instances can initiate their peer-to-peer connections.
   - (optional) A [metadata providing server](https://github.com/peermusic/node-scraping-server) that delivers cover art and information about similarity of songs.
 - [x] Features a beautiful mobile ready interface with different themes for every taste.
 - [x] Connects peer-to-peer between instances to share data.
