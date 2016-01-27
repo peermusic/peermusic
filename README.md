@@ -39,6 +39,8 @@
 *You can find the most recent version here: [Peermusic hosted on Github Pages](http://peermusic.github.io/).*
 
 ```sh
+git clone https://github.com/peermusic/app.git
+cd peermusic
 npm install -g gulp
 npm install
 gulp
