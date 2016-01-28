@@ -58,11 +58,11 @@ module.exports = (state = initialState, action) => {
     },
 
     'PUSH_TO_SIMILAR_PROVIDING_CHRONOLOGY': () => {
-      return {...state, similarsForFriends: [...state.similarsForFriends, action.id]}
+      return {...state, similarsForFriends: [...state.similarsForFriends, action.metadataHash]}
     },
 
     'REMOVE_FROM_SIMILAR_PROVIDING_CHRONOLOGY': () => {
-      var index = state.similarsForFriends.indexOf(action.id) + 1
+      var index = state.similarsForFriends.indexOf(action.metadataHash) + 1
       return {...state, similarsForFriends: [...state.similarsForFriends.slice(0, index - 1),
         ...state.similarsForFriends.slice(index)]}
     }

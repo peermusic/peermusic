@@ -404,11 +404,17 @@ var actions = {
         })
       }
 
-      require('./sync.js').REQUEST_SIMILAR(song)(dispatch, getState)
-
       // Get a similar track by metadata
-      musicSimilarity(state.scrapingServers, metadata, function (list) {
-        actions.SET_RADIO_SONGS(list, metadata, push)(dispatch, getState)
+      musicSimilarity(state.scrapingServers, metadata, function (similar) {
+        if (similar.length === 0) {
+          var songId = song.id
+          var rusha = new (require('rusha'))()
+
+          require('./sync.js').REQUEST_SIMILAR(metadata, songId)(dispatch, getState)
+          return
+        }
+
+        actions.SET_RADIO_SONGS(similar, metadata, push)(dispatch, getState)
       })
     }
   },
