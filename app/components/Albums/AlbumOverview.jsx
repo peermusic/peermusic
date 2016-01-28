@@ -24,8 +24,7 @@ function AlbumOverview ({ albums }) {
 function mapStateToProps (state) {
   // Grab the albums from the songs
   var albums = _uniqueArray(state.songs.map((song) => ({
-    album: song.album,
-    coverUrl: _getCover(song.coverId, state)
+    album: song.album
   })))
 
   // Remove empty albums
@@ -34,6 +33,7 @@ function mapStateToProps (state) {
   // Add the song number to the albums
   albums = albums.map(x => {
     x.songs = state.songs.filter(y => y.album === x.album).length
+    x.coverUrl = _getCover(state.songs.find(y => y.album === x.album).coverId, state)
     return x
   })
 
