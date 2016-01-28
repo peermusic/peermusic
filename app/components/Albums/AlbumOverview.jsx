@@ -24,13 +24,18 @@ function AlbumOverview ({ albums }) {
 function mapStateToProps (state) {
   // Grab the albums from the songs
   var albums = _uniqueArray(state.songs.map((song) => ({
-    album: song.album,
-    artist: song.artist,
-    coverUrl: _getCover(song.coverId, state)
+    album: song.album
   })))
 
-  // Remove albums that have either album or artist not set
-  albums = albums.filter(a => a.album && a.artist)
+  // Remove empty albums
+  albums = albums.filter(a => a.album)
+
+  // Add the song number to the albums
+  albums = albums.map(x => {
+    x.songs = state.songs.filter(y => y.album === x.album).length
+    x.coverUrl = _getCover(state.songs.find(y => y.album === x.album).coverId, state)
+    return x
+  })
 
   // Order the albums by the album title
   albums.sort((a, b) => (a.album > b.album) ? 1 : ((b.album > a.album) ? -1 : 0))

@@ -12,10 +12,28 @@ function Songs ({ songs, PLAYBACK_SONG, REQUEST_INVENTORY }) {
   </div>
 
   if (songs.length > 0) {
+    let remoteSongs = songs.filter(x => !x.local)
+    let localSongs = songs.filter(x => x.local)
     const views = [
-      {path: '/songs/all', name: 'All songs', content: <SongTable songs={songs}/>},
-      {path: '/songs/own', name: 'Own songs', content: <SongTable songs={songs.filter(x => x.local)}/>},
-      {path: '/songs/friends', name: 'Songs of friends', content: <SongTable songs={songs.filter(x => !x.local)}/>}
+      {
+        path: '/songs/all',
+        name: 'All songs',
+        content: <SongTable songs={songs}/>
+      },
+      {
+        path: '/songs/own',
+        name: 'Own songs',
+        content: localSongs.length === 0
+          ? <h3>You have no local songs added.</h3>
+          : <SongTable songs={localSongs}/>
+      },
+      {
+        path: '/songs/friends',
+        name: 'Songs of friends',
+        content: remoteSongs.length === 0
+          ? <h3>There are no remote songs you don't have.</h3>
+          : <SongTable songs={remoteSongs}/>
+      }
     ]
     songDisplay = <HorizontalNavigation views={views}/>
   }

@@ -26,7 +26,7 @@ function CurrentSong ({ currentSong, currentCover, mobile }) {
   }
 
   const linkTargetArtist = '/artists?artist=' + currentSong.artist
-  const linkTargetAlbum = '/albums?album=' + currentSong.album + '&artist=' + currentSong.artist
+  const linkTargetAlbum = '/albums?album=' + encodeURIComponent(currentSong.album)
   artist = <Link to={linkTargetArtist}>{currentSong.artist}</Link>
   album = <Link to={linkTargetAlbum}>{currentSong.album}</Link>
 

@@ -31,14 +31,10 @@
         text-decoration: none;
       }
 
-      .artist {
+      .songs {
         color: $color-gray;
         font-size: 12px;
         text-decoration: none;
-
-        &:hover {
-          text-decoration: underline;
-        }
       }
     }
   }

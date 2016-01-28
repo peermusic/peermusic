@@ -5,7 +5,8 @@ const initialState = {
   importingSongs: 0,
   notifications: false,
   theme: 'classic',
-  showBanNotification: true
+  showBanNotification: true,
+  showPlaylistHint: false
 }
 
 const interfaceStatus = (state = initialState, action) => {
@@ -26,6 +27,10 @@ const interfaceStatus = (state = initialState, action) => {
       return {...state, theme: action.theme}
     case 'TOGGLE_NOTIFICATIONS':
       return {...state, notifications: !state.notifications}
+    case 'SHOW_PLAYLIST_HINT':
+      return {...state, showPlaylistHint: true}
+    case 'HIDE_PLAYLIST_HINT':
+      return {...state, showPlaylistHint: false}
     case 'BAN_SONG':
       return {...state, showBanNotification: false}
     default:

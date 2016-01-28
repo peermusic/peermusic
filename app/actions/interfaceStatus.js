@@ -57,7 +57,17 @@ var actions = {
       newLink.setAttribute('href', href)
       head.appendChild(newLink)
     }
-  }
+  },
+
+  // Show the playlist hint on the top
+  SHOW_PLAYLIST_HINT: () => ({
+    type: 'SHOW_PLAYLIST_HINT'
+  }),
+
+  // Hide the playlist hint on the top
+  HIDE_PLAYLIST_HINT: () => ({
+    type: 'HIDE_PLAYLIST_HINT'
+  })
 
 }
 
