@@ -80,6 +80,14 @@ var actions = {
 
         MULTICAST_SHARING_LEVEL: () => {
           actions.RECEIVE_SHARING_LEVEL(data.sharingLevel, peerId)(dispatch, getState)
+        },
+
+        SYNC_MUSIC_PLAYBACK: () => {
+          if (!getState().devices.some((device) => device.peerId === peerId)) {
+            debug('received a remote command from a instance that is not our own -skipping', peerId)
+            return
+          }
+          actions.SYNC_MUSIC_PLAYBACK(data.now, data.seeker, data.playing, data.songId)(dispatch, getState)
         }
       }
 
@@ -543,8 +551,39 @@ var actions = {
 
   TOGGLE_DEVICE_REMOTE_PLAYBACK: (peerId) => {
     return (dispatch, getState) => {
-      // TODO networking things
+      var now = Date.now()
+      var seeker = getState().player.currentDuration
+      var songId = getState().player.songId
+      var playing = getState().player.playing
+
+      peers.send({
+        type: 'SYNC_MUSIC_PLAYBACK',
+        playing,
+        now,
+        seeker,
+        songId
+      }, peerId)
+
       dispatch({type: 'TOGGLE_DEVICE_REMOTE_PLAYBACK', peerId})
+    }
+  },
+
+  SYNC_MUSIC_PLAYBACK: (now, seeker, playing, songId) => {
+    return (dispatch, getState) => {
+      console.log(now, seeker, playing, songId)
+      var song = getState().songs.find((song) => song.id === songId)
+      if (!song.local) {
+        console.log('we dont have that song, cant play it')
+      }
+
+      var player = require('./player')
+      var difference = playing ? (Date.now() - now) : 0
+
+      debug('remote command: play song', song, seeker, playing)
+      player.PLAYER_SET_SONG(songId)(dispatch, getState)
+      player.PLAYER_SET_PLAYING(playing)(dispatch, getState) // TODO what about initialization?
+      debug('starting music with delay to account for network latency', difference)
+      player.PLAYER_SEEK(seeker + difference)
     }
   }
 }
