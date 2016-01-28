@@ -6,7 +6,7 @@
 
 > Peermusic is a mobile ready music player that runs locally the browser. It strives to deliver all convenience features of modern music players combined with easy and encrypted peer-to-peer based sharing of music files.
 
-[![Peermusic interface on desktop and mobile phone](http://i.imgur.com/MDw72Vx.png)](http://peermusic.github.io/)
+[![Peermusic interface on desktop and mobile phone](http://i.imgur.com/Z68ynbf.png)](http://peermusic.github.io/)
 
 
 ## Features
