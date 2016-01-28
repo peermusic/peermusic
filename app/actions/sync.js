@@ -565,6 +565,10 @@ var actions = {
       }, peerId)
 
       dispatch({type: 'TOGGLE_DEVICE_REMOTE_PLAYBACK', peerId})
+
+      window.setTimeout(() => {
+        dispatch({type: 'TOGGLE_DEVICE_REMOTE_PLAYBACK', peerId})
+      }, 300)
     }
   },
 
