@@ -6,7 +6,9 @@ const initialState = {
   forFriends: [],
   allowedPendingDownloadsForFriends: 50,
   bannedSongs: [],
-  deviceListVersion: 0
+  deviceListVersion: 0,
+  similarsForFriends: {},
+  allowedPendingSimilarsForFriends: 50
 }
 
 module.exports = (state = initialState, action) => {
@@ -49,6 +51,20 @@ module.exports = (state = initialState, action) => {
       return {...state, deviceListVersion: action.version
         ? action.version
         : state.deviceListVersion + 1}
+    },
+
+    'SHIFT_SIMILAR_PROVIDING_CHRONOLOGY': () => {
+      return {...state, similarsForFriends: state.similarsForFriends.slice(1)}
+    },
+
+    'PUSH_TO_SIMILAR_PROVIDING_CHRONOLOGY': () => {
+      return {...state, similarsForFriends: [...state.similarsForFriends, action.id]}
+    },
+
+    'REMOVE_FROM_SIMILAR_PROVIDING_CHRONOLOGY': () => {
+      var index = state.similarsForFriends.indexOf(action.id) + 1
+      return {...state, similarsForFriends: [...state.similarsForFriends.slice(0, index - 1),
+        ...state.similarsForFriends.slice(index)]}
     }
   }
 

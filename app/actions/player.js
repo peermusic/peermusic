@@ -404,7 +404,7 @@ var actions = {
         })
       }
 
-      require('./sync.js').REQUEST_SIMILAR(song)
+      require('./sync.js').REQUEST_SIMILAR(song)(dispatch, getState)
 
       // Get a similar track by metadata
       musicSimilarity(state.scrapingServers, metadata, function (list) {

@@ -71,11 +71,16 @@ var actions = {
         },
 
         REQUEST_SIMILAR: () => {
-          actions.SEND_SIMILAR(data.song, peerId)(dispatch, getState)
+          var similar = getState().similars.find((similar) => similar.songId === data.songId)
+          if (!similar) {
+            debug('received a request for similarity information we dont hold')
+            actions.REQUEST_SIMILAR_FOR_FRIEND(data.songId)(dispatch, getState)
+          }
+          actions.SEND_SIMILAR(data.songId, peerId)(dispatch, getState)
         },
 
         SEND_SIMILAR: () => {
-          actions.RECEIVE_SIMILAR(data.song, data.songs)(dispatch, getState)
+          actions.RECEIVE_SIMILAR(data.song, data.list)(dispatch, getState)
         },
 
         MULTICAST_SHARING_LEVEL: () => {
@@ -485,28 +490,109 @@ var actions = {
     }
   },
 
-  REQUEST_SIMILAR: (song) => {
-    peers.broadcast({
-      type: 'REQUEST_SIMILAR',
-      song
-    })
+  REQUEST_SIMILAR_FOR_FRIEND: (songId) => {
+    return (dispatch, getState) => {
+      var stash = getState().sync.similarsForFriends
+      var similar = getState().similars.some((similar) => similar.songId === songId)
+
+      if (!similar) {
+        debug('peer tries to download similarity information for a song we dont know yet - skipping', songId)
+        return
+      }
+
+      if (stash.indexOf(songId) !== -1) {
+        debug('we are already trying to download the similarity information for a friend - skipping')
+        return
+      }
+
+      var allowedPendingSimilarsForFriends = getState().sync.allowedPendingSimilarsForFriends
+      if (stash.length >= allowedPendingSimilarsForFriends) {
+        debug('list of pending similars for friends too long - dropping oldest')
+
+        var oldId = stash[0]
+        var oldSong = getState().songs.find((song) => song.id === oldId)
+
+        if (!oldSong.local && oldSong.favorite !== true) {
+          debug('we probably only kept that similarity information around for a friend - deleting', oldSong.title)
+
+          dispatch({
+            type: 'REMOVE_SIMILAR',
+            oldId
+          })
+        }
+
+        dispatch({
+          type: 'REMOVE_FROM_SIMILAR_PROVIDING_CHRONOLOGY',
+          songId: oldId
+        })
+      }
+
+      dispatch({
+        type: 'PUSH_TO_SIMILAR_PROVIDING_CHRONOLOGY',
+        songId
+      })
+
+      actions.REQUEST_SIMILAR(songId)
+    }
   },
 
-  SEND_SIMILAR: (song, peerId) => {
+  REQUEST_SIMILAR: (songId) => {
     return (dispatch, getState) => {
-      musicSimilarity(getState().scrapingServers, song, function (list) {
+      console.log('REQUEST_SIMILAR')
+
+      var scrapingServers = getState().scrapingServers
+      if (scrapingServers) {
+        var song = getState().songs.find((song) => song.id === songId)
+        musicSimilarity(scrapingServers, song, function (similar) {
+          actions.RECEIVE_SIMILAR(songId, similar, true)(dispatch, getState)
+        })
+      }
+
+      peers.broadcast({
+        type: 'REQUEST_SIMILARS',
+        songId
+      })
+    }
+  },
+
+  SEND_SIMILAR: (songId, peerId) => {
+    return (dispatch, getState) => {
+      var similar = getState().similars.find((similar) => similar.songId === songId)
+      if (similar) {
         peers.send({
-          type: 'SEND_SIMILAR',
-          song,
-          songs: list
+          type: 'SEND_SIMILARS',
+          songId,
+          similar
+        }, peerId)
+
+        return
+      }
+
+      var song = getState().songs.find((song) => song.id === songId)
+      musicSimilarity(getState().scrapingServers, song, function (similar) {
+        actions.RECEIVE_SIMILAR(songId, similar, true)(dispatch, getState)
+
+        peers.send({
+          type: 'SEND_SIMILARS',
+          songId,
+          similar
         }, peerId)
       })
     }
   },
 
-  RECEIVE_SIMILAR: (song, songs) => {
+  RECEIVE_SIMILAR: (songId, similar, dont) => {
     return (dispatch, getState) => {
-      require('./player.js').SET_RADIO_SONGS(songs, song, true)(dispatch, getState)
+      dispatch({
+        type: 'ADD_SIMILARS',
+        songId,
+        similar
+      })
+
+      if (dont) return
+
+      var song = getState().songs.find((song) => song.id === songId)
+      require('./player.js').SET_RADIO_SONGS(similar, song, true)(dispatch, getState)
     }
   },
 

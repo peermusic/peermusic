@@ -11,7 +11,8 @@ var reducers = {
   devices: require('./devices.js'),
   instances: require('./instances.js'),
   sync: require('./sync.js'),
-  favorites: require('./favorites.js')
+  favorites: require('./favorites.js'),
+  similars: require('./similars.js')
 }
 
 module.exports = reducers
