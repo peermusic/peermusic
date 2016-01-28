@@ -1,5 +1,4 @@
 const base64 = require('base64-arraybuffer')
-const cuid = require('cuid')
 const debug = require('debug')('peermusic:sync:actions')
 const events = require('events')
 const inherits = require('inherits')
@@ -349,11 +348,36 @@ var actions = {
         })
       }
 
-      peers.send({
+      var base64String = base64.encode(arrayBuffer)
+
+      var send = true
+      var index = 1
+      var size = base64String.length
+      var chunkSize = 15000 // trial and error
+      var chunks = Math.ceil(size / chunkSize)
+      var offset = 0
+
+      peers.remotes[peerId].write('HEADER' + JSON.stringify({
         type: 'SEND_SONG',
         id,
-        arrayBuffer: base64.encode(arrayBuffer)
-      }, peerId)
+        chunks
+      }), 'utf8')
+
+      sendChunked()
+      function sendChunked () {
+        do {
+          var chunk = base64String.slice(offset, offset + chunkSize)
+          var msg = JSON.stringify({
+            type: 'SEND_SONG',
+            id: id,
+            index: index++,
+            chunk
+          })
+          send = peers.remotes[peerId].write(msg, 'utf8')
+          offset += chunkSize
+        } while (send && offset < size)
+        if (offset < size) peers.remotes[peerId].once('drain', sendChunked)
+      }
     }
   },
 
@@ -371,7 +395,7 @@ var actions = {
 
       fs.addArrayBuffer({
         filename: hashName,
-        arrayBuffer: base64.decode(arrayBuffer)
+        arrayBuffer
       }, postprocess)
 
       function postprocess () {
@@ -681,14 +705,21 @@ function Peers (dispatch, getState) {
     })
 
     peer.on('data', (data) => {
+      if (!Buffer.isBuffer(data)) {
+        self.emit('data', data, peerId)
+        return
+      }
+
       data = data.toString()
 
       if (data.startsWith('HEADER')) {
         data = JSON.parse(data.replace('HEADER', ''))
+        debug('received HEADER for incoming ArrayBuffer', data)
 
         if (!buffer[peerId]) buffer[peerId] = {}
 
         buffer[peerId][data.id] = {
+          // type: data.type,
           chunks: data.chunks,
           data: ''
         }
@@ -702,12 +733,16 @@ function Peers (dispatch, getState) {
       }
 
       buffer[peerId][data.id].data += data.chunk
-      var object = JSON.parse(buffer[peerId][data.id].data)
+      var arrayBuffer = base64.decode(buffer[peerId][data.id].data)
 
       delete buffer[peerId][data.id]
       if (!buffer[peerId]) delete buffer[peerId]
 
-      self.emit('data', object, peerId)
+      self.emit('data', {
+        type: 'SEND_SONG',
+        id: data.id,
+        arrayBuffer
+      }, peerId)
     })
   }
 
@@ -715,47 +750,19 @@ function Peers (dispatch, getState) {
     delete self.remotes[peerId]
   }
 
-  self.send = (object, peerId) => {
-    debug('>> sending to peer', object.type, object, peerId)
+  self.send = (data, peerId) => {
+    debug('>> sending to peer', data.type, data, peerId)
     var sharingLevel = getState().sync.sharingLevel
     var devices = getState().devices
 
-    if (!honorSharingLevel(sharingLevel, object.type, devices, peerId)) return
+    if (!honorSharingLevel(sharingLevel, data.type, devices, peerId)) return
 
     if (!self.remotes[peerId]) {
       debug('cannot send to offline peer', peerId)
       return
     }
 
-    var string = JSON.stringify(object)
-
-    var id = cuid.slug()
-    var send = true
-    var index = 1
-    var size = string.length
-    var chunkSize = 15000 // trial and error
-    var chunks = Math.ceil(size / chunkSize)
-    var offset = 0
-
-    peers.remotes[peerId].write('HEADER' + JSON.stringify({
-      id,
-      chunks
-    }), 'utf8')
-
-    sendChunked()
-    function sendChunked () {
-      do {
-        var chunk = string.slice(offset, offset + chunkSize)
-        var msg = JSON.stringify({
-          id,
-          index: index++,
-          chunk
-        })
-        send = peers.remotes[peerId].write(msg, 'utf8')
-        offset += chunkSize
-      } while (send && offset < size)
-      if (offset < size) peers.remotes[peerId].once('drain', sendChunked)
-    }
+    self.remotes[peerId].send(data)
   }
 
   self.broadcast = (data) => {
@@ -766,7 +773,7 @@ function Peers (dispatch, getState) {
     for (let peerId in self.remotes) {
       if (!honorSharingLevel(sharingLevel, data.type, devices, peerId)) continue
 
-      self.send(data, peerId)
+      self.remotes[peerId].send(data)
     }
   }
 }
