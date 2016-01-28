@@ -2,7 +2,8 @@ const React = require('react')
 const { connect } = require('react-redux')
 const classNames = require('classnames')
 const { PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG, REMOVE_DOWNLOAD,
-  TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG, BAN_SONG, REMOVE_BAN } = require('../../actions')
+  TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG, BAN_SONG, REMOVE_BAN,
+  SHOW_PLAYLIST_HINT, HIDE_PLAYLIST_HINT } = require('../../actions')
 const DateFormat = require('../DateFormat.jsx')
 const Duration = require('../Duration.jsx')
 const { Link } = require('react-router')
@@ -150,6 +151,13 @@ class SongRow extends React.Component {
     )
   }
 
+  addToQueue () {
+    this.props.PLAYBACK_USER_QUEUE(this.props.song.id)
+    this.props.SHOW_PLAYLIST_HINT()
+
+    setTimeout(() => this.props.HIDE_PLAYLIST_HINT(), 3000)
+  }
+
   renderQueue () {
     if (!this.props.song.local) {
       return <td className='add-button'><a><i className='fa fa-plus'/></a></td>
@@ -157,7 +165,7 @@ class SongRow extends React.Component {
 
     return (
         <td className='add-button'>
-          <a onClick={() => this.props.PLAYBACK_USER_QUEUE(this.props.song.id)}> <i className='fa fa-plus'/></a>
+          <a onClick={() => this.addToQueue()}> <i className='fa fa-plus'/></a>
         </td>
     )
   }
@@ -254,8 +262,10 @@ SongRow.propTypes = {
   PLAYER_SET_PLAYING: React.PropTypes.func,
   REQUEST_SONG: React.PropTypes.func,
   BAN_SONG: React.PropTypes.func,
-  REMOVE_BAN: React.PropTypes.func
+  REMOVE_BAN: React.PropTypes.func,
+  SHOW_PLAYLIST_HINT: React.PropTypes.func,
+  HIDE_PLAYLIST_HINT: React.PropTypes.func
 }
 
 module.exports = connect(null, {PLAYBACK_SONG, PLAYBACK_USER_QUEUE, REMOVE_SONG,
-  REMOVE_DOWNLOAD, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG, BAN_SONG, REMOVE_BAN})(SongRow)
+  REMOVE_DOWNLOAD, TOGGLE_SONG_FAVORITE, PLAYER_SET_PLAYING, REQUEST_SONG, BAN_SONG, REMOVE_BAN, SHOW_PLAYLIST_HINT, HIDE_PLAYLIST_HINT})(SongRow)

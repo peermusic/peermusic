@@ -58,10 +58,16 @@ class DropPageWrapper extends React.Component {
     })
     var dropZoneClasses = classNames('dropzone', {active: this.state.isHovering})
     var importNotification
+    var playlistHint
 
     if (this.props.importingSongs > 0) {
       importNotification = <div className='import-notification'>
         <span>Currently importing {this.props.importingSongs} songs...</span></div>
+    }
+
+    if (this.props.showPlaylistHint > 0) {
+      playlistHint = <div className='import-notification'>
+        <span>The song got added to your playing next queue.</span></div>
     }
 
     return (
@@ -72,6 +78,7 @@ class DropPageWrapper extends React.Component {
              onDrop={(e) => this.drop(e)}>
           <div className={dropZoneClasses} ref='dropzone'></div>
           {importNotification}
+          {playlistHint}
           {this.props.children}
         </div>
     )
@@ -83,13 +90,15 @@ DropPageWrapper.propTypes = {
   children: React.PropTypes.node,
   mobileNavigation: React.PropTypes.bool,
   routePath: React.PropTypes.string,
-  importingSongs: React.PropTypes.number
+  importingSongs: React.PropTypes.number,
+  showPlaylistHint: React.PropTypes.bool
 }
 
 module.exports = connect(
     (state) => ({
       mobileNavigation: state.interfaceStatus.mobileNavigation,
       importingSongs: state.interfaceStatus.importingSongs,
+      showPlaylistHint: state.interfaceStatus.showPlaylistHint,
       routePath: state.routing.path.replace(/\//g, '')
     }),
     {ADD_SONG}
