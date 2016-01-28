@@ -160,6 +160,45 @@ var actions = {
       // Refresh the page
       window.location.reload()
     })
+  },
+
+  CONCAT_QUEUE_SONGS: (queue, cb) => {
+    return (dispatch, getState) => {
+      var data = []
+
+      function save (data) {
+        if (!data) {
+          console.log('buffer undefined', data)
+        }
+        fs.addBlob({
+          filename: 'androidWorkaround',
+          blob: new window.Blob(data, {type: 'audio/mp3'})
+        }, function (err) {
+          if (err) throw err
+          console.log('generated new android workaround file')
+          cb()
+        })
+      }
+
+      queue.forEach((songId, index) => {
+        var hashName = getState().songs.find((song) => song.id === songId).hashName
+
+        fs.getArrayBuffer(hashName, (err, arrayBuffer) => {
+          if (err) throw err
+          if (!arrayBuffer) {
+            console.log('buffer empty', arrayBuffer)
+          }
+          data.push(arrayBuffer)
+
+          if (queue.length === index + 1) {
+            fs.delete('androidWorkaround', (err, arrayBuffer) => {
+              if (err) console.log('generating first android workaround file')
+              save(data)
+            })
+          }
+        })
+      })
+    }
   }
 
 }
