@@ -1,5 +1,4 @@
 /* global MusicControls */
-var debug = require('debug')('peermusic:player:actions')
 var engine = require('player-engine')()
 var coversActions = require('./covers.js')
 var shuffle = require('shuffle-array')
@@ -9,49 +8,11 @@ const ifvisible = require('ifvisible.js')
 var isAndroid
 
 var actions = {
-  ANDROID_IDLE_WORKAROUND: (preload) => {
-    return (dispatch, getState) => {
-      var once = false
-
-      ifvisible.setIdleDuration(3)
-
-      ifvisible.wakeup(function () {
-        debug('allowing to generate another android workaround file')
-        once = true
-      })
-
-      ifvisible.idle(function () {
-        if (once) return
-        debug('generating a android workaround file')
-
-        var player = getState().player
-        if (player.playing) {
-          var queue = [...player.userQueue, ...player.possibleQueue].splice(0, preload)
-
-          if (queue) {
-            require('./songs').CONCAT_QUEUE_SONGS(queue, function () {
-              var fs = require('file-system')(['', 'audio/mp3'])
-
-              fs.get('androidWorkaround', (err, url) => {
-                if (err) throw err
-                var seekPosition = getState().player.currentDuration
-                engine.load(url)
-                engine.seek(seekPosition)
-                engine.play()
-                once = true
-              })
-            })(dispatch, getState)
-          }
-        }
-      })
-    }
-  },
 
   // Synchronize the player engine with the loaded state
   PLAYER_SYNCHRONIZE: () => {
     return (dispatch, getState) => {
       isAndroid = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1
-      if (isAndroid || true) actions.ANDROID_IDLE_WORKAROUND(15)(dispatch, getState)
 
       // Bind the event listeners to the actions
       engine.on('timeupdate', duration => dispatch(actions.PLAYER_CURRENT_DURATION(duration)))
