@@ -1,10 +1,7 @@
-var createTorrent = require('create-torrent')
 var rusha = new (require('rusha'))()
 var metadataReader = require('music-metadata')
 var fs = require('file-system')(['', 'audio/mp3'])
 var coversActions = require('./covers.js')
-var pieceLength = require('piece-length')
-var ReadableBlobStream = require('readable-blob-stream')
 
 var actions = {
 
@@ -42,62 +39,52 @@ var actions = {
         var hash = rusha.digestFromArrayBuffer(arrayBuffer)
         var hashName = hash + file_ending
 
-        var stream = new ReadableBlobStream(file)
+        // Get the metadata off the file
+        metadataReader(file, meta => {
+          // Add the song to the file system
+          fs.add({filename: hashName, file: file}, (err) => {
+            if (err) {
+              dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+              throw new Error('Error adding file: ' + err)
+            }
 
-        createTorrent(stream, {
-          name: file.name,
-          pieceLength: pieceLength(file.length)
-        }, (err, torrent) => {
-          if (err) throw err
-
-          // Get the metadata off the file
-          metadataReader(file, meta => {
-            // Add the song to the file system
-            fs.add({filename: hashName, file: file}, (err) => {
+            // Read the file as an url from the filesystem
+            fs.get(hashName, (err, url) => {
               if (err) {
                 dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
-                throw new Error('Error adding file: ' + err)
+                throw new Error('Error getting file: ' + err)
               }
 
-              // Read the file as an url from the filesystem
-              fs.get(hashName, (err, url) => {
-                if (err) {
-                  dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
-                  throw new Error('Error getting file: ' + err)
+              // Create an audio element to check on the duration
+              var audio = document.createElement('audio')
+              audio.src = url
+              audio.addEventListener('durationchange', () => {
+                var duration = audio.duration
+                let favorites = getState().favorites.map(x => x.id)
+
+                // Dispatch an action to update the view and save
+                // the song data in local storage
+                var song = {
+                  id: hash,
+                  filename: url,
+                  ...meta,
+                  addedAt: (new Date()).toString(),
+                  local: true,
+                  duration: duration,
+                  favorite: favorites.indexOf(hash) !== -1,
+                  coverId: getCoverId(meta),
+                  availability: 0,
+                  hashName: hashName,
+                  originalFilename: file.name
                 }
 
-                // Create an audio element to check on the duration
-                var audio = document.createElement('audio')
-                audio.src = url
-                audio.addEventListener('durationchange', () => {
-                  var duration = audio.duration
-                  let favorites = getState().favorites.map(x => x.id)
+                // Dispatch an action to get the cover from the scraping server
+                coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
 
-                  // Dispatch an action to update the view and save
-                  // the song data in local storage
-                  var song = {
-                    id: hash,
-                    filename: url,
-                    ...meta,
-                    addedAt: (new Date()).toString(),
-                    local: true,
-                    duration: duration,
-                    favorite: favorites.indexOf(hash) !== -1,
-                    coverId: getCoverId(meta),
-                    availability: 0,
-                    hashName: hashName,
-                    originalFilename: file.name,
-                    torrent
-                  }
-
-                  // Dispatch an action to get the cover from the scraping server
-                  coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
-
-                  dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
-                  dispatch({
-                    type: 'ADD_SONG',
-                    song: song
-                  })
+                dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+                dispatch({
+                  type: 'ADD_SONG',
+                  song: song
                 })
               })
             })
