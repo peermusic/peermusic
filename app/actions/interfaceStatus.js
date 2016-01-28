@@ -65,10 +65,13 @@ var actions = {
   }),
 
   // Hide the playlist hint on the top
-  HIDE_PLAYLIST_HINT: () => ({
-    type: 'HIDE_PLAYLIST_HINT'
-  })
-
+  HIDE_PLAYLIST_HINT: () => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: 'HIDE_PLAYLIST_HINT'
+      })
+    }
+  }
 }
 
 module.exports = actions
