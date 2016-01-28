@@ -48,9 +48,9 @@ class ReceiveInviteForm extends React.Component {
               Friend URL
             </label>
             <div>
-              <textarea placeholder='web+peermusic://DEVICE#host:port#pubKey#signPrivKey' ref='friendUrl' defaultValue={this.props.defaultValue}/>
-              <br/>
               <button onClick={(e) => this.readQR(e)}>Read QR code</button>
+              <br/>
+              <textarea placeholder='web+peermusic://DEVICE#host:port#pubKey#signPrivKey' ref='friendUrl' defaultValue={this.props.defaultValue}/>
             </div>
           </div>
 
