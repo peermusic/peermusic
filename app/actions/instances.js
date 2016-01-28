@@ -31,8 +31,7 @@ var actions = {
       var opts = {
         namespace: 'peermusic',
         receivedInvites: {...state.instances.receivedInvites},
-        issuedInvites: [...state.instances.issuedInvites],
-        end: false
+        issuedInvites: [...state.instances.issuedInvites]
       }
 
       debug('connecting to', hubUrls)
