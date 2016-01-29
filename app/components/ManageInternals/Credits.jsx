@@ -47,9 +47,8 @@ function Credits () {
             <a href='http://github.com/ryomiyaichi'><i className='fa fa-github'/> ryomiyaichi</a>
           </div>
           <div className='text'>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi luctus maximus consequat. Aenean faucibus
-            lacus est, eu congue tellus varius eget. In in gravida neque. Vivamus eu nisi ac sem consectetur aliquam.
-            Maecenas non vestibulum metus.
+            Soyons reconnaissants aux personnes qui nous donnent du bonheur, elles sont les charmants jardiniers par qui nos âmes sont fleuries.<br>
+            - Marcel Proust
           </div>
         </div>
       </div>
