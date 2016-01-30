@@ -37,7 +37,7 @@ function Credits () {
         </div>
       </div>
       <div className='attribution-big'>
-        <img src='https://gravatar.com/avatar/6b0ab00560e62bdcba126f0e8907e839'/>
+        <img src='https://gravatar.com/avatar/ee81e9025988439d67cd92a0eda61eb3'/>
         <div>
           <strong>Chee-Kui Cheung</strong>
           <span className='description'>Developer</span>
