@@ -32,9 +32,7 @@ function Credits () {
             <a href='http://david-reess.de'>http://david-reess.de</a>
           </div>
           <div className='text'>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi luctus maximus consequat. Aenean faucibus
-            lacus est, eu congue tellus varius eget. In in gravida neque. Vivamus eu nisi ac sem consectetur aliquam.
-            Maecenas non vestibulum metus.
+            Dedicated to Sarah. Mea fortitudo, mea anima, mi aeterne amor.
           </div>
         </div>
       </div>
@@ -47,8 +45,8 @@ function Credits () {
             <a href='http://github.com/ryomiyaichi'><i className='fa fa-github'/> ryomiyaichi</a>
           </div>
           <div className='text'>
-            Soyons reconnaissants aux personnes qui nous donnent du bonheur, elles sont les charmants jardiniers par qui nos âmes sont fleuries.<br>
-            - Marcel Proust
+            Soyons reconnaissants aux personnes qui nous donnent du bonheur, elles sont les charmants jardiniers par qui nos âmes sont fleuries.<br/>
+            &mdash; Marcel Proust
           </div>
         </div>
       </div>
