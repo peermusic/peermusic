@@ -11,6 +11,7 @@ function Peers (dispatch, getState, peers) {
 
   var self = this
   self.remotes = {}
+  self.queue = []
 
   function honorSharingLevel (sharingLevel, type, devices, peerId) {
     switch (sharingLevel) {
@@ -91,6 +92,32 @@ function Peers (dispatch, getState, peers) {
   }
 
   self.send = (object, peerId) => {
+    if (self.queue.length > 50) {
+      debug('to many packets in the backlog - dropping')
+      return
+    }
+    if (object) self.queue.push([object, peerId])
+    console.log('self.queue', self.queue)
+    if (self.sending) {
+      console.log('already sending -----')
+      return
+    }
+
+    self.sending = true
+    console.log('sending', self.queue.length)
+    var next = self.queue.shift()
+    self._send(next[0], next[1], () => {
+      console.log('callback', self.queue.length)
+      if (self.queue.length === 0) {
+        console.log('done sending')
+        self.sending = false
+        return
+      }
+      self.send()
+    })
+  }
+
+  self._send = (object, peerId, cb) => {
     debug('>> sending to peer', object.type, object, peerId)
     var sharingLevel = getState().sync.sharingLevel
     var devices = getState().devices
@@ -99,6 +126,7 @@ function Peers (dispatch, getState, peers) {
 
     if (!self.remotes[peerId]) {
       debug('cannot send to offline peer', peerId)
+      cb()
       return
     }
 
@@ -111,14 +139,23 @@ function Peers (dispatch, getState, peers) {
     var chunks = Math.ceil(size / chunkSize)
     var offset = 0
 
+    function callbackOnErr (err) {
+      if (err) {
+        cb()
+        throw err
+      }
+    }
+
     self.remotes[peerId].write('HEADER' + JSON.stringify({
       id,
       chunks
-    }), 'utf8')
+    }), 'utf8', callbackOnErr)
 
     sendChunked()
     function sendChunked () {
-      if (offset >= size) return
+      if (offset >= size) {
+        return
+      }
       var chunk = string.slice(offset, offset + chunkSize)
       var msg = JSON.stringify({
         id,
@@ -127,10 +164,13 @@ function Peers (dispatch, getState, peers) {
       })
       offset += chunkSize
       self.remotes[peerId].write(msg, 'utf8', function (err) {
-        if (err) throw err
+        callbackOnErr(err)
         window.setTimeout(sendChunked, 10)
       })
     }
+
+    console.log('done sending, calling cb()')
+    cb()
   }
 
   self.broadcast = (data) => {
