@@ -178,7 +178,7 @@ function Peers (dispatch, getState, peers) {
       offset += chunkSize
       self.remotes[peerId].write(msg, 'utf8', function (err) {
         callbackOnErr(err)
-        window.setTimeout(sendChunked, 10)
+        window.setTimeout(sendChunked, Math.floor(100 / index))
       })
     }
 
