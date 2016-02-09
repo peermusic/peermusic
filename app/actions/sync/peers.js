@@ -106,7 +106,7 @@ function Peers (dispatch, getState, peers) {
       self.queue.push([object, peerId])
 
       if (self.sending) {
-        console.log('already sending, queued send task #', self.queue.length, object.type)
+        debug('already sending, queued send task #', self.queue.length, object.type)
         return
       }
     }
@@ -118,7 +118,7 @@ function Peers (dispatch, getState, peers) {
       self.queue.shift()
 
       if (self.queue.length === 0) {
-        console.log('done sending')
+        debug('sending queue empty')
         self.sending = false
         return
       }
@@ -166,7 +166,6 @@ function Peers (dispatch, getState, peers) {
         return
       }
       if (offset >= size) {
-        console.log('done sending, calling cb() for id', id)
         cb()
         return
       }
@@ -179,7 +178,6 @@ function Peers (dispatch, getState, peers) {
       offset += chunkSize
       self.remotes[peerId].write(msg, 'utf8', function (err) {
         callbackOnErr(err)
-        console.log('sending for id', id)
         window.setTimeout(sendChunked, 10)
       })
     }
