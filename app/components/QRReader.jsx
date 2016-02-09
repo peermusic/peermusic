@@ -8,11 +8,13 @@ function QRReaderPopover ({ resolver }) {
     <div className='page-wrapper'>
       <div className='popover content'>
         <div>
-          <video autoPlay/>
-          <br/>
-          <h3>Hold a QR code for peermusic in front of your camera</h3>
           <div>
-            <button onClick={() => resolver(false)}>Nevermind</button>
+            <video autoPlay/>
+            <br/>
+            <h3>Hold a QR code for peermusic in front of your camera</h3>
+            <div>
+              <button onClick={() => resolver(false)}>Nevermind</button>
+            </div>
           </div>
         </div>
       </div>

@@ -45,6 +45,7 @@
   .page-heading {
     display: flex;
     flex-direction: row;
+    flex-shrink: 0;
     align-items: center;
     max-width: 960px;
     padding: 25px 25px 0;
