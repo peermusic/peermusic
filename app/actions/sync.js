@@ -1,4 +1,3 @@
-const base64 = require('base64-arraybuffer')
 const debug = require('debug')('peermusic:sync:actions')
 var coversActions = require('./covers.js')
 var fs = require('file-system')(['image/jpeg', 'image/jpg', '', 'audio/mp3', 'audio/wav', 'audio/ogg'])
@@ -57,7 +56,7 @@ var actions = {
             debug('received a song that we are no longer interested in', song)
             return
           }
-          actions.RECEIVE_SONG(data.id, data.arrayBuffer, peerId)(dispatch, getState)
+          actions.RECEIVE_SONG(data.id, data.dataUrl, peerId)(dispatch, getState)
         },
 
         REQUEST_COVER: () => {
@@ -334,29 +333,29 @@ var actions = {
     }
   },
 
-  SEND_SONG: (id, peerId, arrayBuffer) => {
+  SEND_SONG: (id, peerId, dataUrl) => {
     return (dispatch, getState) => {
-      if (!arrayBuffer) {
+      if (!dataUrl) {
         var hashName = getState().songs.find((song) => song.id === id).hashName
 
-        return fs.getArrayBuffer(hashName, (err, arrayBuffer) => {
+        return fs.getDataUrl(hashName, (err, dataUrl) => {
           if (err) throw new Error('Error getting file: ' + err)
 
-          return actions.SEND_SONG(id, peerId, arrayBuffer)(dispatch, getState)
+          return actions.SEND_SONG(id, peerId, dataUrl)(dispatch, getState)
         })
       }
 
       peers.send({
         type: 'SEND_SONG',
         id,
-        arrayBuffer: base64.encode(arrayBuffer)
+        dataUrl
       }, peerId)
     }
   },
 
-  RECEIVE_SONG: (id, arrayBuffer, peerId) => {
+  RECEIVE_SONG: (id, dataUrl, peerId) => {
     return (dispatch, getState) => {
-      if (!arrayBuffer) return debug('received empty arrayBuffer')
+      if (!dataUrl) return debug('received empty dataUrl')
 
       var song = getState().songs.find((song) => song.id === id)
       if (song.local) {
@@ -366,9 +365,9 @@ var actions = {
 
       var hashName = song.hashName
 
-      fs.addArrayBuffer({
+      fs.addDataUrl({
         filename: hashName,
-        arrayBuffer: base64.decode(arrayBuffer)
+        dataUrl
       }, postprocess)
 
       function postprocess () {
