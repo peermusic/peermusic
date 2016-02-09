@@ -98,12 +98,13 @@ function Peers (dispatch, getState, peers) {
         return
       }
 
-      self.queue.push([object, peerId])
-
       if (self.queue.length > 5) {
         debug('to many packets in the backlog - dropping', object.type)
         return
       }
+
+      self.queue.push([object, peerId])
+
       if (self.sending) {
         console.log('already sending, queued send task #', self.queue.length, object.type)
         return
