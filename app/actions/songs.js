@@ -6,8 +6,21 @@ var coversActions = require('./covers.js')
 var pieceLength = require('piece-length')
 var ReadableBlobStream = require('readable-blob-stream')
 
-var actions = {
+var queue = []
+var working = false
 
+function workQueue (dispatch, getState) {
+  if (queue.length === 0) {
+    working = false
+    return
+  }
+
+  working = true
+  var file = queue.shift()
+  actions._ADD_SONG(file)(dispatch, getState)
+}
+
+var actions = {
   // Add a file as a song. This hashes the file, adds it to the filesystem,
   // gets the metadata and the duration and dispatches the result metadata.
   // To add multiple files just dispatch this action multiple times.
@@ -16,6 +29,14 @@ var actions = {
       // Update the display state to include the import progress
       dispatch({type: 'INCREMENT_IMPORTING_SONGS'})
 
+      queue.push(file)
+
+      if (!working) workQueue(dispatch, getState)
+    }
+  },
+
+  _ADD_SONG: (file) => {
+    return (dispatch, getState) => {
       // Extract the file ending
       var file_ending = file.name.match(/^.*\..*$/)
         ? file.name.replace(/^.*\.(.*)$/, '$1')
@@ -98,6 +119,10 @@ var actions = {
                     type: 'ADD_SONG',
                     song: song
                   })
+
+                  window.setTimeout(function () {
+                    workQueue(dispatch, getState)
+                  }, 100)
                 })
               })
             })
