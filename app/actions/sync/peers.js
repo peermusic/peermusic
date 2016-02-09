@@ -93,27 +93,35 @@ function Peers (dispatch, getState, peers) {
 
   self.send = (object, peerId) => {
     if (object) {
+      if (self.queue.find((task) => task[1] === peerId)) {
+        debug('already sending to that peer - dropping send task')
+        return
+      }
+
       self.queue.push([object, peerId])
 
       if (self.queue.length > 5) {
         debug('to many packets in the backlog - dropping', object.type)
         return
       }
-      if (self.sending && self.queue.length > 2) {
+      if (self.sending) {
         console.log('already sending, queued send task #', self.queue.length, object.type)
         return
       }
     }
 
     self.sending = true
-    var next = self.queue.shift()
+    var next = self.queue[0]
 
     self._send(next[0], next[1], () => {
+      self.queue.shift()
+
       if (self.queue.length === 0) {
         console.log('done sending')
         self.sending = false
         return
       }
+
       self.send()
     })
   }
