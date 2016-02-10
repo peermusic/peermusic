@@ -3,8 +3,6 @@ var rusha = new (require('rusha'))()
 var metadataReader = require('music-metadata')
 var fs = require('file-system')(['', 'audio/mp3'])
 var coversActions = require('./covers.js')
-var pieceLength = require('piece-length')
-var ReadableBlobStream = require('readable-blob-stream')
 
 var queue = []
 var working = false
@@ -63,12 +61,7 @@ var actions = {
         var hash = rusha.digestFromArrayBuffer(arrayBuffer)
         var hashName = hash + file_ending
 
-        var stream = new ReadableBlobStream(file)
-
-        createTorrent(stream, {
-          name: file.name,
-          pieceLength: pieceLength(file.length)
-        }, (err, torrent) => {
+        createTorrent(file, (err, torrent) => {
           if (err) throw err
 
           // Get the metadata off the file
