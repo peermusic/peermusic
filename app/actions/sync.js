@@ -56,7 +56,7 @@ var actions = {
             debug('received a song that we are no longer interested in', song)
             return
           }
-          actions.RECEIVE_SONG(data.id, data.dataUrl, peerId)(dispatch, getState)
+          actions.RECEIVE_SONG(data.id, data.dataUrl)(dispatch, getState)
         },
 
         REQUEST_COVER: () => {
@@ -353,7 +353,7 @@ var actions = {
     }
   },
 
-  RECEIVE_SONG: (id, dataUrl, peerId) => {
+  RECEIVE_SONG: (id, dataUrl, asArrayBuffer) => {
     return (dispatch, getState) => {
       if (!dataUrl) return debug('received empty dataUrl')
 
@@ -365,10 +365,17 @@ var actions = {
 
       var hashName = song.hashName
 
-      fs.addDataUrl({
-        filename: hashName,
-        dataUrl
-      }, postprocess)
+      if (asArrayBuffer) {
+        fs.addArrayBuffer({
+          filename: hashName,
+          arrayBuffer: dataUrl
+        }, postprocess)
+      } else {
+        fs.addDataUrl({
+          filename: hashName,
+          dataUrl
+        }, postprocess)
+      }
 
       function postprocess () {
         var url = `filesystem:http://${window.location.host}/persistent/${hashName}`

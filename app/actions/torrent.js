@@ -12,9 +12,8 @@ var actions = {
     return (dispatch, getState) => {
       torrent = new Buffer(torrent)
 
-      debug('adding new torrent file')
       client.download(torrent, (torrent) => {
-        debug('torrent downloaded - saving', torrent)
+        debug('added torrent file', torrent)
 
         torrent.on('download', function () {
           debug('downloading torrent', torrent, torrent.downloaded)
@@ -35,7 +34,7 @@ var actions = {
                 return uin8Array
               }
 
-              require('./sync').RECEIVE_SONG(songId, toArrayBuffer(buffer))(dispatch, getState)
+              require('./sync').RECEIVE_SONG(songId, toArrayBuffer(buffer), true)(dispatch, getState)
             })
           })
         })
