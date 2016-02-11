@@ -5,7 +5,27 @@ var client
 
 var actions = {
   INIT_WEBTORRENT: () => {
+    if (client && !client.destroyed) {
+      debug('torrent client already running')
+      return
+    }
+
     client = new WebTorrent()
+    debug('WebTorrent client initialised')
+
+    window.onunload = actions.DESTROY_WEBTORRENT
+  },
+
+  DESTROY_WEBTORRENT: () => {
+    if (!client || client.destroyed) {
+      debug('torrent client already destroyed')
+      return
+    }
+
+    client.destroy((err) => {
+      if (err) throw err
+      debug('WebTorrent client destroyed')
+    })
   },
 
   DOWNLOAD_TORRENT: (torrent, songId) => {

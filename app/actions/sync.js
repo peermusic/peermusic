@@ -493,6 +493,14 @@ var actions = {
     return (dispatch, getState) => {
       actions.MULTICAST_SHARING_LEVEL(sharingLevel)(dispatch, getState)
 
+      if (sharingLevel === 'EVERYONE') {
+        debug('trying to start torrent client')
+        require('./torrent').INIT_WEBTORRENT()
+      } else {
+        debug('trying to stop torrent client')
+        require('./torrent').DESTROY_WEBTORRENT()
+      }
+
       if (peerId === 'self') {
         dispatch({
           type: 'SET_SHARING_LEVEL_SELF',
