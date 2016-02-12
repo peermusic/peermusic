@@ -45,7 +45,8 @@ var actions = {
 
       if (file_ending !== 'mp3') {
         dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
-        console.log('Skipping non-music file', file.name)
+        console.log('Skipping non-mp3 file', file.name)
+        workQueue(dispatch, getState)
         return
       }
 
@@ -54,6 +55,7 @@ var actions = {
       reader.readAsArrayBuffer(file)
       reader.onerror = function (err) {
         dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+        workQueue(dispatch, getState)
         throw new Error('Error reading file: ' + err)
       }
 
@@ -67,7 +69,11 @@ var actions = {
         createTorrent(file, {
           name: hashName // to always generate the same torrent regardless of naming
         }, (err, torrent) => {
-          if (err) throw err
+          if (err) {
+            dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+            workQueue(dispatch, getState)
+            throw new Error('Error creating torrent file: ' + err)
+          }
 
           // Get the metadata off the file
           metadataReader(file, meta => {
@@ -75,6 +81,7 @@ var actions = {
             fs.add({filename: hashName, file: file}, (err) => {
               if (err) {
                 dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+                workQueue(dispatch, getState)
                 throw new Error('Error adding file: ' + err)
               }
 
@@ -82,6 +89,7 @@ var actions = {
               fs.get(hashName, (err, url) => {
                 if (err) {
                   dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+                  workQueue(dispatch, getState)
                   throw new Error('Error getting file: ' + err)
                 }
 
