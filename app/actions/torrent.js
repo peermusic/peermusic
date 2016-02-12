@@ -1,19 +1,24 @@
 const debug = require('debug')('peermusic:torrent:actions')
 var WebTorrent = require('webtorrent')
+var fs = require('file-system')(['', 'audio/mp3'])
 
 var client
 
 var actions = {
   INIT_WEBTORRENT: () => {
-    if (client && !client.destroyed) {
-      debug('torrent client already running')
-      return
+    return (dispatch, getState) => {
+      if (client && !client.destroyed) {
+        debug('torrent client already running')
+        return
+      }
+
+      client = new WebTorrent()
+      debug('WebTorrent client initialised')
+
+      window.onunload = actions.DESTROY_WEBTORRENT
+
+      actions.SEED_TORRENTS()(dispatch, getState)
     }
-
-    client = new WebTorrent()
-    debug('WebTorrent client initialised')
-
-    window.onunload = actions.DESTROY_WEBTORRENT
   },
 
   DESTROY_WEBTORRENT: () => {
@@ -26,6 +31,28 @@ var actions = {
       if (err) throw err
       debug('WebTorrent client destroyed')
     })
+  },
+
+  SEED_TORRENTS: () => {
+    return (dispatch, getState) => {
+      var localSongs = getState().songs.filter((song) => song.local)
+
+      localSongs.forEach((song) => {
+        fs.getFile(song.hashName, (err, file) => {
+          if (err) throw err
+
+          file.file((file) => {
+            client.seed(file, [], (torrent) => {
+              debug('seeding torrent:', torrent)
+
+              torrent.on('wire', () => {
+                debug('peer connected to download torrent', torrent)
+              })
+            })
+          })
+        })
+      })
+    }
   },
 
   CANCEL_TORRENT: (songId) => {

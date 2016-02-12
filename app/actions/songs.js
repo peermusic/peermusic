@@ -61,7 +61,9 @@ var actions = {
         var hash = rusha.digestFromArrayBuffer(arrayBuffer)
         var hashName = hash + file_ending
 
-        createTorrent(file, (err, torrent) => {
+        createTorrent(file, {
+          name: hashName // to always generate the same torrent regardless of naming
+        }, (err, torrent) => {
           if (err) throw err
 
           // Get the metadata off the file

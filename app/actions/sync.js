@@ -499,7 +499,7 @@ var actions = {
 
       if (sharingLevel === 'EVERYONE') {
         debug('trying to start torrent client')
-        require('./torrent').INIT_WEBTORRENT()
+        require('./torrent').INIT_WEBTORRENT()(dispatch, getState)
       } else {
         debug('trying to stop torrent client')
         require('./torrent').DESTROY_WEBTORRENT()
