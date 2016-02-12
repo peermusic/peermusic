@@ -29,6 +29,7 @@ html, body {
     display: flex;
     flex: 1;
     flex-direction: row;
+    max-height: 100%;
   }
 
   .mobile-only, .mobile-top-bar {

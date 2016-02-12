@@ -9,6 +9,7 @@
 
 .horizontal-navigation {
   display: flex;
+  flex-shrink: 0;
   max-width: 960px;
   margin: 10px 25px 15px;
   border-bottom: 1px solid $background-gray;

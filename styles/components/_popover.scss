@@ -32,5 +32,10 @@
     max-width: 90%;
     height: auto !important;
     margin: auto;
+    margin-bottom: 10px;
+
+    @media screen and (max-width: 1024px) {
+      max-height: 300px;
+    }
   }
 }

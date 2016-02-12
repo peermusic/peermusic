@@ -38,11 +38,11 @@ function Navigation ({ routing, TOGGLE_MOBILE_NAVIGATION }) {
             <li><Link to='/playing-next' className='flaticon-queue' {...linkProperties}>Playing Next</Link></li>
             <li><Link to='/history' className='flaticon-history' {...linkProperties}>History</Link></li>
             <li className='heading'>Manage</li>
+            <li><Link to='/manage-downloads' className='flaticon-download' {...linkProperties}>Downloads</Link></li>
+            <li><Link to='/manage-songs/own' className={manageSongsLinkClasses} {...linkProperties}>Collection</Link></li>
             <li><Link to='/manage-friends/authenticated' className={friendsLinkClasses} {...linkProperties}>Friends</Link></li>
             <li><Link to='/manage-devices/authenticated' className={devicesLinkClasses} {...linkProperties}>Devices</Link></li>
-            <li><Link to='/manage-songs/own' className={manageSongsLinkClasses} {...linkProperties}>Songs</Link></li>
             <li><Link to='/manage-servers/scraping' className={manageServersLinkClasses} {...linkProperties}>Servers</Link></li>
-            <li><Link to='/manage-downloads' className='flaticon-download' {...linkProperties}>Downloads</Link></li>
             <li><Link to='/manage-internals/settings' className={manageInternalsLinkClasses} {...linkProperties}>Internals</Link></li>
           </ul>
         </div>
