@@ -9,6 +9,9 @@ var working = false
 
 function workQueue (dispatch, getState) {
   if (queue.length === 0) {
+    if (getState().sync.sharingLevel === 'EVERYONE') {
+      require('./torrent').SEED_TORRENTS()(dispatch, getState)
+    }
     working = false
     return
   }
