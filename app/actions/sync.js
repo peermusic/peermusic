@@ -401,6 +401,10 @@ var actions = {
 
   REMOVE_DOWNLOAD: (id) => {
     return (dispatch, getState) => {
+      if (getState().sync.sharingLevel === 'EVERYONE') {
+        require('./torrent').CANCEL_TORRENT(id)(dispatch, getState)
+      }
+
       dispatch({
         type: 'TOGGLE_SONG_DOWNLOADING',
         id

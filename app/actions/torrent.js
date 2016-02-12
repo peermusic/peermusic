@@ -28,6 +28,17 @@ var actions = {
     })
   },
 
+  CANCEL_TORRENT: (songId) => {
+    return (dispatch, getState) => {
+      var torrent = getState().songs.find((song) => song.id === songId).torrent
+
+      client.remove(new Buffer(torrent), (err) => {
+        if (err) throw err
+        debug('torrent download cancelled')
+      })
+    }
+  },
+
   DOWNLOAD_TORRENT: (torrent, songId) => {
     return (dispatch, getState) => {
       torrent = new Buffer(torrent)
