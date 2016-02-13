@@ -1,10 +1,27 @@
+var createTorrent = require('create-torrent')
 var rusha = new (require('rusha'))()
 var metadataReader = require('music-metadata')
 var fs = require('file-system')(['', 'audio/mp3'])
 var coversActions = require('./covers.js')
 
-var actions = {
+var queue = []
+var working = false
 
+function workQueue (dispatch, getState) {
+  if (queue.length === 0) {
+    if (getState().sync.sharingLevel === 'EVERYONE') {
+      require('./torrent').SEED_TORRENTS()(dispatch, getState)
+    }
+    working = false
+    return
+  }
+
+  working = true
+  var file = queue.shift()
+  actions._ADD_SONG(file)(dispatch, getState)
+}
+
+var actions = {
   // Add a file as a song. This hashes the file, adds it to the filesystem,
   // gets the metadata and the duration and dispatches the result metadata.
   // To add multiple files just dispatch this action multiple times.
@@ -13,6 +30,14 @@ var actions = {
       // Update the display state to include the import progress
       dispatch({type: 'INCREMENT_IMPORTING_SONGS'})
 
+      queue.push(file)
+
+      if (!working) workQueue(dispatch, getState)
+    }
+  },
+
+  _ADD_SONG: (file) => {
+    return (dispatch, getState) => {
       // Extract the file ending
       var file_ending = file.name.match(/^.*\..*$/)
         ? file.name.replace(/^.*\.(.*)$/, '$1')
@@ -20,7 +45,8 @@ var actions = {
 
       if (file_ending !== 'mp3') {
         dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
-        console.log('Skipping non-music file', file.name)
+        console.log('Skipping non-mp3 file', file.name)
+        workQueue(dispatch, getState)
         return
       }
 
@@ -29,6 +55,7 @@ var actions = {
       reader.readAsArrayBuffer(file)
       reader.onerror = function (err) {
         dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+        workQueue(dispatch, getState)
         throw new Error('Error reading file: ' + err)
       }
 
@@ -39,52 +66,69 @@ var actions = {
         var hash = rusha.digestFromArrayBuffer(arrayBuffer)
         var hashName = hash + file_ending
 
-        // Get the metadata off the file
-        metadataReader(file, meta => {
-          // Add the song to the file system
-          fs.add({filename: hashName, file: file}, (err) => {
-            if (err) {
-              dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
-              throw new Error('Error adding file: ' + err)
-            }
+        createTorrent(file, {
+          name: hashName // to always generate the same torrent regardless of naming
+        }, (err, torrent) => {
+          if (err) {
+            dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+            workQueue(dispatch, getState)
+            throw new Error('Error creating torrent file: ' + err)
+          }
 
-            // Read the file as an url from the filesystem
-            fs.get(hashName, (err, url) => {
+          // Get the metadata off the file
+          metadataReader(file, meta => {
+            // Add the song to the file system
+            fs.add({filename: hashName, file: file}, (err) => {
               if (err) {
                 dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
-                throw new Error('Error getting file: ' + err)
+                workQueue(dispatch, getState)
+                throw new Error('Error adding file: ' + err)
               }
 
-              // Create an audio element to check on the duration
-              var audio = document.createElement('audio')
-              audio.src = url
-              audio.addEventListener('durationchange', () => {
-                var duration = audio.duration
-                let favorites = getState().favorites.map(x => x.id)
-
-                // Dispatch an action to update the view and save
-                // the song data in local storage
-                var song = {
-                  id: hash,
-                  filename: url,
-                  ...meta,
-                  addedAt: (new Date()).toString(),
-                  local: true,
-                  duration: duration,
-                  favorite: favorites.indexOf(hash) !== -1,
-                  coverId: getCoverId(meta),
-                  availability: 0,
-                  hashName: hashName,
-                  originalFilename: file.name
+              // Read the file as an url from the filesystem
+              fs.get(hashName, (err, url) => {
+                if (err) {
+                  dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+                  workQueue(dispatch, getState)
+                  throw new Error('Error getting file: ' + err)
                 }
 
-                // Dispatch an action to get the cover from the scraping server
-                coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
+                // Create an audio element to check on the duration
+                var audio = document.createElement('audio')
+                audio.src = url
+                audio.addEventListener('durationchange', () => {
+                  var duration = audio.duration
+                  let favorites = getState().favorites.map(x => x.id)
 
-                dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
-                dispatch({
-                  type: 'ADD_SONG',
-                  song: song
+                  // Dispatch an action to update the view and save
+                  // the song data in local storage
+                  var song = {
+                    id: hash,
+                    filename: url,
+                    ...meta,
+                    addedAt: (new Date()).toString(),
+                    local: true,
+                    duration: duration,
+                    favorite: favorites.indexOf(hash) !== -1,
+                    coverId: getCoverId(meta),
+                    availability: 0,
+                    hashName: hashName,
+                    originalFilename: file.name,
+                    torrent
+                  }
+
+                  // Dispatch an action to get the cover from the scraping server
+                  coversActions.GET_COVER(song.album, song.artist, song.coverId)(dispatch, getState)
+
+                  dispatch({type: 'DECREMENT_IMPORTING_SONGS'})
+                  dispatch({
+                    type: 'ADD_SONG',
+                    song: song
+                  })
+
+                  window.setTimeout(function () {
+                    workQueue(dispatch, getState)
+                  }, 100)
                 })
               })
             })
