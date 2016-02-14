@@ -94,11 +94,12 @@ function Peers (dispatch, getState, peers) {
   self.send = (object, peerId) => {
     if (object) {
       if (self.queue.find((task) => task[1] === peerId)) {
-        debug('already sending to that peer - dropping send task')
+        debug('already sending to that peer - dropping send task',
+          object.type ? object.type : '')
         return
       }
 
-      if (self.queue.length > 5) {
+      if (self.queue.length > 30) {
         debug('to many packets in the backlog - dropping', object.type)
         return
       }

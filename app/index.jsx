@@ -46,9 +46,10 @@ load(store).then(() => {
   SET_ALL_TO_OFFLINE()(store.dispatch, store.getState)
   render()
 
-  START_DOWNLOAD_LOOP(1000 * 3, 1000 * 60)(store.dispatch, store.getState)
-  START_SHARING_LEVEL_SYNC_LOOP(1000 * 5, 1000 * 60 * 1)(store.dispatch, store.getState)
-  START_MULTICAST_DEVICES_LOOP(1000 * 3, 1000 * 5)(store.dispatch, store.getState)
+  START_DOWNLOAD_LOOP(1000 * 3, 1000 * 60 * 1)(store.dispatch, store.getState)
+  START_SHARING_LEVEL_SYNC_LOOP(1000 * 3, 1000 * 60 * 1)(store.dispatch, store.getState)
+  START_MULTICAST_DEVICES_LOOP(1000 * 3, 1000 * 60 * 1)(store.dispatch, store.getState)
+
   LOAD_THEME()(store.dispatch, store.getState)
 
   if (store.getState().sync.sharingLevel === 'EVERYONE') {
