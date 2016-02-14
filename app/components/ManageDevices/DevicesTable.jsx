@@ -22,9 +22,8 @@ function DevicesTable ({ devices, myId, sharingLevel, REMOVE_PEER, SET_SHARING_L
         </tr>
 
         <tr>
-          <td className='number'>0</td>
+          <td className='number'>-</td>
           <td className='status desktop-only'>
-            <span className='online'><i className='fa fa-circle'/> Online</span>
           </td>
           <td className='desktop-only'>This device</td>
           <td className='desktop-only'>
