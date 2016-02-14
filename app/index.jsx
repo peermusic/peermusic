@@ -53,7 +53,7 @@ load(store).then(() => {
   LOAD_THEME()(store.dispatch, store.getState)
 
   if (store.getState().sync.sharingLevel === 'EVERYONE') {
-    INIT_WEBTORRENT()
+    INIT_WEBTORRENT()(store.dispatch, store.getState)
   }
   HIDE_PLAYLIST_HINT()(store.dispatch, store.getState)
 })

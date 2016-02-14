@@ -29,7 +29,7 @@
 - [x] Peermusic instances can be set to one of four different sharing levels:
   - "leech" and "private" only connect to the users own Peermusic instances.
   - "friends" allows connections to instances that were added as friends by the user.
-  - [ ] "everyone" takes advantage of [WebTorrent](https://github.com/feross/webtorrent):
+  - [x] "everyone" takes advantage of [WebTorrent](https://github.com/feross/webtorrent):
     - Locally available songs will be seeded via WebTorrent.
     - Locally unavailable songs that are requested by other instances will be downloaded via WebTorrent.
 - [x] Peermusic instances employ an escrow sharing concept:

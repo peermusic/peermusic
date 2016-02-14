@@ -56,7 +56,7 @@ var actions = {
             debug('received a song that we are no longer interested in', song)
             return
           }
-          actions.RECEIVE_SONG(data.id, data.dataUrl, peerId)(dispatch, getState)
+          actions.RECEIVE_SONG(data.id, data.dataUrl)(dispatch, getState)
         },
 
         REQUEST_COVER: () => {
@@ -263,10 +263,7 @@ var actions = {
       var sharingLevel = getState().sync.sharingLevel
       if (sharingLevel === 'EVERYONE') {
         debug('trying to download as a torrent')
-
         require('./torrent').DOWNLOAD_TORRENT(song.torrent, song.id)(dispatch, getState)
-
-        return
       }
 
       var providers = getState().sync.providers[id]
@@ -353,7 +350,7 @@ var actions = {
     }
   },
 
-  RECEIVE_SONG: (id, dataUrl, peerId) => {
+  RECEIVE_SONG: (id, dataUrl, asArrayBuffer) => {
     return (dispatch, getState) => {
       if (!dataUrl) return debug('received empty dataUrl')
 
@@ -365,10 +362,17 @@ var actions = {
 
       var hashName = song.hashName
 
-      fs.addDataUrl({
-        filename: hashName,
-        dataUrl
-      }, postprocess)
+      if (asArrayBuffer) {
+        fs.addArrayBuffer({
+          filename: hashName,
+          arrayBuffer: dataUrl
+        }, postprocess)
+      } else {
+        fs.addDataUrl({
+          filename: hashName,
+          dataUrl
+        }, postprocess)
+      }
 
       function postprocess () {
         var url = `filesystem:http://${window.location.host}/persistent/${hashName}`
@@ -394,6 +398,10 @@ var actions = {
 
   REMOVE_DOWNLOAD: (id) => {
     return (dispatch, getState) => {
+      if (getState().sync.sharingLevel === 'EVERYONE') {
+        require('./torrent').CANCEL_TORRENT(id)(dispatch, getState)
+      }
+
       dispatch({
         type: 'TOGGLE_SONG_DOWNLOADING',
         id
@@ -485,6 +493,14 @@ var actions = {
   SET_SHARING_LEVEL: (sharingLevel, peerId) => {
     return (dispatch, getState) => {
       actions.MULTICAST_SHARING_LEVEL(sharingLevel)(dispatch, getState)
+
+      if (sharingLevel === 'EVERYONE') {
+        debug('trying to start torrent client')
+        require('./torrent').INIT_WEBTORRENT()(dispatch, getState)
+      } else {
+        debug('trying to stop torrent client')
+        require('./torrent').DESTROY_WEBTORRENT()
+      }
 
       if (peerId === 'self') {
         dispatch({
