@@ -17,12 +17,17 @@ var actions = {
       peers.on('close', function (peer, peerId) {
         actions.DEREGISTER_PEER(peer, peerId)(dispatch, getState)
       })
+    }
+  },
+
+  START_INVENTORY_SYNC_LOOP: (timeout, interval) => {
+    return (dispatch, getState) => {
       window.setTimeout(() => {
         actions.REQUEST_INVENTORY()
-      }, 1000 * 5)
+      }, timeout)
       window.setInterval(() => {
         actions.REQUEST_INVENTORY()
-      }, 1000 * 60 * 5)
+      }, interval)
     }
   },
 

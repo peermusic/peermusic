@@ -49,6 +49,7 @@ load(store).then(() => {
   START_DOWNLOAD_LOOP(1000 * 3, 1000 * 60 * 1)(store.dispatch, store.getState)
   START_SHARING_LEVEL_SYNC_LOOP(1000 * 3, 1000 * 60 * 1)(store.dispatch, store.getState)
   START_MULTICAST_DEVICES_LOOP(1000 * 3, 1000 * 60 * 1)(store.dispatch, store.getState)
+  START_INVENTORY_SYNC_LOOP(1000 * 3, 1000 * 60 * 1)(store.dispatch, store.getState)
 
   LOAD_THEME()(store.dispatch, store.getState)
 
