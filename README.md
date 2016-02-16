@@ -24,8 +24,6 @@
 - [x] Connects peer-to-peer between instances to share data.
 - [x] Secures the communication cryptographically (regular WebRTC encryption - no public key pinning).
 - [x] Does not leak IP information to the central signalhub server that faciliates the peer-to-peer connection setup.
-- [x] Shares the index of available music between all connected instances.
-- [x] Metadata about songs is shared between all connected instances.
 - [x] Peermusic instances can be set to one of four different sharing levels:
   - "leech" and "private" only connect to the users own Peermusic instances.
   - "friends" allows connections to instances that were added as friends by the user.
