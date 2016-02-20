@@ -380,7 +380,7 @@ var actions = {
       }
 
       function postprocess () {
-        var url = `filesystem:http://${window.location.host}/persistent/${hashName}`
+        var url = `filesystem:${window.location.protocol}//${window.location.host}/persistent/${hashName}`
 
         dispatch({
           type: 'FIX_SONG_FILENAME',
