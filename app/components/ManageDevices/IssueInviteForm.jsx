@@ -11,7 +11,7 @@ class IssueInviteForm extends React.Component {
     var hubUrl = ReactDOM.findDOMNode(this.refs.hubUrl)
 
     this.props.ISSUE_INVITE(description.value,
-      hubUrl.value ? hubUrl.value : 'https://peerjs.guth.so:65116', true
+      hubUrl.value ? hubUrl.value : 'https://signalhub.perguth.de:65300/', true
     )
 
     description.value = ''
@@ -33,7 +33,7 @@ class IssueInviteForm extends React.Component {
           <label>
             Hub url
           </label>
-          <input type='text' placeholder='https://peerjs.guth.so:65116' ref='hubUrl'/>
+          <input type='text' placeholder='https://signalhub.perguth.de:65300/' ref='hubUrl'/>
         </div>
 
         <div className='no-border'>
