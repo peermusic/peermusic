@@ -15,9 +15,7 @@ function Credits () {
             <a href='http://www.perguth.de/'>http://www.perguth.de/</a>
           </div>
           <div className='text'>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi luctus maximus consequat. Aenean faucibus
-            lacus est, eu congue tellus varius eget. In in gravida neque. Vivamus eu nisi ac sem consectetur aliquam.
-            Maecenas non vestibulum metus.
+            To Sabine Kull without whom I wouldn't have started this course of studies. Thank you for beeing the vibrant source of inspiration you are!
           </div>
         </div>
       </div>
