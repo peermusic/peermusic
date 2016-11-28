@@ -1,0 +1,114 @@
+@import '../../colors';
+
+.credits-page {
+  h3:not(:first-child) {
+    margin-top: 40px;
+  }
+
+  .attribution-big, .attribution-medium, .attribution-small {
+    display: flex;
+    margin-bottom: 35px;
+
+    img {
+      width: 100px;
+      height: 100px;
+      margin-top: 5px;
+      margin-right: 15px;
+    }
+
+    > div {
+      align-self: center;
+      max-width: 500px;
+      font-weight: 300;
+
+      strong {
+        display: block;
+        color: $color-light-gray;
+        font-size: 20px;
+        font-weight: 300;
+        letter-spacing: 1px;
+      }
+
+      .websites {
+        display: block;
+        font-size: 90%;
+
+        a {
+          color: $color-brand;
+          text-decoration: none;
+
+          .fa {
+            position: relative;
+            top: 2px;
+            margin-right: 2px;
+            font-size: 120%;
+          }
+
+        }
+
+        .padder {
+          margin-right: 7px;
+          margin-left: 7px;
+        }
+
+      }
+
+      .description {
+        display: block;
+        margin-top: 3px;
+        margin-bottom: 10px;
+        font-size: 15px;
+        font-weight: 300;
+      }
+
+      .text {
+        margin-top: 10px;
+        color: $color-gray;
+        font-weight: 300;
+
+        a {
+          color: $color-gray;
+        }
+
+        > div {
+          margin-bottom: 7px;
+        }
+
+      }
+
+    }
+  }
+
+  .list {
+    display: block !important;
+    font-size: 15px;
+    font-weight: 300;
+
+    a {
+      color: $color-light-gray;
+    }
+  }
+
+  .attribution-medium, .attribution-small {
+    display: flex;
+    margin-bottom: 25px;
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+
+    > div {
+      max-width: 700px;
+
+      .description {
+        margin-bottom: 0;
+      }
+
+      i {
+        margin-right: 4px;
+      }
+
+    }
+  }
+}

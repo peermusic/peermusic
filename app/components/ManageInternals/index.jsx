@@ -3,10 +3,12 @@ const { connect } = require('react-redux')
 const HorizontalNavigation = require('../HorizontalNavigation.jsx')
 const MobilePageHeader = require('../MobilePageHeader.jsx')
 const SettingsForm = require('./SettingsForm.jsx')
+const Credits = require('./Credits.jsx')
 
 function ManageInternals () {
   const views = [
-    {path: '/manage-internals/settings', name: 'Application settings', content: <SettingsForm/>}
+    {path: '/manage-internals/settings', name: 'Application settings', content: <SettingsForm/>},
+    {path: '/manage-internals/credits', name: 'Credits', content: <Credits/>}
   ]
   const internalsDisplay = <HorizontalNavigation views={views}/>
 
