@@ -5,6 +5,7 @@
   "scripts": {
     "test": "standard && sh sass-lint.sh"
   },
+  "engines" : { "node" : ">=5.10.0" },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/peermusic/desktop.git"

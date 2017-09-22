@@ -1,4 +1,47 @@
 CACHE MANIFEST
 
+CACHE:
+android-chrome-144x144.png
+android-chrome-192x192.png
+android-chrome-36x36.png
+android-chrome-48x48.png
+android-chrome-72x72.png
+android-chrome-96x96.png
+favicon-16x16.png
+favicon-194x194.png
+favicon-32x32.png
+favicon-96x96.png
+favicon.ico
+index.html
+manifest.json
+assets/dropdown.png
+assets/import-songs.png
+assets/loading-cover.png
+build/bundle.js
+build/theme-apricots.css
+build/theme-beach.css
+build/theme-caterpillar.css
+build/theme-classic.css
+build/theme-cookie-dough.css
+build/theme-faded-flamingo.css
+build/theme-latte.css
+build/theme-lilac.css
+build/theme-mint.css
+build/theme-monokai.css
+build/theme-muddy-denim.css
+build/theme-overcast.css
+build/theme-peaches-and-cream.css
+build/theme-pebbles.css
+build/theme-stormy-night.css
+fonts/flaticon.woff
+fonts/fontawesome.woff
+fonts/lato-300.woff
+fonts/lato-400.woff
+
 NETWORK:
 *
+
+SETTINGS:
+prefer-online
+
+# hash: 26e61a082ae9df1ef9964f6f578d9d4266272a7ce06670d3346e396158f027c1
