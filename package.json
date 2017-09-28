@@ -50,6 +50,7 @@
     "redux-logger": "^3.0.6",
     "redux-simple-router": "^2.0.4",
     "redux-storage": "^4.1.2",
+    "redux-storage-engine-localstorage": "^1.1.4",
     "redux-thunk": "^2.2.0",
     "rusha": "0.8.*",
     "secure-client-server-messaging": "git+https://github.com/peermusic/secure-client-server-messaging.git",

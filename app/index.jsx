@@ -3,12 +3,12 @@ const ReactDOM = require('react-dom')
 const { createStore, applyMiddleware, combineReducers } = require('redux')
 const { Provider } = require('react-redux')
 const { Router, Route, IndexRedirect } = require('react-router')
-const createHistory = require('history/createHashHistory')
+const createHistory = require('history/createHashHistory').default
 const { syncReduxAndRouter } = require('redux-simple-router')
-const thunk = require('redux-thunk')
+const thunk = require('redux-thunk').default
 // const logger = require('redux-logger')()
 const reduxStorage = require('redux-storage')
-const storageEngine = require('redux-storage/engines/localStorage').default('peermusic-storage')
+const storageEngine = require('redux-storage-engine-localstorage').default('peermusic-storage')
 const { PLAYER_SYNCHRONIZE, RESET_IMPORTING_SONGS, INSTANCES_CONNECT, INITIATE_SYNC,
   INITIALLY_LOAD_COVERS, START_DOWNLOAD_LOOP, START_SHARING_LEVEL_SYNC_LOOP,
   START_MULTICAST_DEVICES_LOOP, LOAD_THEME, INIT_WEBTORRENT, SET_ALL_TO_OFFLINE, HIDE_PLAYLIST_HINT,
