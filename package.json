@@ -51,7 +51,7 @@
     "shuffle-array": "^0.1.1",
     "subfolders-too": "git+https://github.com/peermusic/subfolders-too.git",
     "tweetnacl": "^0.13.3",
-    "webtorrent": "^0.72.2",
+    "webtorrent": "^0.98.19",
     "xhr": "^2.2.0"
   },
   "devDependencies": {
@@ -59,9 +59,10 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",
     "babelify": "^7.2.0",
-    "browserify": "^12.0.1",
+    "browserify": "^14.4.0",
     "chalk": "^1.1.1",
-    "gulp": "^3.9.0",
+    "eslint": "^4.8.0",
+    "gulp": "^3.9.1",
     "gulp-livereload": "^3.8.1",
     "gulp-manifest": "^0.1.1",
     "gulp-sass": "^2.1.1",
@@ -72,7 +73,7 @@
     "sass-lint": "^1.4.0",
     "signalhub": "^4.3.1",
     "st": "^1.1.0",
-    "standard": "^5.4.1",
+    "standard": "^10.0.3",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.6.1"
   }

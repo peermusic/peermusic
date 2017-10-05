@@ -118,7 +118,7 @@ var actions = {
     return (dispatch, getState) => {
       var receivedInvites = getState().instances.receivedInvites
       var issuedInvites = getState().instances.issuedInvites
-      var invite
+      var invite = []
 
       if (receivedInvites[peerId]) {
         var receivedInvitesList = getState().instances.receivedInvitesList

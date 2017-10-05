@@ -4,6 +4,9 @@ var metadataReader = require('music-metadata')
 var fs = require('file-system')(['', 'audio/mp3'])
 var coversActions = require('./covers.js')
 
+// fix rusha ".isBuffer is not a function" error
+global.Buffer = require('buffer').Buffer
+
 var queue = []
 var working = false
 
